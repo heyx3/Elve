@@ -35,11 +35,8 @@ public class Chunk : MonoBehaviour
 		VoxelMesh = new Mesh();
 		VoxelMesh.name = "Chunk " + MinCorner + " Mesh";
 		VoxelMesh.MarkDynamic();
-		
-		//Set up the voxel grid.
-		for (int x = 0; x < Grid.GetLength(0); ++x)
-			for (int y = 0; y < Grid.GetLength(1); ++y)
-				Grid[x, y] = VoxelTypes.Empty;
+
+		RegenMesh();
 	}
 
 
@@ -58,7 +55,7 @@ public class Chunk : MonoBehaviour
 	/// </summary>
 	public void RegenMesh()
 	{
-		Vector2 minCornerF = new Vector2((float)MinCorner.x, (float)MinCorner.y);
+		Vector2 minCornerF = new Vector2((float)MinCorner.x, (float)MinCorner.y) * (float)Size;
 
 		//Generate vertex data.
 		List<VoxelVertex> vertices = new List<VoxelVertex>();
@@ -93,10 +90,9 @@ public class Chunk : MonoBehaviour
 		VoxelMesh.uv = uvs;
 		VoxelMesh.SetIndices(indices, MeshTopology.Points, 0);
 
-		Vector3 size = new Vector3(Size, Size, 1.0f);
-		VoxelMesh.bounds = new Bounds(new Vector3(MinCorner.x * (float)Size,
-												  MinCorner.y * (float)Size,
-												  tr.position.z),
-									  size);
+		VoxelMesh.bounds = new Bounds(new Vector3((MinCorner.x * (float)Size) + (Size * 0.5f),
+												  (MinCorner.y * (float)Size) + (Size * 0.5f),
+												  0.0f),
+									  new Vector3(Size, Size, 1.0f));
 	}
 }

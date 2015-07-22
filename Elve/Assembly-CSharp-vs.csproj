@@ -48,9 +48,13 @@
   <ItemGroup>
      <Compile Include="Assets\Elve\Scripts\Content\VoxelContent.cs" />
      <Compile Include="Assets\Elve\Scripts\Tests\ChunkTest.cs" />
+     <Compile Include="Assets\Elve\Scripts\Tests\NoiseAlgoTests.cs" />
      <Compile Include="Assets\Elve\Scripts\Vector2i.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\Chunk.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\VoxelTypes.cs" />
+     <Compile Include="Assets\Elve\Scripts\World Generation\NoiseAlgos.cs" />
+     <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenSettings.cs" />
+     <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenerator.cs" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />

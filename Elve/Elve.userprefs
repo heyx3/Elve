@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets\2D\Scripts\PlatformerCharacter2D.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Elve\Scripts\Tests\NoiseAlgoTests.cs">
     <Files>
-      <File FileName="Assets\Standard Assets\2D\Scripts\PlatformerCharacter2D.cs" Line="1" Column="1" />
+      <File FileName="Assets\Elve\Scripts\Tests\NoiseAlgoTests.cs" Line="38" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
