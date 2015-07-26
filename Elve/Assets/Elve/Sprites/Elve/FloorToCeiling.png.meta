@@ -1,0 +1,143 @@
+fileFormatVersion: 2
+guid: b170f93f27c64d14a8608a9ef3ffb0ad
+timeCreated: 1437670491
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: FloorToCeiling_0
+    21300002: FloorToCeiling_1
+    21300004: FloorToCeiling_2
+    21300006: FloorToCeiling_3
+    21300008: FloorToCeiling_4
+    21300010: FloorToCeiling_5
+    21300012: FloorToCeiling_6
+    21300014: FloorToCeiling_7
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: FloorToCeiling_0
+      rect:
+        serializedVersion: 2
+        x: 546
+        y: 7
+        width: 56
+        height: 184
+      alignment: 9
+      pivot: {x: .500571132, y: .00896139257}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FloorToCeiling_1
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 103
+        width: 56
+        height: 124
+      alignment: 9
+      pivot: {x: .513374329, y: -.747236311}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FloorToCeiling_2
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 124
+        width: 68
+        height: 128
+      alignment: 9
+      pivot: {x: .500000894, y: -.886719882}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FloorToCeiling_3
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 168
+        width: 120
+        height: 45
+      alignment: 9
+      pivot: {x: .503120959, y: -3.48605537}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FloorToCeiling_4
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 4
+        width: 42
+        height: 126
+      alignment: 9
+      pivot: {x: .5, y: .0285499468}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FloorToCeiling_5
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 6
+        width: 40
+        height: 114
+      alignment: 9
+      pivot: {x: .441989124, y: .0237037335}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FloorToCeiling_6
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 8
+        width: 42
+        height: 104
+      alignment: 9
+      pivot: {x: .433702022, y: .0247605946}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FloorToCeiling_7
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 7
+        width: 56
+        height: 124
+      alignment: 9
+      pivot: {x: .501785815, y: .0112902811}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

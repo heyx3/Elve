@@ -22,14 +22,12 @@ public class Chunk : MonoBehaviour
 
 	public Material VoxelBlockMat;
 
-	private Transform tr;
 	private MeshFilter mf;
 	private Mesh VoxelMesh { get { return mf.mesh; } set { mf.mesh = value; } }
 
 
 	void Start()
 	{
-		tr = transform;
 		mf = GetComponent<MeshFilter>();
 
 		VoxelMesh = new Mesh();

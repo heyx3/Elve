@@ -46,12 +46,30 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Elve\Scripts\Content\ElveConstants.cs" />
+     <Compile Include="Assets\Elve\Scripts\Content\PathingConstants.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\VoxelContent.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimController.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimFinishEvent.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimStates.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\ElveBehavior.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_ChangeSurface.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_Climb.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_MoveToEdge.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_Walk.cs" />
+     <Compile Include="Assets\Elve\Scripts\Pathing\BaseGraphDeclarations.cs" />
+     <Compile Include="Assets\Elve\Scripts\Pathing\Game Pathing\VoxelGraphDeclarations.cs" />
+     <Compile Include="Assets\Elve\Scripts\Pathing\IndexedPriorityQueue.cs" />
+     <Compile Include="Assets\Elve\Scripts\Pathing\PathFinder.cs" />
      <Compile Include="Assets\Elve\Scripts\Tests\ChunkTest.cs" />
      <Compile Include="Assets\Elve\Scripts\Tests\NoiseAlgoTests.cs" />
+     <Compile Include="Assets\Elve\Scripts\Tests\PathingTest.cs" />
+     <Compile Include="Assets\Elve\Scripts\Tests\VoxelAddRemoveTest.cs" />
      <Compile Include="Assets\Elve\Scripts\Vector2i.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\Chunk.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\VoxelTypes.cs" />
+     <Compile Include="Assets\Elve\Scripts\Voxel\WorldVoxels.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\NoiseAlgos.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenSettings.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenerator.cs" />

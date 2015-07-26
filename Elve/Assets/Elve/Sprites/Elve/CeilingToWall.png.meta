@@ -1,0 +1,99 @@
+fileFormatVersion: 2
+guid: 422e15e1657c2d146b3182a989fd1341
+timeCreated: 1437670120
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: CeilingToWall_0
+    21300002: CeilingToWall_1
+    21300004: CeilingToWall_2
+    21300006: CeilingToWall_3
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: CeilingToWall_0
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 84
+        width: 116
+        height: 44
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CeilingToWall_1
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 79
+        width: 117
+        height: 45
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CeilingToWall_2
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 34
+        width: 72
+        height: 90
+      alignment: 9
+      pivot: {x: .608684957, y: .958454549}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CeilingToWall_3
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 12
+        width: 50
+        height: 112
+      alignment: 9
+      pivot: {x: .357721567, y: .992259979}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

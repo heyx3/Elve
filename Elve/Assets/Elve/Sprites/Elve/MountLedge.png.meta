@@ -1,0 +1,121 @@
+fileFormatVersion: 2
+guid: 0e107f55bd5f2fe409f7fdd5cc483a7d
+timeCreated: 1437670667
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: MountLedge_0
+    21300002: MountLedge_1
+    21300004: MountLedge_2
+    21300006: MountLedge_3
+    21300008: MountLedge_4
+    21300010: MountLedge_5
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: MountLedge_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 71
+        width: 51
+        height: 121
+      alignment: 9
+      pivot: {x: .896787763, y: .356880188}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MountLedge_1
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 68
+        width: 44
+        height: 120
+      alignment: 9
+      pivot: {x: .809556782, y: .328122258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MountLedge_2
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 60
+        width: 56
+        height: 136
+      alignment: 9
+      pivot: {x: .367964059, y: .2582075}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MountLedge_3
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 115
+        width: 117
+        height: 73
+      alignment: 9
+      pivot: {x: .119157843, y: -.0970633551}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MountLedge_4
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 99
+        width: 93
+        height: 85
+      alignment: 9
+      pivot: {x: .0250605103, y: -.152410895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MountLedge_5
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 64
+        width: 48
+        height: 122
+      alignment: 9
+      pivot: {x: .0743586197, y: -.177835584}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

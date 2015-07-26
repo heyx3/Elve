@@ -1,0 +1,132 @@
+fileFormatVersion: 2
+guid: 8c568c61f16775d4bb74be8527a0dad0
+timeCreated: 1437671158
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: WallToWall_0
+    21300002: WallToWall_1
+    21300004: WallToWall_2
+    21300006: WallToWall_3
+    21300008: WallToWall_4
+    21300010: WallToWall_5
+    21300012: WallToWall_6
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: WallToWall_0
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 487
+        width: 47
+        height: 113
+      alignment: 9
+      pivot: {x: 3.79409099, y: .493869483}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WallToWall_1
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 488
+        width: 50
+        height: 111
+      alignment: 9
+      pivot: {x: .948000193, y: .568468809}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WallToWall_2
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 370
+        width: 50
+        height: 111
+      alignment: 9
+      pivot: {x: 3.63108158, y: .568647504}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WallToWall_3
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 367
+        width: 46
+        height: 112
+      alignment: 9
+      pivot: {x: 1.79640865, y: .460446209}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WallToWall_4
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 250
+        width: 37
+        height: 112
+      alignment: 9
+      pivot: {x: 3.03275204, y: .493914753}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WallToWall_5
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 125
+        width: 13
+        height: 112
+      alignment: 9
+      pivot: {x: 9.72701073, y: .506085098}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: WallToWall_6
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 6
+        width: 31
+        height: 112
+      alignment: 9
+      pivot: {x: 4.99148798, y: .499999911}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
