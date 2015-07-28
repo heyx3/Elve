@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 42bc24e58d99f9a4eaed27cd1efffe96
-timeCreated: 1437541257
+timeCreated: 1438085924
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -59,8 +59,8 @@ TextureImporter:
         y: 0
         width: 64
         height: 128
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Stand_1
       rect:
@@ -69,8 +69,8 @@ TextureImporter:
         y: 0
         width: 64
         height: 128
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .628700137, y: .000929564994}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

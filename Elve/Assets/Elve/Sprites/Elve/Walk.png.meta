@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 76138fc99876cf943b6d16793eeea24d
-timeCreated: 1437542025
+timeCreated: 1438087784
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -65,8 +65,8 @@ TextureImporter:
         y: 0
         width: 49
         height: 128
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Walk_1
       rect:
@@ -75,8 +75,8 @@ TextureImporter:
         y: 0
         width: 37
         height: 127
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Walk_2
       rect:
@@ -85,8 +85,8 @@ TextureImporter:
         y: 0
         width: 37
         height: 128
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Walk_3
       rect:
@@ -95,8 +95,8 @@ TextureImporter:
         y: 0
         width: 32
         height: 128
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Walk_4
       rect:
@@ -105,8 +105,8 @@ TextureImporter:
         y: 0
         width: 46
         height: 128
-      alignment: 9
-      pivot: {x: .364906967, y: .504854977}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Walk_5
       rect:
@@ -115,8 +115,8 @@ TextureImporter:
         y: 0
         width: 33
         height: 128
-      alignment: 9
-      pivot: {x: .457575947, y: .500781238}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Walk_6
       rect:
@@ -125,8 +125,8 @@ TextureImporter:
         y: 0
         width: 36
         height: 128
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Walk_7
       rect:
@@ -135,8 +135,8 @@ TextureImporter:
         y: 0
         width: 37
         height: 127
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Walk_8
       rect:
@@ -145,8 +145,8 @@ TextureImporter:
         y: 0
         width: 49
         height: 128
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 7
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

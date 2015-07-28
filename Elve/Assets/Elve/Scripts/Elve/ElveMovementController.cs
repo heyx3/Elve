@@ -71,6 +71,7 @@ public class ElveMovementController : MonoBehaviour
 		Assert.IsTrue(Path[Path.Count - 1].WorldPos == currentPos,
 					  "Current pos is " + currentPos + " but first node of path is " +
 						Path[Path.Count - 1].WorldPos);
+		targetPos = currentPos;
 		OnStateFinished(null);
 	}
 	private void UpdatePos()

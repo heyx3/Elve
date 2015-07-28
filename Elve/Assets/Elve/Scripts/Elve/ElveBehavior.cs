@@ -41,7 +41,10 @@ public class ElveBehavior : MonoBehaviour
 
 			ElveState old = currentState;
 			currentState = value;
-			currentState.OnStateStarting(old);
+			if (currentState != null)
+			{
+				currentState.OnStateStarting(old);
+			}
 		}
 	}
 	private ElveState currentState = null;

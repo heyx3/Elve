@@ -43,7 +43,7 @@ public class ElveAnimController : MonoBehaviour
 			}
 		}
 	}
-	private ElveAnimStates animState = ElveAnimStates.Standing;
+	private ElveAnimStates animState = ElveAnimStates.MountingLedge;
 
 	public GameObject ActiveAnim { get; private set; }
 

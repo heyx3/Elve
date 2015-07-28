@@ -20,8 +20,17 @@ public class PathingTest : MonoBehaviour
 	{
 		cam = GetComponent<Camera>();
 
-		pos1 = new Vector2(0.0f, 0.0f);
-		pos2 = new Vector2(0.0f, 0.0f);
+		if (Elve == null)
+		{
+			pos1 = new Vector2(0.0f, 0.0f);
+			pos2 = new Vector2(0.0f, 0.0f);
+		}
+		else
+		{
+			Vector3 pos = Elve.transform.position;
+			pos1 = new Vector2(pos.x, pos.y);
+			pos2 = new Vector2(pos.x, pos.y);
+		}
 		path = new List<VoxelNode>();
 		path.Add(new VoxelNode(null, new Vector2i(0, 0), new Vector2i(0, 0)));
 	}

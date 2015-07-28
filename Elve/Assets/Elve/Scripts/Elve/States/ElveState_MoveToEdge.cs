@@ -20,6 +20,11 @@ public class ElveState_MoveToEdge : ElveState
 	/// </summary>
 	public ElveState ToResume { get; private set; }
 
+	/// <summary>
+	/// The target position along the movement axis.
+	/// </summary>
+	private int targetPos;
+
 
 	public ElveState_MoveToEdge(ElveBehavior owner, ElveState toResume, float dir)
 		: base(owner)
@@ -27,139 +32,104 @@ public class ElveState_MoveToEdge : ElveState
 		Dir = dir;
 		ToResume = toResume;
 	}
-	
-	public override void Update()
+
+	public override void OnStateStarting(ElveState oldState)
 	{
-		Vector3 myPos;
-		int targetX, targetY;
+		Vector3 myPos = Owner.MyTransform.position;
 
 		switch (Owner.CurrentSurface)
 		{
 			case ElveBehavior.Surfaces.Floor:
-
-				Assert.IsTrue((int)Owner.MyTransform.position.y == 0 ||
-							  WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[(int)Owner.MyTransform.position.x,
-																			  (int)Owner.MyTransform.position.y - 1]));
-
-				//Animate.
-				Owner.MyAnimator.AnimState = ElveAnimStates.Walking;
-				Owner.MyTransform.localScale = new Vector3(Dir, 1.0f, Owner.MyTransform.localScale.z);
-
-				//Figure out the target position to walk to.
-				myPos = Owner.MyTransform.position;
-				targetX = (int)myPos.x;
-				if (Dir > 0.0f)
-				{
-					targetX += 1;
-				}
-
-				//Walk.
-				myPos.x += Dir * Time.deltaTime * ElveConstants.Instance.WalkSpeed;
-				Owner.MyTransform.position = myPos;
-
-				//If we've reached our destination, switch states.
-				if ((Dir < 0.0f && myPos.x < targetX) ||
-					(Dir > 0.0f && myPos.x == targetX))
-				{
-					Owner.MyTransform.position = new Vector3((float)targetX - (Dir * 0.01f), myPos.y,
-															 myPos.z);
-					Success(ToResume);
-				}
+			case ElveBehavior.Surfaces.Ceiling:
+				targetPos = (int)myPos.x;
+				targetPos += (Dir > 0.0f) ? 1 : 0;
 				break;
 
-			case ElveBehavior.Surfaces.Ceiling:
+			case ElveBehavior.Surfaces.LeftWall:
+			case ElveBehavior.Surfaces.RightWall:
+				targetPos = (int)myPos.y;
+				targetPos += (Dir > 0.0f) ? 1 : 0;
+				break;
+		}
+	}
 
-				Assert.IsTrue((int)Owner.MyTransform.position.y < WorldVoxels.Instance.Voxels.GetLength(1) - 1 &&
-							  WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[(int)Owner.MyTransform.position.x,
-																			  (int)Owner.MyTransform.position.y + 1]));
+	public override void Update()
+	{
+		Vector3 myPos = Owner.MyTransform.position;
+		float moveAmount, distToTarget;
+
+		switch (Owner.CurrentSurface)
+		{
+			case ElveBehavior.Surfaces.Floor:
+			case ElveBehavior.Surfaces.Ceiling:
+				
+				//If on the floor, make sure the floor is solid.
+				Assert.IsTrue(Owner.CurrentSurface == ElveBehavior.Surfaces.Ceiling ||
+							  ((int)Owner.MyTransform.position.y == 0 ||
+							   WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[(int)Owner.MyTransform.position.x,
+																			   (int)Owner.MyTransform.position.y - 1])));
+				//If on the ceiling, make sure the ceiling is solid.
+				Assert.IsTrue(Owner.CurrentSurface == ElveBehavior.Surfaces.Floor ||
+							  ((int)Owner.MyTransform.position.y < WorldVoxels.Instance.Voxels.GetLength(1) - 1 &&
+							    WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[(int)Owner.MyTransform.position.x,
+																			    (int)Owner.MyTransform.position.y + 1])));
 
 				//Animate.
-				Owner.MyAnimator.AnimState = ElveAnimStates.ClimbingCeiling;
+				Owner.MyAnimator.AnimState = (Owner.CurrentSurface == ElveBehavior.Surfaces.Floor ?
+												ElveAnimStates.Walking :
+												ElveAnimStates.ClimbingCeiling);
 				Owner.MyTransform.localScale = new Vector3(Dir, 1.0f, Owner.MyTransform.localScale.z);
 
-				//Figure out the target position to walk to.
-				myPos = Owner.MyTransform.position;
-				targetX = (int)myPos.x;
-				if (Dir > 0.0f)
+				//Move.
+				moveAmount = Time.deltaTime * ElveConstants.Instance.WalkSpeed;
+				distToTarget = Mathf.Abs(myPos.x - targetPos);
+				//If close to the goal, jump there and end the state.
+				if (moveAmount > distToTarget)
 				{
-					targetX += 1;
-				}
-
-				//Move along the ceiling.
-				myPos.x += Dir * Time.deltaTime * ElveConstants.Instance.WalkSpeed;
-				Owner.MyTransform.position = myPos;
-
-				//If we've reached our destination, switch states.
-				if ((Dir < 0.0f && myPos.x < targetX) ||
-					(Dir > 0.0f && myPos.x == targetX))
-				{
-					Owner.MyTransform.position = new Vector3((float)targetX - (Dir * 0.01f), myPos.y,
+					Owner.MyTransform.position = new Vector3((float)targetPos - (Dir * 0.0001f), myPos.y,
 															 myPos.z);
 					Success(ToResume);
+				}
+				else
+				{
+					myPos.x += moveAmount * Dir;
+					Owner.MyTransform.position = myPos;
 				}
 				break;
 
 			case ElveBehavior.Surfaces.LeftWall:
-
-				Assert.IsTrue((int)Owner.MyTransform.position.x > 0 &&
-							  WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[(int)Owner.MyTransform.position.x - 1,
-																			  (int)Owner.MyTransform.position.y]));
-
-				//Animate.
-				Owner.MyAnimator.AnimState = ElveAnimStates.ClimbingWall;
-				Owner.MyTransform.localScale = new Vector3(-1.0f, Dir, Owner.MyTransform.localScale.z);
-
-				//Figure out the target position to walk to.
-				myPos = Owner.MyTransform.position;
-				targetY = (int)myPos.y;
-				if (Dir > 0.0f)
-				{
-					targetY += 1;
-				}
-
-				//Climb.
-				myPos.y += Dir * Time.deltaTime * ElveConstants.Instance.ClimbSpeed;
-				Owner.MyTransform.position = myPos;
-
-				//If we've reached out destination, switch states.
-				if ((Dir < 0.0f && myPos.y < targetY) ||
-					(Dir > 0.0f && myPos.y == targetY))
-				{
-					Owner.MyTransform.position = new Vector3(myPos.x, (float)targetY - (Dir * 0.01f),
-															 myPos.z);
-					Success(ToResume);
-				}
-				break;
-
 			case ElveBehavior.Surfaces.RightWall:
-
-				Assert.IsTrue((int)Owner.MyTransform.position.x < WorldVoxels.Instance.Voxels.GetLength(0) - 1 &&
-							  WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[(int)Owner.MyTransform.position.x + 1,
-																			  (int)Owner.MyTransform.position.y]));
+				
+				//If on the left wall, make sure it's solid.
+				Assert.IsTrue(Owner.CurrentSurface == ElveBehavior.Surfaces.RightWall ||
+							  ((int)Owner.MyTransform.position.x > 0 &&
+							   WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[(int)Owner.MyTransform.position.x - 1,
+																			   (int)Owner.MyTransform.position.y])));
+				//If on the right wall, make sure it's solid.
+				Assert.IsTrue(Owner.CurrentSurface == ElveBehavior.Surfaces.LeftWall ||
+							  ((int)Owner.MyTransform.position.x < WorldVoxels.Instance.Voxels.GetLength(0) - 1 &&
+							   WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[(int)Owner.MyTransform.position.x + 1,
+																			   (int)Owner.MyTransform.position.y])));
 
 				//Animate.
 				Owner.MyAnimator.AnimState = ElveAnimStates.ClimbingWall;
-				Owner.MyTransform.localScale = new Vector3(1.0f, Dir, Owner.MyTransform.localScale.z);
+				Owner.MyTransform.localScale = new Vector3((Owner.CurrentSurface == ElveBehavior.Surfaces.LeftWall ?
+																-1.0f : 1.0f),
+														   Dir, Owner.MyTransform.localScale.z);
 
-				//Figure out the target position to walk to.
-				myPos = Owner.MyTransform.position;
-				targetY = (int)myPos.y;
-				if (Dir > 0.0f)
+				//Move.
+				moveAmount = Time.deltaTime * ElveConstants.Instance.ClimbSpeed;
+				distToTarget = Mathf.Abs(myPos.y - targetPos);
+				if (moveAmount > distToTarget)
 				{
-					targetY += 1;
-				}
-
-				//Climb.
-				myPos.y += Dir * Time.deltaTime * ElveConstants.Instance.ClimbSpeed;
-				Owner.MyTransform.position = myPos;
-
-				//If we've reached out destination, switch states.
-				if ((Dir < 0.0f && myPos.y < targetY) ||
-					(Dir > 0.0f && myPos.y == targetY))
-				{
-					Owner.MyTransform.position = new Vector3(myPos.x, (float)targetY - (Dir * 0.0001f),
+					Owner.MyTransform.position = new Vector3(myPos.x, (float)targetPos - (Dir * 0.0001f),
 															 myPos.z);
 					Success(ToResume);
+				}
+				else
+				{
+					myPos.y += moveAmount * Dir;
+					Owner.MyTransform.position = myPos;
 				}
 				break;
 
