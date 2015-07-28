@@ -11,7 +11,7 @@ public class PathingConstants : MonoBehaviour
 {
 	/// <summary>
 	/// The different atomic types of movement an Elve can do
-	/// to get from one block to an adjacent (orthogonal or diagonal) block.
+	/// to get from one block to an adjacent (orthogonal) block.
 	/// </summary>
 	public enum MovementTypes
 	{
@@ -23,17 +23,14 @@ public class PathingConstants : MonoBehaviour
 		/// <summary>
 		/// Climbing along the side of a wall. Moves upward or downward.
 		/// </summary>
-		ClimbWall,
+		Climb,
 
 		/// <summary>
-		/// Climbing up and over a wall to stand on top of it. Moves up and to the left/right.
+		/// Climbing over a ledge.
+		/// Moves left/right for half a block and up/down for half a block,
+		/// plus a little time for crossing the ledge itself.
 		/// </summary>
-		ClimbOverLedge,
-		/// <summary>
-		/// The opposite of "ClimbOverLedge": drop down to the wall on the side of the floor.
-		/// Moves down and to the left/right.
-		/// </summary>
-		DropDownFromLedge,
+		Ledge,
 
 
 		NumberOfMovementTypes,
@@ -58,9 +55,8 @@ public class PathingConstants : MonoBehaviour
 		new MovementTypeAndCost[(int)MovementTypes.NumberOfMovementTypes]
 		{
 			new MovementTypeAndCost(MovementTypes.Walk, 1.0f),
-			new MovementTypeAndCost(MovementTypes.ClimbWall, 1.0f),
-			new MovementTypeAndCost(MovementTypes.ClimbOverLedge, 1.0f),
-			new MovementTypeAndCost(MovementTypes.DropDownFromLedge, 1.0f),
+			new MovementTypeAndCost(MovementTypes.Climb, 1.0f),
+			new MovementTypeAndCost(MovementTypes.Ledge, 1.1f)
 		};
 
 

@@ -53,6 +53,7 @@
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimFinishEvent.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimStates.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveBehavior.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\ElveMovementController.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_ChangeSurface.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_Climb.cs" />

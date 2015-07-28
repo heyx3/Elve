@@ -59,6 +59,16 @@ public class VoxelNode : Node
 
 public class VoxelEdge : Edge<VoxelNode>
 {
+	/// <summary>
+	/// Makes an edge with an arbitrary movement type.
+	/// Used in the construction of a PathFinder instance.
+	/// </summary>
+	public static VoxelEdge MakeEdge(VoxelNode start, VoxelNode end)
+	{
+		return new VoxelEdge(start, end, MovementTypes.Walk);
+	}
+
+
 	public MovementTypes MoveType;
 
 
@@ -85,8 +95,18 @@ public class VoxelEdge : Edge<VoxelNode>
 	}
 }
 
+
+/// <summary>
+/// Is a singleton simply because it doesn't have any state and it's a waste to keep re-allocating.
+/// </summary>
 public class VoxelGraph : Graph<VoxelNode>
 {
+	public static VoxelGraph Instance = new VoxelGraph();
+
+
+	private VoxelGraph() { }
+
+
 	public void GetConnections(VoxelNode start, List<Edge<VoxelNode>> ends)
 	{
 		WorldVoxels.VoxelConnections connections =
@@ -106,34 +126,34 @@ public class VoxelGraph : Graph<VoxelNode>
 		if (connections.CanClimbDown)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos.LessY),
-								   MovementTypes.ClimbWall));
+								   MovementTypes.Climb));
 		}
 		if (connections.CanClimbUp)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos.MoreY),
-								   MovementTypes.ClimbWall));
+								   MovementTypes.Climb));
 		}
 
 		if (connections.CanMoveDownLeft)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos + new Vector2i(-1, -1)),
-								   MovementTypes.DropDownFromLedge));
+								   MovementTypes.Ledge));
 		}
 		if (connections.CanMoveDownRight)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos + new Vector2i(1, -1)),
-								   MovementTypes.DropDownFromLedge));
+								   MovementTypes.Ledge));
 		}
 		
 		if (connections.CanMoveUpLeft)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos + new Vector2i(-1, 1)),
-								   MovementTypes.ClimbOverLedge));
+								   MovementTypes.Ledge));
 		}
 		if (connections.CanMoveUpRight)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos + new Vector2i(1, 1)),
-								   MovementTypes.ClimbOverLedge));
+								   MovementTypes.Ledge));
 		}
 	}
 }

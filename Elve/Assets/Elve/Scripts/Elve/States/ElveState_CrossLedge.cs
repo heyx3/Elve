@@ -4,7 +4,7 @@ using Assert = UnityEngine.Assertions.Assert;
 
 
 /// <summary>
-/// Move the Elve from a floor/ceiling to a wall below/above it, or vice-versa.
+/// Moves the Elve from a floor/ceiling to a nearby voxel's wall (or vice-versa).
 /// </summary>
 public class ElveState_CrossLedge : ElveState
 {
@@ -14,10 +14,6 @@ public class ElveState_CrossLedge : ElveState
 	public Vector2i MoveAmount { get; private set; }
 
 
-	/// <summary>
-	/// If true, this state is currently playing the animation and not just moving into place.
-	/// </summary>
-	private bool actuallyRunning = false;
 	private ElveBehavior.Surfaces targetSurface;
 
 
@@ -33,8 +29,6 @@ public class ElveState_CrossLedge : ElveState
 
 	public override void OnStateStarting(ElveState oldState)
 	{
-		actuallyRunning = false;
-
 		Vector3 pos = Owner.MyTransform.position;
 		Vector2i posI = ToPosI(pos);
 		
@@ -89,39 +83,56 @@ public class ElveState_CrossLedge : ElveState
 		//Basically, for either of the 4 movement directions for ledge crossing,
 		//    it can either be for a right-side-up ledge (from/to the floor)
 		//    or an upside-down ledge (from/to the ceiling).
-		ElveBehavior.Surfaces rightSideUpTargetSurface, upsideDownTargetSurface;
+		ElveBehavior.Surfaces rightSideUpTargetSurface, upsideDownTargetSurface,
+							  rightSideUpFinalSurface, upsideDownFinalSurface;
 		ElveAnimStates rightSideUpAnim, upsideDownAnim;
 		float xScale;
 		if (MoveAmount.x == 1 && MoveAmount.y == 1)
 		{
 			rightSideUpTargetSurface = ElveBehavior.Surfaces.RightWall;
-			upsideDownTargetSurface = ElveBehavior.Surfaces.Ceiling;
 			rightSideUpAnim = ElveAnimStates.MountingLedge;
+			rightSideUpFinalSurface = ElveBehavior.Surfaces.Floor;
+
+			upsideDownTargetSurface = ElveBehavior.Surfaces.Ceiling;
 			upsideDownAnim = ElveAnimStates.DroppingToLedgeUpsideDown;
+			upsideDownFinalSurface = ElveBehavior.Surfaces.LeftWall;
+
 			xScale = 1.0f;
 		}
 		else if (MoveAmount.x == -1 && MoveAmount.y == 1)
 		{
 			rightSideUpTargetSurface = ElveBehavior.Surfaces.LeftWall;
-			upsideDownTargetSurface = ElveBehavior.Surfaces.Ceiling;
 			rightSideUpAnim = ElveAnimStates.MountingLedge;
+			rightSideUpFinalSurface = ElveBehavior.Surfaces.Floor;
+
+			upsideDownTargetSurface = ElveBehavior.Surfaces.Ceiling;
 			upsideDownAnim = ElveAnimStates.DroppingToLedgeUpsideDown;
+			upsideDownFinalSurface = ElveBehavior.Surfaces.RightWall;
+
 			xScale = -1.0f;
 		}
 		else if (MoveAmount.x == 1 && MoveAmount.y == -1)
 		{
 			rightSideUpTargetSurface = ElveBehavior.Surfaces.Floor;
-			upsideDownTargetSurface = ElveBehavior.Surfaces.RightWall;
 			rightSideUpAnim = ElveAnimStates.DroppingToLedge;
+			rightSideUpFinalSurface = ElveBehavior.Surfaces.LeftWall;
+
+			upsideDownTargetSurface = ElveBehavior.Surfaces.RightWall;
 			upsideDownAnim = ElveAnimStates.MountingLedgeUpsideDown;
+			upsideDownFinalSurface = ElveBehavior.Surfaces.Ceiling;
+
 			xScale = 1.0f;
 		}
 		else if (MoveAmount.x == -1 && MoveAmount.y == -1)
 		{
 			rightSideUpTargetSurface = ElveBehavior.Surfaces.Floor;
-			upsideDownTargetSurface = ElveBehavior.Surfaces.LeftWall;
 			rightSideUpAnim = ElveAnimStates.DroppingToLedge;
+			rightSideUpFinalSurface = ElveBehavior.Surfaces.RightWall;
+
+			upsideDownTargetSurface = ElveBehavior.Surfaces.LeftWall;
 			upsideDownAnim = ElveAnimStates.MountingLedgeUpsideDown;
+			upsideDownFinalSurface = ElveBehavior.Surfaces.Ceiling;
+
 			xScale = -1.0f;
 		}
 		else
@@ -144,8 +155,8 @@ public class ElveState_CrossLedge : ElveState
 			//Otherwise, everything is in place; play the animation.
 			else
 			{
-				actuallyRunning = true;
 				Owner.MyAnimator.AnimState = rightSideUpAnim;
+				targetSurface = rightSideUpFinalSurface;
 			}
 		}
 		else
@@ -163,8 +174,8 @@ public class ElveState_CrossLedge : ElveState
 			//Otherwise, everything is in place; play the animation.
 			else
 			{
-				actuallyRunning = true;
 				Owner.MyAnimator.AnimState = upsideDownAnim;
+				targetSurface = upsideDownFinalSurface;
 			}
 		}
 

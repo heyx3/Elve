@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// The controller for the FSM controlling Elve movement/behavior.
+/// The FSM controlling Elve movement/behavior.
 /// </summary>
 [RequireComponent(typeof(ElveAnimController))]
 public class ElveBehavior : MonoBehaviour

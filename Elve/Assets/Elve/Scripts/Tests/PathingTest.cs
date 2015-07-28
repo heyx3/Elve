@@ -8,6 +8,8 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class PathingTest : MonoBehaviour
 {
+	public ElveMovementController Elve = null;
+
 	private Camera cam;
 
 	private Vector2 pos1, pos2;
@@ -44,12 +46,7 @@ public class PathingTest : MonoBehaviour
 
 	private void CalcPath()
 	{
-		Func<VoxelNode, VoxelNode, Edge<VoxelNode>> makeEdge =
-			(n1, n2) =>
-			{
-				return new VoxelEdge(n1, n2, PathingConstants.MovementTypes.Walk);
-			};
-		PathFinder<VoxelNode> pather = new PathFinder<VoxelNode>(new VoxelGraph(), makeEdge);
+		PathFinder<VoxelNode> pather = new PathFinder<VoxelNode>(VoxelGraph.Instance, VoxelEdge.MakeEdge);
 
 		pather.Start = new VoxelNode(new Vector2i((int)pos1.x, (int)pos1.y));
 		pather.End = new VoxelNode(new Vector2i((int)pos2.x, (int)pos2.y));
@@ -57,10 +54,11 @@ public class PathingTest : MonoBehaviour
 
 		path = pather.CurrentPath.ToList();
 
-		pathTree = pather.PathTree;
+		if (Elve != null)
+		{
+			Elve.StartPath(pos2);
+		}
 	}
-
-	private Dictionary<VoxelNode, VoxelNode> pathTree = new Dictionary<VoxelNode, VoxelNode>();
 
 
 	void OnDrawGizmos()
@@ -73,14 +71,6 @@ public class PathingTest : MonoBehaviour
 		{
 			Gizmos.DrawLine(new Vector3(path[i].WorldPos.x + 0.5f, path[i].WorldPos.y + 0.5f, 0.0f),
 							new Vector3(path[i + 1].WorldPos.x + 0.5f, path[i + 1].WorldPos.y + 0.5f, 0.0f));
-		}
-
-		Gizmos.color = new Color(0.25f, 0.25f, 0.25f, 0.5f);
-		foreach (KeyValuePair<VoxelNode, VoxelNode> kvp in pathTree)
-		{
-			//if (kvp.Key != null && kvp.Value != null)
-			//	Gizmos.DrawLine(new Vector3(kvp.Key.WorldPos.x + 0.5f, kvp.Key.WorldPos.y + 0.5f, 0.0f),
-			//					new Vector3(kvp.Value.WorldPos.x + 0.5f, kvp.Value.WorldPos.y + 0.5f, 0.0f));
 		}
 
 		Gizmos.color = new Color(0.25f, 0.25f, 0.25f);
