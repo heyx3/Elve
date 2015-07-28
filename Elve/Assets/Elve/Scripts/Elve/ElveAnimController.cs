@@ -61,6 +61,9 @@ public class ElveAnimController : MonoBehaviour
 
 		new StateAndObject(ElveAnimStates.MountingLedge),
 		new StateAndObject(ElveAnimStates.DroppingToLedge),
+		new StateAndObject(ElveAnimStates.MountingLedgeUpsideDown),
+		new StateAndObject(ElveAnimStates.DroppingToLedgeUpsideDown),
+
 		new StateAndObject(ElveAnimStates.FloorToWall),
 		new StateAndObject(ElveAnimStates.FloorToCeiling),
 		new StateAndObject(ElveAnimStates.WallToFloor),

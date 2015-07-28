@@ -29,16 +29,14 @@ public class ElveBehavior : MonoBehaviour
 		get { return currentState; }
 		set
 		{
+			if (currentState == value)
+			{
+				return;
+			}
+
 			if (currentState != null)
 			{
 				currentState.OnStateEnding(value);
-			}
-			if (OnStateChanged != null)
-			{
-				//Store a copy of the event to trigger and clean out the actual event.
-				StateChangeCallback copyOfEvent = (OnStateChanged + DummyFunc);
-				OnStateChanged = null;
-				copyOfEvent(this, currentState, value);
 			}
 
 			ElveState old = currentState;
@@ -56,20 +54,6 @@ public class ElveBehavior : MonoBehaviour
 
 	public Transform MyTransform { get; private set; }
 	public ElveAnimController MyAnimator { get; private set; }
-
-
-	/// <summary>
-	/// A callback to be triggered when the current movement state changes.
-	/// Note that either of the two states may be "null", which means an inactive "standing" state.
-	/// </summary>
-	public delegate void StateChangeCallback(ElveBehavior movementStateMachine,
-											 ElveState oldState, ElveState newState);
-	/// <summary>
-	/// Triggered when a state ends and a new one begins.
-	/// Note that the event is actually cleared out before the callbacks are raised
-	/// so that new callbacks can be added for the new state.
-	/// </summary>
-	public event StateChangeCallback OnStateChanged;
 
 
 	void Awake()

@@ -111,14 +111,14 @@ public class PathingTest : MonoBehaviour
 				Gizmos.DrawLine(centerPos, centerPos + new Vector3(0, -1, 0));
 			if (conn.CanClimbUp)
 				Gizmos.DrawLine(centerPos, centerPos + new Vector3(0, 1, 0));
-			if (conn.CanDropLedgeLeft)
+			if (conn.CanMoveDownLeft)
 				Gizmos.DrawLine(centerPos, centerPos + new Vector3(-1, -1, 0));
-			if (conn.CanDropLedgeRight)
+			if (conn.CanMoveDownRight)
 				Gizmos.DrawLine(centerPos, centerPos + new Vector3(1, -1, 0));
-			if (conn.CanClimbLedgeLeft)
+			if (conn.CanMoveUpLeft)
 				Gizmos.DrawLine(centerPos, centerPos + new Vector3(-1, 1, 0));
-			if (conn.CanClimbLedgeRight)
-				Gizmos.DrawLine(centerPos, centerPos + new Vector3(-1, 1, 0));
+			if (conn.CanMoveUpRight)
+				Gizmos.DrawLine(centerPos, centerPos + new Vector3(1, 1, 0));
 		}
 	}
 }

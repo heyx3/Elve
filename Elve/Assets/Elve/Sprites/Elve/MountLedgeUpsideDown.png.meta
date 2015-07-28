@@ -1,13 +1,14 @@
 fileFormatVersion: 2
-guid: 422e15e1657c2d146b3182a989fd1341
-timeCreated: 1437670120
+guid: e9fa76f2ac4194f4685c7f98f75904b0
+timeCreated: 1438052238
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: CeilingToWall_0
-    21300002: CeilingToWall_1
-    21300004: CeilingToWall_2
-    21300006: CeilingToWall_3
+    21300000: MountLedgeUpsideDown_0
+    21300002: MountLedgeUpsideDown_1
+    21300004: MountLedgeUpsideDown_2
+    21300006: MountLedgeUpsideDown_3
+    21300008: MountLedgeUpsideDown_4
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -53,45 +54,55 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: CeilingToWall_0
+    - name: MountLedgeUpsideDown_0
       rect:
         serializedVersion: 2
-        x: 120
-        y: 84
+        x: 16
+        y: 8
+        width: 52
+        height: 120
+      alignment: 9
+      pivot: {x: .898629785, y: .457774907}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MountLedgeUpsideDown_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 8
+        width: 44
+        height: 124
+      alignment: 9
+      pivot: {x: .887355447, y: .574296713}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MountLedgeUpsideDown_2
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 0
+        width: 56
+        height: 138
+      alignment: 9
+      pivot: {x: .310809284, y: .67023617}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: MountLedgeUpsideDown_3
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 10
         width: 116
-        height: 44
-      alignment: 2
-      pivot: {x: .5, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: CeilingToWall_1
-      rect:
-        serializedVersion: 2
-        x: 252
-        y: 79
-        width: 117
-        height: 45
-      alignment: 2
-      pivot: {x: .5, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: CeilingToWall_2
-      rect:
-        serializedVersion: 2
-        x: 372
-        y: 34
-        width: 72
-        height: 90
+        height: 74
       alignment: 9
-      pivot: {x: .608684957, y: .958454549}
+      pivot: {x: .0711295009, y: 1.31545532}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: CeilingToWall_3
+    - name: MountLedgeUpsideDown_4
       rect:
         serializedVersion: 2
-        x: 462
+        x: 383
         y: 12
-        width: 50
-        height: 112
+        width: 117
+        height: 64
       alignment: 9
-      pivot: {x: .357721567, y: .992259979}
+      pivot: {x: -9.39002439e-06, y: 1.35650074}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

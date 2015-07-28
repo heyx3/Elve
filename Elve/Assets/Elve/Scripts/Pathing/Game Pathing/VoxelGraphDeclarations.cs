@@ -114,23 +114,23 @@ public class VoxelGraph : Graph<VoxelNode>
 								   MovementTypes.ClimbWall));
 		}
 
-		if (connections.CanDropLedgeLeft)
+		if (connections.CanMoveDownLeft)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos + new Vector2i(-1, -1)),
 								   MovementTypes.DropDownFromLedge));
 		}
-		if (connections.CanDropLedgeRight)
+		if (connections.CanMoveDownRight)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos + new Vector2i(1, -1)),
 								   MovementTypes.DropDownFromLedge));
 		}
 		
-		if (connections.CanClimbLedgeLeft)
+		if (connections.CanMoveUpLeft)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos + new Vector2i(-1, 1)),
 								   MovementTypes.ClimbOverLedge));
 		}
-		if (connections.CanClimbLedgeRight)
+		if (connections.CanMoveUpRight)
 		{
 			ends.Add(new VoxelEdge(start, new VoxelNode(start.WorldPos + new Vector2i(1, 1)),
 								   MovementTypes.ClimbOverLedge));

@@ -106,7 +106,8 @@ public class ElveState_Walk : ElveState
 				break;
 
 			default:
-				throw new InvalidOperationException("Unknown surface " + Owner.CurrentSurface);
+				Assert.IsTrue(false, "Unknown state " + Owner.CurrentSurface);
+				break;
 		}
 	}
 
@@ -125,17 +126,25 @@ public class ElveState_Walk : ElveState
 		}
 		
 		//Flip the Elve correctly.
-		Vector3 scale = Owner.MyTransform.localScale;
-		Owner.MyTransform.localScale = new Vector3(Dir, scale.y, scale.z);
+		Owner.MyTransform.localScale = new Vector3(Dir, 1.0f, Owner.MyTransform.localScale.z);
 
 		//Walk forwards.
-		Owner.MyTransform.position += new Vector3(Dir * Time.deltaTime * ElveConstants.Instance.WalkSpeed,
-												  0.0f, 0.0f);
+		Vector3 pos = Owner.MyTransform.position;
+		pos.x += Dir * Time.deltaTime * ElveConstants.Instance.WalkSpeed;
+		if (Owner.CurrentSurface == ElveBehavior.Surfaces.Floor)
+		{
+			pos.y = Mathf.Floor(pos.y) + 0.00001f;
+		}
+		else
+		{
+			pos.y = Mathf.Floor(pos.y) + 0.99f;
+		}
+		Owner.MyTransform.position = pos;
 
 		//If we reached the destination voxel, stop.
-		if ((int)Owner.MyTransform.position.x == TargetPos.x)
+		if ((int)pos.x == TargetPos.x)
 		{
-			Owner.CurrentState = null;
+			Success();
 		}
 	}
 }

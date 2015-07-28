@@ -14,7 +14,7 @@ public class WorldVoxels : MonoBehaviour
 	/// </summary>
 	public struct VoxelConnections
 	{
-		public int Bitflag;
+		public uint Bitflag;
 
 		public void ClearAll() { Bitflag = 0; }
 
@@ -22,19 +22,19 @@ public class WorldVoxels : MonoBehaviour
 		public bool CanWalkRight       { get { return (Bitflag & 2) == 2; } }
 		public bool CanClimbUp         { get { return (Bitflag & 4) == 4; } }
 		public bool CanClimbDown       { get { return (Bitflag & 8) == 8; } }
-		public bool CanClimbLedgeLeft  { get { return (Bitflag & 16) == 16; } }
-		public bool CanClimbLedgeRight { get { return (Bitflag & 32) == 32; } }
-		public bool CanDropLedgeLeft   { get { return (Bitflag & 64) == 64; } }
-		public bool CanDropLedgeRight  { get { return (Bitflag & 128) == 128; } }
+		public bool CanMoveUpLeft      { get { return (Bitflag & 16) == 16; } }
+		public bool CanMoveUpRight     { get { return (Bitflag & 32) == 32; } }
+		public bool CanMoveDownLeft    { get { return (Bitflag & 64) == 64; } }
+		public bool CanMoveDownRight   { get { return (Bitflag & 128) == 128; } }
 		
 		public void Set_WalkLeft()        { Bitflag |= 1; }
 		public void Set_WalkRight()       { Bitflag |= 2; }
 		public void Set_ClimbUp()         { Bitflag |= 4; }
 		public void Set_ClimbDown()       { Bitflag |= 8; }
-		public void Set_ClimbLedgeLeft()  { Bitflag |= 16; }
-		public void Set_ClimbLedgeRight() { Bitflag |= 32; }
-		public void Set_DropLedgeLeft()   { Bitflag |= 64; }
-		public void Set_DropLedgeRight()  { Bitflag |= 128; }
+		public void Set_MoveUpLeft()      { Bitflag |= 16; }
+		public void Set_MoveUpRight()     { Bitflag |= 32; }
+		public void Set_MoveDownLeft()    { Bitflag |= 64; }
+		public void Set_MoveDownRight()   { Bitflag |= 128; }
 	}
 
 
@@ -104,6 +104,7 @@ public class WorldVoxels : MonoBehaviour
 			}
 		}
 	}
+
 	/// <summary>
 	/// Recalculates connections for the given voxel (in world coordinates).
 	/// </summary>
@@ -119,7 +120,6 @@ public class WorldVoxels : MonoBehaviour
 
 		Connections[x, y].ClearAll();
 
-		TODO: Figure out why climbing right ledge is not detected.
 		//If this is an empty space, find connections.
 		if (!IsSolid(Voxels[x, y]))
 		{
@@ -138,10 +138,15 @@ public class WorldVoxels : MonoBehaviour
 					{
 						Connections[x, y].Set_ClimbDown();
 					}
-					//See if we can mount the ledge.
+					//See if we can mount the ledge right-side-up.
 					if (!isTopEdge && !IsSolid(Voxels[x, y + 1]) && !IsSolid(Voxels[x - 1, y + 1]))
 					{
-						Connections[x, y].Set_ClimbLedgeLeft();
+						Connections[x, y].Set_MoveUpLeft();
+					}
+					//See if we can mount the ledge upside-down.
+					if (!isBottomEdge && !IsSolid(Voxels[x, y - 1]) && !IsSolid(Voxels[x - 1, y - 1]))
+					{
+						Connections[x, y].Set_MoveDownLeft();
 					}
 				}
 				else
@@ -153,10 +158,15 @@ public class WorldVoxels : MonoBehaviour
 					{
 						Connections[x, y].Set_WalkLeft();
 					}
+					//See if we can mount the upside-down ledge.
+					if (!isTopEdge && IsSolid(Voxels[x, y + 1]) && !IsSolid(Voxels[x - 1, y + 1]))
+					{
+						Connections[x, y].Set_MoveUpLeft();
+					}
 					//See if we can drop down a ledge.
 					if (!isBottomEdge && IsSolid(Voxels[x, y - 1]) && !IsSolid(Voxels[x - 1, y - 1]))
 					{
-						Connections[x, y].Set_DropLedgeLeft();
+						Connections[x, y].Set_MoveDownLeft();
 					}
 				}
 			}
@@ -175,10 +185,15 @@ public class WorldVoxels : MonoBehaviour
 					{
 						Connections[x, y].Set_ClimbDown();
 					}
-					//See if we can mount the ledge.
+					//See if we can mount the ledge right-side-up.
 					if (!isTopEdge && !IsSolid(Voxels[x, y + 1]) && !IsSolid(Voxels[x + 1, y + 1]))
 					{
-						Connections[x, y].Set_ClimbLedgeRight();
+						Connections[x, y].Set_MoveUpRight();
+					}
+					//See if we can mount the ledge upside-down.
+					if (!isBottomEdge && !IsSolid(Voxels[x, y - 1]) && !IsSolid(Voxels[x + 1, y - 1]))
+					{
+						Connections[x, y].Set_MoveDownRight();
 					}
 				}
 				else
@@ -190,10 +205,15 @@ public class WorldVoxels : MonoBehaviour
 					{
 						Connections[x, y].Set_WalkRight();
 					}
+					//See if we can mount the upside-down ledge.
+					if (!isTopEdge && IsSolid(Voxels[x, y + 1]) && !IsSolid(Voxels[x + 1, y + 1]))
+					{
+						Connections[x, y].Set_MoveUpRight();
+					}
 					//See if we can drop down a ledge.
 					if (!isBottomEdge && IsSolid(Voxels[x, y - 1]) && !IsSolid(Voxels[x + 1, y - 1]))
 					{
-						Connections[x, y].Set_DropLedgeRight();
+						Connections[x, y].Set_MoveDownRight();
 					}
 				}
 			}
@@ -255,6 +275,4 @@ public class WorldVoxels : MonoBehaviour
 			}
 		}
 	}
-
-
 }

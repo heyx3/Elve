@@ -129,7 +129,7 @@ public class ElveState_ChangeSurface : ElveState
 		if (Owner.CurrentState == this)
 		{
 			Owner.CurrentSurface = To;
-			Owner.CurrentState = ToResume;
+			Success(ToResume);
 		}
 	}
 }

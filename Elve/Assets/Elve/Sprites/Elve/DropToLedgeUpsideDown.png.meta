@@ -1,13 +1,14 @@
 fileFormatVersion: 2
-guid: 422e15e1657c2d146b3182a989fd1341
-timeCreated: 1437670120
+guid: 2f25734cd2040e641817fdad17727c8e
+timeCreated: 1438052331
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: CeilingToWall_0
-    21300002: CeilingToWall_1
-    21300004: CeilingToWall_2
-    21300006: CeilingToWall_3
+    21300000: DropToLedgeUpsideDown_0
+    21300002: DropToLedgeUpsideDown_1
+    21300004: DropToLedgeUpsideDown_2
+    21300006: DropToLedgeUpsideDown_3
+    21300008: DropToLedgeUpsideDown_4
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -53,45 +54,55 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: CeilingToWall_0
+    - name: DropToLedgeUpsideDown_0
       rect:
         serializedVersion: 2
-        x: 120
-        y: 84
-        width: 116
-        height: 44
-      alignment: 2
-      pivot: {x: .5, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: CeilingToWall_1
-      rect:
-        serializedVersion: 2
-        x: 252
-        y: 79
-        width: 117
-        height: 45
-      alignment: 2
-      pivot: {x: .5, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: CeilingToWall_2
-      rect:
-        serializedVersion: 2
-        x: 372
-        y: 34
-        width: 72
-        height: 90
+        x: 14
+        y: 29
+        width: 115
+        height: 63
       alignment: 9
-      pivot: {x: .608684957, y: .958454549}
+      pivot: {x: .28770569, y: .916769385}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: CeilingToWall_3
+    - name: DropToLedgeUpsideDown_1
       rect:
         serializedVersion: 2
-        x: 462
-        y: 12
+        x: 147
+        y: 15
+        width: 115
+        height: 73
+      alignment: 9
+      pivot: {x: .548066795, y: .777645707}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: DropToLedgeUpsideDown_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 4
+        width: 56
+        height: 134
+      alignment: 9
+      pivot: {x: .853704751, y: .530938566}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: DropToLedgeUpsideDown_3
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 8
+        width: 44
+        height: 121
+      alignment: 9
+      pivot: {x: 1.63065898, y: .538069546}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: DropToLedgeUpsideDown_4
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 7
         width: 50
-        height: 112
+        height: 119
       alignment: 9
-      pivot: {x: .357721567, y: .992259979}
+      pivot: {x: 1.60553348, y: .418710947}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

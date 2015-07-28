@@ -56,6 +56,7 @@
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_ChangeSurface.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_Climb.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_CrossLedge.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_MoveToEdge.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_Walk.cs" />
      <Compile Include="Assets\Elve\Scripts\Pathing\BaseGraphDeclarations.cs" />

@@ -63,7 +63,7 @@ public class ElveState_MoveToEdge : ElveState
 				{
 					Owner.MyTransform.position = new Vector3((float)targetX - (Dir * 0.01f), myPos.y,
 															 myPos.z);
-					Owner.CurrentState = ToResume;
+					Success(ToResume);
 				}
 				break;
 
@@ -95,7 +95,7 @@ public class ElveState_MoveToEdge : ElveState
 				{
 					Owner.MyTransform.position = new Vector3((float)targetX - (Dir * 0.01f), myPos.y,
 															 myPos.z);
-					Owner.CurrentState = ToResume;
+					Success(ToResume);
 				}
 				break;
 
@@ -127,7 +127,7 @@ public class ElveState_MoveToEdge : ElveState
 				{
 					Owner.MyTransform.position = new Vector3(myPos.x, (float)targetY - (Dir * 0.01f),
 															 myPos.z);
-					Owner.CurrentState = ToResume;
+					Success(ToResume);
 				}
 				break;
 
@@ -157,9 +157,9 @@ public class ElveState_MoveToEdge : ElveState
 				if ((Dir < 0.0f && myPos.y < targetY) ||
 					(Dir > 0.0f && myPos.y == targetY))
 				{
-					Owner.MyTransform.position = new Vector3(myPos.x, (float)targetY - (Dir * 0.01f),
+					Owner.MyTransform.position = new Vector3(myPos.x, (float)targetY - (Dir * 0.0001f),
 															 myPos.z);
-					Owner.CurrentState = ToResume;
+					Success(ToResume);
 				}
 				break;
 

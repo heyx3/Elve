@@ -15,6 +15,16 @@ public abstract class ElveState
 
 	public ElveBehavior Owner { get; private set; }
 
+	/// <summary>
+	/// The type of function to be called when this state succeeds.
+	/// </summary>
+	public delegate void StateSucceedCallback(ElveState me);
+	/// <summary>
+	/// Raised when this state exits after successful completion.
+	/// Child classes can call "Success()" to raise this event at the proper time.
+	/// </summary>
+	public event StateSucceedCallback OnStateSucceeded;
+
 
 	public ElveState(ElveBehavior owner) { Owner = owner; }
 
@@ -24,4 +34,16 @@ public abstract class ElveState
 
 	public abstract void Update();
 
+	/// <summary>
+	/// Raises the "OnStateSucceeded" event and switches to the given state.
+	/// </summary>
+	protected void Success(ElveState nextState = null)
+	{
+		Owner.CurrentState = nextState;
+
+		if (OnStateSucceeded != null)
+		{
+			OnStateSucceeded(this);
+		}
+	}
 }
