@@ -57,7 +57,8 @@ public class ElveState_Walk : ElveState
 				if (!WorldVoxels.IsSolid(vxs[TargetPos.x, TargetPos.y + 1]))
 				{
 					Assert.IsTrue(TargetPos.y > 0);
-					Assert.IsTrue(WorldVoxels.IsSolid(vxs[TargetPos.x, TargetPos.y - 1]));
+					Assert.IsTrue(WorldVoxels.IsSolid(vxs[TargetPos.x, TargetPos.y - 1]),
+								  "Target pos is " + TargetPos + "; my pos is " + myPos);
 					Owner.CurrentState = new ElveState_ChangeSurface(Owner, this,
 																	 ElveBehavior.Surfaces.Ceiling,
 																	 ElveBehavior.Surfaces.Floor);

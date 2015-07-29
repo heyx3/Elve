@@ -31,7 +31,8 @@ public class ElveState_ChangeSurface : ElveState
 	public override void OnStateStarting(ElveState oldState)
 	{
 		//Enable the correct animation.
-		float xScale = Owner.MyTransform.localScale.x;
+		float xScale = Owner.MyTransform.localScale.x,
+			  yScale = 1.0f;
 		switch (From)
 		{
 			case ElveBehavior.Surfaces.Floor:
@@ -113,7 +114,7 @@ public class ElveState_ChangeSurface : ElveState
 				}
 				break;
 		}
-		Owner.MyTransform.localScale = new Vector3(xScale, Owner.MyTransform.localScale.y,
+		Owner.MyTransform.localScale = new Vector3(xScale, yScale,
 												   Owner.MyTransform.localScale.z);
 		
 		//When the animation is finished, switch states.
@@ -129,6 +130,90 @@ public class ElveState_ChangeSurface : ElveState
 		if (Owner.CurrentState == this)
 		{
 			Owner.CurrentSurface = To;
+
+			//Update the position.
+			Vector3 myPos = Owner.MyTransform.position;
+			const float vertHorzOffset = 0.1f;
+			switch (From)
+			{
+				case ElveBehavior.Surfaces.Floor:
+					switch (To)
+					{
+						case ElveBehavior.Surfaces.Ceiling:
+							myPos.y = Mathf.Ceil(myPos.y + 0.1f) - 0.0001f;
+							break;
+						case ElveBehavior.Surfaces.LeftWall:
+							myPos.x = Mathf.Floor(myPos.x) + 0.0001f;
+							myPos.y += vertHorzOffset;
+							break;
+						case ElveBehavior.Surfaces.RightWall:
+							myPos.x = Mathf.Floor(myPos.x) + 0.9999f;
+							myPos.y += vertHorzOffset;
+							break;
+
+						default: Assert.IsTrue(false); break;
+					}
+					break;
+
+				case ElveBehavior.Surfaces.Ceiling:
+					switch (To)
+					{
+						case ElveBehavior.Surfaces.Floor:
+							myPos.y = Mathf.Floor(myPos.y - 0.1f) + 0.0001f;
+							break;
+						case ElveBehavior.Surfaces.LeftWall:
+							myPos.x = Mathf.Floor(myPos.x) + 0.0001f;
+							myPos.y -= vertHorzOffset;
+							break;
+						case ElveBehavior.Surfaces.RightWall:
+							myPos.x = Mathf.Floor(myPos.x) + 0.9999f;
+							myPos.y -= vertHorzOffset;
+							break;
+
+						default: Assert.IsTrue(false); break;
+					}
+					break;
+
+				case ElveBehavior.Surfaces.LeftWall:
+					switch (To)
+					{
+						case ElveBehavior.Surfaces.Floor:
+							myPos.x = Mathf.Floor(myPos.x) + 0.05f;
+							myPos.y = Mathf.Floor(myPos.y + 0.000001f) + 0.0001f;
+							break;
+						case ElveBehavior.Surfaces.Ceiling:
+							myPos.x = Mathf.Floor(myPos.x) + 0.05f;
+							myPos.y = Mathf.Floor(myPos.y + 0.000001f) + 0.999f;
+							break;
+						case ElveBehavior.Surfaces.RightWall:
+							myPos.x = Mathf.Floor(myPos.x) + 0.9999f;
+							break;
+
+						default: Assert.IsTrue(false); break;
+					}
+					break;
+
+				case ElveBehavior.Surfaces.RightWall:
+					switch (To)
+					{
+						case ElveBehavior.Surfaces.Floor:
+							myPos.x = Mathf.Floor(myPos.x) + 0.95f;
+							myPos.y = Mathf.Floor(myPos.y + 0.000001f) + 0.0001f;
+							break;
+						case ElveBehavior.Surfaces.Ceiling:
+							myPos.x = Mathf.Floor(myPos.x) + 0.95f;
+							myPos.y = Mathf.Floor(myPos.y + 0.000001f) + 0.999f;
+							break;
+						case ElveBehavior.Surfaces.LeftWall:
+							myPos.x = Mathf.Floor(myPos.x) + 0.0001f;
+							break;
+
+						default: Assert.IsTrue(false); break;
+					}
+					break;
+			}
+			Owner.MyTransform.position = myPos;
+
 			Success(ToResume);
 		}
 	}

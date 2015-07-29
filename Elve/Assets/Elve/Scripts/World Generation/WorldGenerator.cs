@@ -6,7 +6,6 @@ using UnityEngine;
 public class WorldGenerator : MonoBehaviour
 {
 	public WorldGenSettings Settings = new WorldGenSettings();
-	public GameObject ChunkPrefab = null;
 
 	/// <summary>
 	/// Meant for use in the inspector to generate the world at will.
@@ -16,11 +15,6 @@ public class WorldGenerator : MonoBehaviour
 
 	void Start()
 	{
-		if (ChunkPrefab == null)
-		{
-			Debug.LogError("'Chunk Prefab' field isnt set to anything!");
-		}
-		
 		if (Settings.Width % Chunk.Size != 0)
 		{
 			Debug.LogError("World width of " + Settings.Width +
@@ -44,46 +38,23 @@ public class WorldGenerator : MonoBehaviour
 
 	public void Generate()
 	{
-		const float chunkSizeF = (float)Chunk.Size;
-
 		Vector2 worldSize = new Vector2((float)Settings.Width, (float)Settings.Height);
 
-		Vector2i nChunks = new Vector2i(Settings.Width / Chunk.Size,
-										Settings.Height / Chunk.Size);
-		WorldVoxels.Instance.Chunks = new Chunk[nChunks.x, nChunks.y];
+		WorldVoxels.Instance.Voxels = new VoxelTypes[Settings.Width, Settings.Height];
 
-		for (int cX = 0; cX < nChunks.x; ++cX)
+		Vector2 posF = new Vector2();
+		for (int y = 0; y < Settings.Height; ++y)
 		{
-			float cXF = (float)cX;
-			float chunkStartX = (cXF * chunkSizeF);
-
-			for (int cY = 0; cY < nChunks.y; ++cY)
+			posF.y = (float)y;
+			for (int x = 0; x < Settings.Width; ++x)
 			{
-				float cYF = (float)cY;
-				float chunkStartY = (cYF * chunkSizeF);
+				posF.x = (float)x;
 
-				Chunk chnk = GenerateChunk(new Vector2i(cX, cY));
-
-				//Fill the chunk's voxels with randomized values.
-				for (int x = 0; x < Chunk.Size; ++x)
-				{
-					float xF = (float)x;
-					float worldX = chunkStartX + xF;
-
-					for (int y = 0; y < Chunk.Size; ++y)
-					{
-						float yF = (float)y;
-						float worldY = chunkStartY + yF;
-
-						chnk.Grid[x, y] = GetVoxel(new Vector2(xF, yF),
-												   new Vector2(worldX, worldY),
-												   worldSize);
-					}
-				}
+				WorldVoxels.Instance.Voxels[x, y] = GetVoxel(posF, worldSize);
 			}
 		}
 
-		WorldVoxels.Instance.GenerateVoxelGrid();
+		WorldVoxels.Instance.GenerateChunksAndConnections();
 	}
 	/// <summary>
 	/// Gets the type of voxel for the given block.
@@ -92,7 +63,7 @@ public class WorldGenerator : MonoBehaviour
 	/// <param name="worldPos">The position of this block in world space.</param>
 	/// <param name="worldSize">The number of blocks in the world along each axis.</param>
 	/// <returns>The type of block to place at the given position.</returns>
-	private VoxelTypes GetVoxel(Vector2 localPos, Vector2 worldPos, Vector2 worldSize)
+	private VoxelTypes GetVoxel(Vector2 worldPos, Vector2 worldSize)
 	{
 		//Get which biome we're in based on height.
 		float heightLerp = worldPos.y / worldSize.y;
@@ -114,7 +85,6 @@ public class WorldGenerator : MonoBehaviour
 										 Mathf.InverseLerp(Settings.Biome_Rock,
 														   Settings.Biome_Dirt,
 														   heightLerp));
-			//Debug.Log("Noise: " + noise + "; Threshold: " + threshold);
 			if (noise < threshold)
 			{
 				return VoxelTypes.HardRock;
@@ -147,20 +117,5 @@ public class WorldGenerator : MonoBehaviour
 		{
 			return VoxelTypes.Empty;
 		}
-	}
-
-
-	/// <summary>
-	/// Generates a Chunk object with the given position on the voxel grid and returns it.
-	/// </summary>
-	private Chunk GenerateChunk(Vector2i minGridPos)
-	{
-		GameObject obj = (GameObject)Instantiate(ChunkPrefab);
-		obj.name = "Chunk " + minGridPos;
-		
-		Chunk chnk = obj.GetComponent<Chunk>();
-		chnk.MinCorner = minGridPos;
-		WorldVoxels.Instance.Chunks[minGridPos.x, minGridPos.y] = chnk;
-		return chnk;
 	}
 }

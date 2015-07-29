@@ -83,12 +83,15 @@ public class ElveState_CrossLedge : ElveState
 		//Basically, for either of the 4 movement directions for ledge crossing,
 		//    it can either be for a right-side-up ledge (from/to the floor)
 		//    or an upside-down ledge (from/to the ceiling).
+		Vector2i testPos = posI;
 		ElveBehavior.Surfaces rightSideUpTargetSurface, upsideDownTargetSurface,
 							  rightSideUpFinalSurface, upsideDownFinalSurface;
 		ElveAnimStates rightSideUpAnim, upsideDownAnim;
 		float xScale;
 		if (MoveAmount.x == 1 && MoveAmount.y == 1)
 		{
+			testPos.x += 1;
+			
 			rightSideUpTargetSurface = ElveBehavior.Surfaces.RightWall;
 			rightSideUpAnim = ElveAnimStates.MountingLedge;
 			rightSideUpFinalSurface = ElveBehavior.Surfaces.Floor;
@@ -101,6 +104,8 @@ public class ElveState_CrossLedge : ElveState
 		}
 		else if (MoveAmount.x == -1 && MoveAmount.y == 1)
 		{
+			testPos.x -= 1;
+
 			rightSideUpTargetSurface = ElveBehavior.Surfaces.LeftWall;
 			rightSideUpAnim = ElveAnimStates.MountingLedge;
 			rightSideUpFinalSurface = ElveBehavior.Surfaces.Floor;
@@ -113,6 +118,8 @@ public class ElveState_CrossLedge : ElveState
 		}
 		else if (MoveAmount.x == 1 && MoveAmount.y == -1)
 		{
+			testPos.y -= 1;
+
 			rightSideUpTargetSurface = ElveBehavior.Surfaces.Floor;
 			rightSideUpAnim = ElveAnimStates.DroppingToLedge;
 			rightSideUpFinalSurface = ElveBehavior.Surfaces.LeftWall;
@@ -121,10 +128,12 @@ public class ElveState_CrossLedge : ElveState
 			upsideDownAnim = ElveAnimStates.MountingLedgeUpsideDown;
 			upsideDownFinalSurface = ElveBehavior.Surfaces.Ceiling;
 
-			xScale = 1.0f;
+			xScale = -1.0f;
 		}
 		else if (MoveAmount.x == -1 && MoveAmount.y == -1)
 		{
+			testPos.y -= 1;
+
 			rightSideUpTargetSurface = ElveBehavior.Surfaces.Floor;
 			rightSideUpAnim = ElveAnimStates.DroppingToLedge;
 			rightSideUpFinalSurface = ElveBehavior.Surfaces.RightWall;
@@ -133,7 +142,7 @@ public class ElveState_CrossLedge : ElveState
 			upsideDownAnim = ElveAnimStates.MountingLedgeUpsideDown;
 			upsideDownFinalSurface = ElveBehavior.Surfaces.Ceiling;
 
-			xScale = -1.0f;
+			xScale = 1.0f;
 		}
 		else
 		{
@@ -142,7 +151,7 @@ public class ElveState_CrossLedge : ElveState
 
 
 		//Get whether this is a right-side-up ledge or not.
-		if (WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[posI.x + MoveAmount.x, posI.y]))
+		if (WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[testPos.x, testPos.y]))
 		{
 			//Switch to the correct surface if needed.
 			if (Owner.CurrentSurface != rightSideUpTargetSurface)
@@ -161,8 +170,6 @@ public class ElveState_CrossLedge : ElveState
 		}
 		else
 		{
-			Assert.IsTrue(WorldVoxels.IsSolid(WorldVoxels.Instance.Voxels[posI.x, posI.y - 1]));
-			
 			//Switch to the correct surface if needed.
 			if (Owner.CurrentSurface != upsideDownTargetSurface)
 			{
@@ -194,8 +201,10 @@ public class ElveState_CrossLedge : ElveState
 			Owner.MyTransform.position += new Vector3(MoveAmount.x * dist, MoveAmount.y * dist, 0.0f);
 
 			//Double-check that we actually went into the next voxel.
-			Assert.IsTrue((int)Owner.MyTransform.position.x == ((int)myPos.x + MoveAmount.x));
-			Assert.IsTrue((int)Owner.MyTransform.position.y == ((int)myPos.y + MoveAmount.y));
+			Assert.IsTrue((int)Owner.MyTransform.position.x == ((int)myPos.x + MoveAmount.x),
+						  "X Pos is " + Owner.MyTransform.position.x + "; prev pos is " + myPos.x);
+			Assert.IsTrue((int)Owner.MyTransform.position.y == ((int)myPos.y + MoveAmount.y),
+						  "Y Pos is " + Owner.MyTransform.position.y + "; prev pos is " + myPos.y);
 
 			Owner.CurrentSurface = targetSurface;
 

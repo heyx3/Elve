@@ -32,7 +32,7 @@ public class PathingTest : MonoBehaviour
 			pos2 = new Vector2(pos.x, pos.y);
 		}
 		path = new List<VoxelNode>();
-		path.Add(new VoxelNode(null, new Vector2i(0, 0), new Vector2i(0, 0)));
+		path.Add(new VoxelNode(new Vector2i(0, 0)));
 	}
 	void Update()
 	{

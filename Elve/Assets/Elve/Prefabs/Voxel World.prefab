@@ -54,7 +54,6 @@ MonoBehaviour:
     SoftRockChanceMin: 1
     SoftRockChanceMax: 0
     DirtScale: .349999994
-  ChunkPrefab: {fileID: 158332, guid: 5fcbdbd45d6393046b6ac1e7cf880318, type: 2}
   ShouldGenerate: 0
 --- !u!114 &11494494
 MonoBehaviour:
@@ -67,6 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7325562267bb02d429814d37491f0586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  VoxelBlockMat: {fileID: 2100000, guid: a3c6b7d2340659f40a61e90624e43d86, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -138,6 +138,10 @@ Prefab:
       propertyPath: Settings.DirtScale
       value: .349999994
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: VoxelBlockMat
+      value: 
+      objectReference: {fileID: 2100000, guid: a3c6b7d2340659f40a61e90624e43d86, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 142400}

@@ -2,11 +2,10 @@
 using UnityEngine;
 
 
-[RequireComponent(typeof(MeshFilter))]
 /// <summary>
 /// A single square group of blocks.
 /// </summary>
-public class Chunk : MonoBehaviour
+public class Chunk
 {
 	/// <summary>
 	/// The length of each side of a chunk.
@@ -16,25 +15,25 @@ public class Chunk : MonoBehaviour
 	/// <summary>
 	/// The world grid coordinate of this chunk's left-bottom corner block.
 	/// </summary>
-	public Vector2i MinCorner = new Vector2i();
+	public Vector2i MinCorner { get; private set; }
 
-	public VoxelTypes[,] Grid = new VoxelTypes[Size, Size];
-
-	public Material VoxelBlockMat;
-
-	private MeshFilter mf;
-	private Mesh VoxelMesh { get { return mf.mesh; } set { mf.mesh = value; } }
+	public Mesh VoxelMesh;
 
 
-	void Start()
+	public Chunk(Vector2i minCorner)
 	{
-		mf = GetComponent<MeshFilter>();
+		MinCorner = minCorner;
 
 		VoxelMesh = new Mesh();
-		VoxelMesh.name = "Chunk " + MinCorner + " Mesh";
+		VoxelMesh.name = "Chunk " + MinCorner;
 		VoxelMesh.MarkDynamic();
 
 		RegenMesh();
+
+		VoxelMesh.bounds = new Bounds(new Vector3((MinCorner.x * Size) + (Size * 0.5f),
+												  (MinCorner.y * Size) + (Size * 0.5f),
+												  0.0f),
+									  new Vector3(Size, Size, 1.0f));
 	}
 
 
@@ -56,16 +55,21 @@ public class Chunk : MonoBehaviour
 		Vector2 minCornerF = new Vector2((float)MinCorner.x, (float)MinCorner.y) * (float)Size;
 
 		//Generate vertex data.
+		VoxelTypes[,] vxs = WorldVoxels.Instance.Voxels;
 		List<VoxelVertex> vertices = new List<VoxelVertex>();
-		for (int x = 0; x < Grid.GetLength(0); ++x)
+		for (int y = MinCorner.y * Size; y < (MinCorner.y + 1) * Size; ++y)
 		{
-			float xF = (float)x;
-			for (int y = 0; y < Grid.GetLength(1); ++y)
+			UnityEngine.Assertions.Assert.IsTrue(y >= 0 && y < vxs.GetLength(1));
+
+			float yF = (float)y;
+			for (int x = MinCorner.x * Size; x < (MinCorner.x + 1) * Size; ++x)
 			{
-				if (Grid[x, y] != VoxelTypes.Empty)
+				UnityEngine.Assertions.Assert.IsTrue(x >= 0 && x < vxs.GetLength(0));
+
+				if (vxs[x, y] != VoxelTypes.Empty)
 				{
-					Vector2 pos = minCornerF + new Vector2(xF, (float)y),
-							pixel = VoxelContent.Instance.Data[(int)Grid[x, y]].SubTexturePixelMin;
+					Vector2 pos = new Vector2((float)x, yF),
+							pixel = VoxelContent.Instance.Data[(int)vxs[x, y]].SubTexturePixelMin;
 					vertices.Add(new VoxelVertex(pos, pixel));
 				}
 			}
@@ -87,10 +91,5 @@ public class Chunk : MonoBehaviour
 		VoxelMesh.vertices = poses;
 		VoxelMesh.uv = uvs;
 		VoxelMesh.SetIndices(indices, MeshTopology.Points, 0);
-
-		VoxelMesh.bounds = new Bounds(new Vector3((MinCorner.x * (float)Size) + (Size * 0.5f),
-												  (MinCorner.y * (float)Size) + (Size * 0.5f),
-												  0.0f),
-									  new Vector3(Size, Size, 1.0f));
 	}
 }

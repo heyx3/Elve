@@ -132,11 +132,11 @@ public class ElveState_Climb : ElveState
 		pos.y += Dir * Time.deltaTime * ElveConstants.Instance.ClimbSpeed;
 		if (Owner.CurrentSurface == ElveBehavior.Surfaces.LeftWall)
 		{
-			pos.x = Mathf.Floor(pos.y) + 0.00001f;
+			pos.x = Mathf.Floor(pos.x) + 0.00001f;
 		}
 		else
 		{
-			pos.x = Mathf.Floor(pos.y) + 1.00001f;
+			pos.x = Mathf.Floor(pos.x) + 0.9999f;
 		}
 		Owner.MyTransform.position = pos;
 

@@ -5,13 +5,12 @@ using MovementTypes = PathingConstants.MovementTypes;
 
 public class VoxelNode : Node
 {
-	public Chunk Chnk;
-	public Vector2i LocalPos, WorldPos;
+	public Vector2i WorldPos;
 
 
 	public VoxelTypes BlockType
 	{
-		get { return Chnk.Grid[LocalPos.x, LocalPos.y]; }
+		get { return WorldVoxels.Instance.Voxels[WorldPos.x, WorldPos.y]; }
 	}
 
 	public bool IsLeftEdgeOfLevel { get { return WorldPos.x == 0; } }
@@ -26,16 +25,8 @@ public class VoxelNode : Node
 	}
 
 
-	public VoxelNode(Chunk chnk, Vector2i localPos, Vector2i worldPos)
-	{
-		Chnk = chnk;
-		LocalPos = localPos;
-		WorldPos = worldPos;
-	}
 	public VoxelNode(Vector2i worldPos)
 	{
-		Chnk = WorldVoxels.Instance.GetChunkAt(worldPos);
-		LocalPos = worldPos - Chnk.MinCorner;
 		WorldPos = worldPos;
 	}
 
@@ -43,12 +34,12 @@ public class VoxelNode : Node
 	public override bool IsEqualTo(Node other)
 	{
 		VoxelNode vn = (VoxelNode)other;
-		return Chnk == vn.Chnk && LocalPos == vn.LocalPos;
+		return WorldPos == vn.WorldPos;
 	}
 	public override bool IsNotEqualTo(Node other)
 	{
 		VoxelNode vn = (VoxelNode)other;
-		return Chnk != vn.Chnk || LocalPos != vn.LocalPos;
+		return WorldPos != vn.WorldPos;
 	}
 
 	public override int GetHashCode()

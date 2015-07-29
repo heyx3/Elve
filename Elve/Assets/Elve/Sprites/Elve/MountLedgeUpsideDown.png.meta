@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e9fa76f2ac4194f4685c7f98f75904b0
-timeCreated: 1438052238
+timeCreated: 1438149238
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -62,17 +62,17 @@ TextureImporter:
         width: 52
         height: 120
       alignment: 9
-      pivot: {x: .898629785, y: .457774907}
+      pivot: {x: .0570781417, y: .450097591}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: MountLedgeUpsideDown_1
       rect:
         serializedVersion: 2
-        x: 96
-        y: 8
+        x: 84
+        y: 9
         width: 44
         height: 124
       alignment: 9
-      pivot: {x: .887355447, y: .574296713}
+      pivot: {x: .0936353877, y: .577526033}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: MountLedgeUpsideDown_2
       rect:
@@ -82,27 +82,27 @@ TextureImporter:
         width: 56
         height: 138
       alignment: 9
-      pivot: {x: .310809284, y: .67023617}
+      pivot: {x: .663948357, y: .668245852}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: MountLedgeUpsideDown_3
       rect:
         serializedVersion: 2
-        x: 236
+        x: 239
         y: 10
         width: 116
         height: 74
       alignment: 9
-      pivot: {x: .0711295009, y: 1.31545532}
+      pivot: {x: .89038533, y: 1.28947365}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: MountLedgeUpsideDown_4
       rect:
         serializedVersion: 2
-        x: 383
+        x: 376
         y: 12
         width: 117
         height: 64
       alignment: 9
-      pivot: {x: -9.39002439e-06, y: 1.35650074}
+      pivot: {x: .993005753, y: 1.32216787}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

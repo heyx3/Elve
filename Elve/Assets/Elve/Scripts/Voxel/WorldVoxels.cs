@@ -4,8 +4,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// A singleton that stores the world voxel data.
-/// Stores the chunks on a 2D grid as well as the full world voxel grid for easy reference when pathing.
+/// A singleton that stores and renders the world voxel data.
 /// </summary>
 public class WorldVoxels : MonoBehaviour
 {
@@ -58,11 +57,23 @@ public class WorldVoxels : MonoBehaviour
 
 	public static WorldVoxels Instance;
 
+	
+	public Material VoxelBlockMat;
 
-	public Chunk[,] Chunks = null;
+	/// <summary>
+	/// The voxel grid.
+	/// </summary>
 	public VoxelTypes[,] Voxels = null;
+	/// <summary>
+	/// Contains a square region of meshes for the voxel grid.
+	/// </summary>
+	public Chunk[,] Chunks = null;
+	/// <summary>
+	/// The connections from each voxel to its 8 neighbors.
+	/// </summary>
 	public VoxelConnections[,] Connections = null;
 
+	private Vector2 vMin, vMax;
 
 
 	void Awake()
@@ -75,34 +86,78 @@ public class WorldVoxels : MonoBehaviour
 		}
 		Instance = this;
 	}
+	void OnRenderObject()
+	{
+		//Figure out which chunks are in view and render them.
+
+		Camera cam = Camera.current;
+		Vector2 orthoHalf = new Vector2(cam.orthographicSize * cam.pixelWidth / cam.pixelHeight,
+										cam.orthographicSize);
+		Vector3 camPos = cam.transform.position;
+		Vector2 viewMin = new Vector2(camPos.x - orthoHalf.x, camPos.y - orthoHalf.y),
+				viewMax = viewMin + (orthoHalf * 2.0f);
+
+		Vector2i viewMinI = new Vector2i((int)viewMin.x, (int)viewMin.y),
+				 viewMaxI = new Vector2i((int)viewMax.x + 1, (int)viewMax.y + 1);
+
+		Vector2i chunkMinI = viewMinI / Chunk.Size,
+				 chunkMaxI = viewMaxI / Chunk.Size;
+
+		if (cam.gameObject.name == "PathingTest")
+		{
+			vMin = viewMin;
+			vMax = viewMax;
+		}
+
+		VoxelBlockMat.SetPass(0);
+		Matrix4x4 identity = Matrix4x4.identity;
+		for (int y = chunkMinI.y; y <= chunkMaxI.y && y < Chunks.GetLength(1); ++y)
+		{
+			if (y > 0)
+			{
+				for (int x = chunkMinI.x; x <= chunkMaxI.x && x < Chunks.GetLength(0); ++x)
+				{
+					if (x > 0)
+					{
+						Graphics.DrawMeshNow(Chunks[x, y].VoxelMesh, identity);
+					}
+				}
+			}
+		}
+	}
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.magenta;
+		Gizmos.DrawSphere(new Vector3(vMin.x, vMin.y, 0.0f), 0.25f);
+		Gizmos.DrawSphere(new Vector3(vMax.x, vMax.y, 0.0f), 0.25f);
+	}
 
 
 	/// <summary>
-	/// Should be called once all the Chunks are generated and stored in the "Chunks" array.
-	/// Sets up the "Voxels" and "Connections" arrays.
+	/// Should be called once the "Voxels" array is filled with its initial values.
+	/// Generates the "Chunk" and "Connections" arrays.
 	/// </summary>
-	public void GenerateVoxelGrid()
+	public void GenerateChunksAndConnections()
 	{
-		Voxels = new VoxelTypes[Chunks.GetLength(0) * Chunk.Size,
-								Chunks.GetLength(1) * Chunk.Size];
-		for (int y = 0; y < Voxels.GetLength(1); ++y)
-		{
-			for (int x = 0; x < Voxels.GetLength(0); ++x)
-			{
-				Chunk chnk = Chunks[x / Chunk.Size, y / Chunk.Size];
-				Voxels[x, y] = chnk.Grid[x % Chunk.Size, y % Chunk.Size];
-			}
-		}
+		UnityEngine.Assertions.Assert.IsTrue(Voxels.GetLength(0) % Chunk.Size == 0 &&
+											  Voxels.GetLength(1) % Chunk.Size == 0,
+											 "Voxel grid size " + Voxels.GetLength(0) +
+											  "x" + Voxels.GetLength(1) +
+											  " is not divisible by chunk size " + Chunk.Size);
+
+		//Calculate chunks.
+		Vector2i nChunks = new Vector2i(Voxels.GetLength(0) / Chunk.Size,
+										Voxels.GetLength(1) / Chunk.Size);
+		Chunks = new Chunk[nChunks.x, nChunks.y];
+		for (int y = 0; y < nChunks.y; ++y)
+			for (int x = 0; x < nChunks.x; ++x)
+				Chunks[x, y] = new Chunk(new Vector2i(x, y));
 
 		//Calculate connections.
 		Connections = new VoxelConnections[Voxels.GetLength(0), Voxels.GetLength(1)];
 		for (int y = 0; y < Voxels.GetLength(1); ++y)
-		{
 			for (int x = 0; x < Voxels.GetLength(0); ++x)
-			{
 				GetConnections(new Vector2i(x, y));
-			}
-		}
 	}
 
 	/// <summary>
@@ -221,25 +276,6 @@ public class WorldVoxels : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Gets the chunk at the given world position.
-	/// Assumes the given position is inside the world's voxel grid.
-	/// </summary>
-	public Chunk GetChunkAt(Vector2 worldPos)
-	{
-		Vector2i worldPosI = new Vector2i((int)worldPos.x, (int)worldPos.y),
-				 chunkPosI = new Vector2i(worldPosI.x / Chunk.Size,
-										  worldPosI.y / Chunk.Size);
-		return Chunks[chunkPosI.x, chunkPosI.y];
-	}
-	/// <summary>
-	/// Gets the chunk at the given world position.
-	/// Assumes the given position is inside the world's voxel grid.
-	/// </summary>
-	public Chunk GetChunkAt(Vector2i worldPos)
-	{
-		return Chunks[worldPos.x / Chunk.Size, worldPos.y / Chunk.Size];
-	}
-	/// <summary>
 	/// Gets the voxel at the given world position.
 	/// Assumes the given position is inside the world's voxel grid.
 	/// </summary>
@@ -258,13 +294,9 @@ public class WorldVoxels : MonoBehaviour
 		Vector2i worldPosI = new Vector2i((int)worldPos.x, (int)worldPos.y),
 				 chunkPosI = new Vector2i(worldPosI.x / Chunk.Size,
 										  worldPosI.y / Chunk.Size);
-
-		Chunks[chunkPosI.x, chunkPosI.y].Grid[worldPosI.x - (chunkPosI.x * Chunk.Size),
-											  worldPosI.y - (chunkPosI.y * Chunk.Size)] = newType;
-		Chunks[chunkPosI.x, chunkPosI.y].RegenMesh();
-
+		
 		Voxels[worldPosI.x, worldPosI.y] = newType;
-
+		Chunks[chunkPosI.x, chunkPosI.y].RegenMesh();
 
 		//Re-calculate connections for adjacent voxels as well as this one.
 		for (int y = -1; y <= 1; ++y)
