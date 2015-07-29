@@ -1,7 +1,8 @@
 ﻿public enum ElveAnimStates
 {
-	Standing,
-	//TODO: Change to "IdleStand" and add "IdleClimb".
+	IdleFloor,
+	IdleWall,
+	IdleCeiling,
 
 	Walking,
 	ClimbingWall,

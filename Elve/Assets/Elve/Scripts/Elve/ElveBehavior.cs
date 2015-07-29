@@ -72,7 +72,21 @@ public class ElveBehavior : MonoBehaviour
 		}
 		else
 		{
-			MyAnimator.AnimState = ElveAnimStates.Standing;
+			switch (CurrentSurface)
+			{
+				case Surfaces.Floor:
+					MyAnimator.AnimState = ElveAnimStates.IdleFloor;
+					break;
+				case Surfaces.LeftWall:
+				case Surfaces.RightWall:
+					MyAnimator.AnimState = ElveAnimStates.IdleWall;
+					break;
+				case Surfaces.Ceiling:
+					MyAnimator.AnimState = ElveAnimStates.IdleCeiling;
+					break;
+
+				default: throw new InvalidOperationException();
+			}
 		}
 	}
 

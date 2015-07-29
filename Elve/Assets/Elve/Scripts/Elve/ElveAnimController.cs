@@ -54,7 +54,10 @@ public class ElveAnimController : MonoBehaviour
 	/// </summary>
 	public StateAndObject[] AnimChildren = new StateAndObject[]
 	{
-		new StateAndObject(ElveAnimStates.Standing),
+		new StateAndObject(ElveAnimStates.IdleFloor),
+		new StateAndObject(ElveAnimStates.IdleWall),
+		new StateAndObject(ElveAnimStates.IdleCeiling),
+
 		new StateAndObject(ElveAnimStates.Walking),
 		new StateAndObject(ElveAnimStates.ClimbingWall),
 		new StateAndObject(ElveAnimStates.ClimbingCeiling),
@@ -102,6 +105,6 @@ public class ElveAnimController : MonoBehaviour
 			}
 		}
 
-		AnimState = ElveAnimStates.Standing;
+		AnimState = ElveAnimStates.IdleFloor;
 	}
 }

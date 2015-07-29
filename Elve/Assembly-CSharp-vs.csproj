@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Elve\Scripts\Camera\FollowObject.cs" />
+     <Compile Include="Assets\Elve\Scripts\Camera\LandscapeCamera.cs" />
+     <Compile Include="Assets\Elve\Scripts\Camera\LandscapeSprite.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\ElveConstants.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\PathingConstants.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\VoxelContent.cs" />
@@ -61,6 +63,7 @@
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_CrossLedge.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_MoveToEdge.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_Walk.cs" />
+     <Compile Include="Assets\Elve\Scripts\MeshRendererSortingLayersEditor.cs" />
      <Compile Include="Assets\Elve\Scripts\Pathing\BaseGraphDeclarations.cs" />
      <Compile Include="Assets\Elve\Scripts\Pathing\Game Pathing\VoxelGraphDeclarations.cs" />
      <Compile Include="Assets\Elve\Scripts\Pathing\IndexedPriorityQueue.cs" />

@@ -9,8 +9,20 @@
 
 	SubShader
 	{
-		Pass
+        Tags 
+        { 
+            "RenderType" = "Opaque"
+            "Queue" = "Transparent+1" 
+        }
+
+        Cull Off
+        Lighting Off
+        ZWrite Off
+        Fog { Mode Off }
+		
+        Pass
 		{
+
 			CGPROGRAM
 				#pragma target 5.0
 				

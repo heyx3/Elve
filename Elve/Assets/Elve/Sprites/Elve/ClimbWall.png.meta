@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: f8b1760b872c4f04198a885209af5345
-timeCreated: 1437542486
+timeCreated: 1438192728
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -58,8 +58,8 @@ TextureImporter:
         y: 1
         width: 45
         height: 127
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .954202712, y: .556328237}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Climb_1
       rect:
@@ -68,8 +68,8 @@ TextureImporter:
         y: 2
         width: 49
         height: 126
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 5
+      pivot: {x: 1, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

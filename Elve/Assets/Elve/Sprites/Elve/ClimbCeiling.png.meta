@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 64e52d02fa447ed42a9b384c0623bb57
-timeCreated: 1437670171
+timeCreated: 1438192587
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -54,22 +54,22 @@ TextureImporter:
     - name: ClimbCeiling_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 14
         y: 0
         width: 116
         height: 64
       alignment: 9
-      pivot: {x: .50000006, y: .917453945}
+      pivot: {x: .522576094, y: .95837307}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: ClimbCeiling_1
       rect:
         serializedVersion: 2
-        x: 124
-        y: 4
-        width: 117
-        height: 58
+        x: 140
+        y: 1
+        width: 116
+        height: 63
       alignment: 9
-      pivot: {x: .499145389, y: .974138021}
+      pivot: {x: .573819935, y: .974138081}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

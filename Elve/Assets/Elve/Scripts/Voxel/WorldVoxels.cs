@@ -74,10 +74,13 @@ public class WorldVoxels : MonoBehaviour
 	public VoxelConnections[,] Connections = null;
 
 	private Vector2 vMin, vMax;
+	private Transform tr;
 
 
 	void Awake()
 	{
+		tr = transform;
+
 		if (Instance != null)
 		{
 			Debug.LogError("More than one instance of 'WorldVoxels' script at a time!");
@@ -88,9 +91,16 @@ public class WorldVoxels : MonoBehaviour
 	}
 	void OnRenderObject()
 	{
+		Camera cam = Camera.current;
+
+		//Don't render if this camera doesn't see this object's layer.
+		if ((cam.cullingMask & (1 << gameObject.layer)) == 0)
+		{
+			return;
+		}
+
 		//Figure out which chunks are in view and render them.
 
-		Camera cam = Camera.current;
 		Vector2 orthoHalf = new Vector2(cam.orthographicSize * cam.pixelWidth / cam.pixelHeight,
 										cam.orthographicSize);
 		Vector3 camPos = cam.transform.position;
@@ -109,8 +119,10 @@ public class WorldVoxels : MonoBehaviour
 			vMax = viewMax;
 		}
 
+		
+
 		VoxelBlockMat.SetPass(0);
-		Matrix4x4 identity = Matrix4x4.identity;
+		Matrix4x4 worldM = tr.localToWorldMatrix;
 		for (int y = chunkMinI.y; y <= chunkMaxI.y && y < Chunks.GetLength(1); ++y)
 		{
 			if (y > 0)
@@ -119,7 +131,7 @@ public class WorldVoxels : MonoBehaviour
 				{
 					if (x > 0)
 					{
-						Graphics.DrawMeshNow(Chunks[x, y].VoxelMesh, identity);
+						Graphics.DrawMeshNow(Chunks[x, y].VoxelMesh, worldM);
 					}
 				}
 			}
