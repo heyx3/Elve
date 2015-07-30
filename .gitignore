@@ -66,3 +66,6 @@ $RECYCLE.BIN/
 
 # Custom Settings
 Elve/Builds/
+Elve/Assets/UnityVS/
+Elve/Assets/UnityVS.meta
+Elve/UnityVS.*
