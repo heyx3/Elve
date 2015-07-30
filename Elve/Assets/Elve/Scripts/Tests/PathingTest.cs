@@ -5,12 +5,9 @@ using UnityEngine;
 
 
 
-[RequireComponent(typeof(Camera))]
 public class PathingTest : MonoBehaviour
 {
 	public ElveMovementController Elve = null;
-
-	private Camera cam;
 
 	private Vector2 pos1, pos2;
 	private List<VoxelNode> path = new List<VoxelNode>();
@@ -18,8 +15,6 @@ public class PathingTest : MonoBehaviour
 
 	void Start()
 	{
-		cam = GetComponent<Camera>();
-
 		if (Elve == null)
 		{
 			pos1 = new Vector2(0.0f, 0.0f);
@@ -36,7 +31,7 @@ public class PathingTest : MonoBehaviour
 	}
 	void Update()
 	{
-		Vector3 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+		Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
 		worldPos.x = Mathf.Max(0.0f, worldPos.x);
 		worldPos.y = Mathf.Max(0.0f, worldPos.y);
@@ -89,7 +84,7 @@ public class PathingTest : MonoBehaviour
 		//Draw any connections from the moused-over voxel.
 		if (WorldVoxels.Instance != null && WorldVoxels.Instance.Connections != null)
 		{
-			Vector3 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+			Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			worldPos.x = Mathf.Clamp(worldPos.x, 0.0f, (float)WorldVoxels.Instance.Voxels.GetLength(0) - 0.001f);
 			worldPos.y = Mathf.Clamp(worldPos.y, 0.0f, (float)WorldVoxels.Instance.Voxels.GetLength(1) - 0.001f);
 

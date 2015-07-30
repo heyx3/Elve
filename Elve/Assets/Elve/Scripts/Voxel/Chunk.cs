@@ -52,8 +52,6 @@ public class Chunk
 	/// </summary>
 	public void RegenMesh()
 	{
-		Vector2 minCornerF = new Vector2((float)MinCorner.x, (float)MinCorner.y) * (float)Size;
-
 		//Generate vertex data.
 		VoxelTypes[,] vxs = WorldVoxels.Instance.Voxels;
 		List<VoxelVertex> vertices = new List<VoxelVertex>();

@@ -6,21 +6,13 @@ using UnityEngine;
 /// <summary>
 /// Tests the ability to add/remove voxels at will.
 /// </summary>
-[RequireComponent(typeof(Camera))]
 public class VoxelAddRemoveTest : MonoBehaviour
 {
-	private Camera cam;
-
-
-	void Awake()
-	{
-		cam = GetComponent<Camera>();
-	}
 	void Update()
 	{
 		if (Input.GetMouseButtonDown(2))
 		{
-			Vector3 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+			Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			
 			if (worldPos.x < 0.0f || worldPos.y < 0.0f)
 			{
