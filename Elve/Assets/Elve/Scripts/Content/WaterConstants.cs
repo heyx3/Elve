@@ -59,6 +59,8 @@ public class WaterConstants : MonoBehaviour
 	/// </summary>
 	public float RadiusShrinkRate = 0.001f;
 
+	public float MaxRadius = 0.15f;
+
 
 	void Awake()
 	{

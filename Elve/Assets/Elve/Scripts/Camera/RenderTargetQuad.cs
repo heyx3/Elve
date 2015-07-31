@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 
 [RequireComponent(typeof(RawImage))]
-public class LandscapeSprite : MonoBehaviour
+public class RenderTargetQuad : MonoBehaviour
 {
-	public Camera LandscapeCam;
+	public Camera Cam;
 
 	private RawImage ri;
 
@@ -16,6 +16,6 @@ public class LandscapeSprite : MonoBehaviour
 	}
 	void Update()
 	{
-		ri.texture = LandscapeCam.targetTexture;
+		ri.texture = Cam.targetTexture;
 	}
 }

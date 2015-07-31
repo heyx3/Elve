@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Water
-  m_Shader: {fileID: 4800000, guid: e69b55fa47a54ff4d90c7d528e2fba28, type: 3}
+  m_Name: PlayerMat
+  m_Shader: {fileID: 4800000, guid: 45612aa56c4fd134f984cc41c205568f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
@@ -93,6 +93,10 @@ Material:
         second: .5
       data:
         first:
+          name: PixelSnap
+        second: 0
+      data:
+        first:
           name: _Parallax
         second: .0199999996
       data:
@@ -129,8 +133,8 @@ Material:
         second: 0
       data:
         first:
-          name: _RadiusScale
-        second: 2.69000006
+          name: _Z
+        second: .5
     m_Colors:
       data:
         first:

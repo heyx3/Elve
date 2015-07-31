@@ -6,9 +6,9 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Water
-  m_Shader: {fileID: 4800000, guid: e69b55fa47a54ff4d90c7d528e2fba28, type: 3}
-  m_ShaderKeywords: 
+  m_Name: LandscapeQuadWater
+  m_Shader: {fileID: 4800000, guid: 5b948c01243d5644783e483313b93888, type: 3}
+  m_ShaderKeywords: DISCARDALPHA_ON
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -129,8 +129,12 @@ Material:
         second: 0
       data:
         first:
-          name: _RadiusScale
-        second: 2.69000006
+          name: _Z
+        second: .523999989
+      data:
+        first:
+          name: DiscardAlpha
+        second: 1
     m_Colors:
       data:
         first:
@@ -140,3 +144,7 @@ Material:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _Tint
+        second: {r: 0, g: 0, b: 0, a: .0719999969}

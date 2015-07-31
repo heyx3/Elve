@@ -4,6 +4,9 @@ using System.Linq;
 using UnityEngine;
 
 
+/// <summary>
+/// Handles water simulation system.
+/// </summary>
 public class WaterBehavior : MonoBehaviour
 {
 	private static void ResizeList<T>(List<T> list, int newSize) where T : struct
@@ -32,9 +35,19 @@ public class WaterBehavior : MonoBehaviour
 
 	public List<WaterDrop> Drops { get { return dropsBuffers[fromIndex]; } }
 
+	/// <summary>
+	/// Needs to be tracked for WaterRender to work correctly.
+	/// </summary>
+	public uint NFixedUpdates { get; private set; }
 
+	void Start()
+	{
+		NFixedUpdates = 0;
+	}
 	void FixedUpdate()
 	{
+		NFixedUpdates += 1;
+
 		List<WaterDrop> from = dropsBuffers[fromIndex],
 						to = dropsBuffers[(fromIndex + 1) % 2];
 
@@ -65,22 +78,28 @@ public class WaterBehavior : MonoBehaviour
 
 			//Check for collisions.
 			bool collided = false;
-			for (int j = i + 1; j < from.Count; ++j)
+			if (from[i].Radius < WaterConstants.Instance.MaxRadius)
 			{
-				float targetDist = from[i].Radius + from[j].Radius;
-				if ((from[i].Pos - from[j].Pos).sqrMagnitude <= targetDist * targetDist)
+				for (int j = i + 1; j < from.Count; ++j)
 				{
-					//Combine the two drops together.
-					to[i] = from[i].Combine(from[j]);
-					from.RemoveAt(j);
-					to.RemoveAt(to.Count - 1);
-					collided = true;
+					if (from[j].Radius < WaterConstants.Instance.MaxRadius)
+					{
+						float targetDist = from[i].Radius + from[j].Radius;
+						if ((from[i].Pos - from[j].Pos).sqrMagnitude <= targetDist * targetDist)
+						{
+							//Combine the two drops together.
+							to[i] = from[i].Combine(from[j]);
+							from.RemoveAt(j);
+							to.RemoveAt(to.Count - 1);
+							collided = true;
 
-					//Run the rest of the update logic for the new drop.
-					force.y += WaterConstants.Instance.Gravity;
-					to[i].AddNormalForces(ref force);
-					to[i] = to[i].Update(force);
-					break;
+							//Run the rest of the update logic for the new drop.
+							force.y += WaterConstants.Instance.Gravity;
+							to[i].AddNormalForces(ref force);
+							to[i] = to[i].Update(force);
+							break;
+						}
+					}
 				}
 			}
 

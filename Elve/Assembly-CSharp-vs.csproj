@@ -47,8 +47,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Elve\Scripts\Camera\FollowObject.cs" />
-     <Compile Include="Assets\Elve\Scripts\Camera\LandscapeCamera.cs" />
-     <Compile Include="Assets\Elve\Scripts\Camera\LandscapeSprite.cs" />
+     <Compile Include="Assets\Elve\Scripts\Camera\MatchParentCamera.cs" />
+     <Compile Include="Assets\Elve\Scripts\Camera\RenderTargetQuad.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\ElveConstants.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\PathingConstants.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\VoxelContent.cs" />
@@ -85,6 +85,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />
+     <None Include="Assets\Elve\Shaders\LandscapeQuad.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\ShowAlphaChannel.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\SunShaftsComposite.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\ColorCorrectionCurves.shader" />
@@ -104,6 +105,8 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\FisheyeShader.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\Contrast Stretch\Apply.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\frag_ao.cginc" />
+     <None Include="Assets\Elve\Shaders\Sprites-CustomZ.shader" />
+     <None Include="Assets\Elve\Shaders\WaterQuad.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAlpha.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_DepthOfField\DepthOfField34.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\MobileBlur.shader" />
@@ -125,6 +128,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\SeparableBlurPlus.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\MultiPassHollywoodFlares.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\BlurEffectConeTaps.shader" />
+     <None Include="Assets\Elve\Shaders\Drop.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\CameraMotionBlur.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_Antialiasing\DLAA.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\NoiseAndGrainDX11.shader" />

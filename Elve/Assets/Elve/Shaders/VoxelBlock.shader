@@ -12,12 +12,13 @@
         Tags 
         { 
             "RenderType" = "Opaque"
-            "Queue" = "Transparent+1" 
+            "Queue" = "Geometry"
+			"PreviewType"="Plane" 
         }
 
         Cull Off
         Lighting Off
-        ZWrite Off
+        ZWrite On
         Fog { Mode Off }
 		
         Pass

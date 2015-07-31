@@ -9,6 +9,8 @@ public class WaterTest : MonoBehaviour
 	public int NDrops = 30;
 	public float DropRadiusMin = 0.01f,
 				 DropRadiusMax = 0.02f;
+	public Vector2 MinVelocity = new Vector2(-3.0f, 0.0f),
+				   MaxVelocity = new Vector2(3.0f, -5.0f);
 	public bool ContinuousDrop = false;
 
 	public bool ClearAllWater = false;
@@ -26,7 +28,10 @@ public class WaterTest : MonoBehaviour
 			{
 				Water.Drops.Add(new WaterDrop(new Vector2(posI.x + UnityEngine.Random.value,
 														  posI.y + UnityEngine.Random.value),
-											  new Vector2(Mathf.Lerp(-1.0f, 1.0f, UnityEngine.Random.value), 0.0f),
+											  new Vector2(Mathf.Lerp(MinVelocity.x, MaxVelocity.x,
+																	 UnityEngine.Random.value),
+														  Mathf.Lerp(MinVelocity.y, MaxVelocity.y,
+																	 UnityEngine.Random.value)),
 											  Mathf.Lerp(DropRadiusMin, DropRadiusMax, UnityEngine.Random.value)));
 			}
 		}

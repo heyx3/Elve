@@ -1,17 +1,17 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &181154
+--- !u!1 &160690
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 496328}
-  - 114: {fileID: 11406384}
-  - 114: {fileID: 11406688}
-  - 114: {fileID: 11405988}
-  - 114: {fileID: 11428526}
+  - 4: {fileID: 486196}
+  - 114: {fileID: 11470980}
+  - 114: {fileID: 11443932}
+  - 114: {fileID: 11420212}
+  - 114: {fileID: 11475848}
   m_Layer: 0
   m_Name: Content and Constants
   m_TagString: Untagged
@@ -19,24 +19,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &496328
+--- !u!4 &486196
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 181154}
+  m_GameObject: {fileID: 160690}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11405988
+--- !u!114 &11420212
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 181154}
+  m_GameObject: {fileID: 160690}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 355f7db445fbc3a4985b795dbfc03079, type: 3}
@@ -49,12 +49,25 @@ MonoBehaviour:
     Cost: 1
   - Type: 2
     Cost: 1.10000002
---- !u!114 &11406384
+--- !u!114 &11443932
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 181154}
+  m_GameObject: {fileID: 160690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3720bfb48bf545143bb1d3c8ba4af03b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WalkSpeed: 1
+  ClimbSpeed: 1
+--- !u!114 &11470980
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 160690}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09fbc68b862b8c947a4d57df002cabda, type: 3}
@@ -67,25 +80,12 @@ MonoBehaviour:
     SubTexturePixelMin: {x: 35, y: 1}
   - Type: 2
     SubTexturePixelMin: {x: 69, y: 1}
---- !u!114 &11406688
+--- !u!114 &11475848
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 181154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3720bfb48bf545143bb1d3c8ba4af03b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WalkSpeed: 1
-  ClimbSpeed: 1
---- !u!114 &11428526
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 181154}
+  m_GameObject: {fileID: 160690}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d91a4ff1181bfb4188da1803660891e, type: 3}
@@ -93,25 +93,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Friction:
   - Type: 0
-    Friction: 1
+    Friction: .100000001
   - Type: 1
-    Friction: 1
+    Friction: .100000001
   - Type: 2
-    Friction: 1
+    Friction: .100000001
   NormalForceGrowth: 2
-  NormalForce: 750
+  NormalForce: 325
   BounceDamp: .5
   Mass: 10
   Gravity: -9.80000019
-  RadiusShrinkRate: .00100000005
+  RadiusShrinkRate: .00300000003
+  MaxRadius: .150000006
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[0].Friction
+      value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[1].Friction
+      value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[2].Friction
+      value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: RadiusShrinkRate
+      value: .00300000003
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 181154}
+  m_RootGameObject: {fileID: 160690}
   m_IsPrefabParent: 1
