@@ -37,6 +37,18 @@ public struct WaterDrop
 	}
 
 	/// <summary>
+	/// Adds forces to push this drop away from the given one.
+	/// </summary>
+	/// <param name="toOther">The delta from this position to the other drop's position.</param>
+	/// <param name="distSqr">The square of the distance between these drops.</param>
+	public void Separate(WaterDrop other, Vector2 toOther, float distSqr,
+						 ref Vector2 myForce, ref Vector2 otherForce)
+	{
+		Vector2 forceToOther = toOther / Mathf.Sqrt(distSqr) * WaterConstants.Instance.SeparationForce;
+		myForce -= forceToOther;
+		otherForce += forceToOther;
+	}
+	/// <summary>
 	/// Combines this drop with the given one.
 	/// Returns the result of combining them.
 	/// </summary>
@@ -48,14 +60,13 @@ public struct WaterDrop
 		float myMass = Mass,
 			  otherMass = other.Mass;
 
-		float newArea = (Radius * Radius) + (other.Radius * other.Radius);
-		float newRadius = Mathf.Sqrt(newArea);
+		float newMass = myMass + otherMass;
+		float newRadius = Mathf.Sqrt(newMass / WaterConstants.Instance.Mass);
 
-		float newMass = WaterConstants.Instance.Mass * newRadius * newRadius;
-
-		float myPosWeight = myMass / (myMass + otherMass);
-		return new WaterDrop((Pos * myPosWeight) + (other.Pos * (1.0f - myPosWeight)),
-							 ((Velocity * myMass) + (other.Velocity * otherMass)) / newMass,
+		float myWeight = myMass / newMass,
+			  otherWeight = 1.0f - myWeight;
+		return new WaterDrop((Pos * myWeight) + (other.Pos * otherWeight),
+							 ((Velocity * myWeight) + (other.Velocity * otherWeight)),
 							 newRadius);
 	}
 	/// <summary>
@@ -138,6 +149,12 @@ public struct WaterDrop
 
 		//Apply the force.
 		next.Velocity += force * Time.deltaTime / Mass;
+		float sizeSqr = next.Velocity.sqrMagnitude;
+		if (sizeSqr > WaterConstants.Instance.MaxSpeed)
+		{
+			next.Velocity /= Mathf.Sqrt(sizeSqr);
+			next.Velocity *= WaterConstants.Instance.MaxSpeed;
+		}
 
 
 		//Try applying the velocity and back up if a wall is hit.
@@ -149,14 +166,14 @@ public struct WaterDrop
 		if (next.PosI.x < 0 || next.PosI.x >= vxs.GetLength(0) ||
 			WorldVoxels.IsSolid(vxs[next.PosI.x, PosI.y]))
 		{
-			next.Pos.x = Pos.x;
+			next.Pos.x = (next.Velocity.x < 0.0f ? PosI.x : (PosI.x + 1));
 			next.Velocity.x = -next.Velocity.x * WaterConstants.Instance.BounceDamp;
 			next.PosI.x = PosI.x;
 		}
 		if (next.PosI.y < 0 || next.PosI.y >= vxs.GetLength(1) ||
 			WorldVoxels.IsSolid(vxs[PosI.x, next.PosI.y]))
 		{
-			next.Pos.y = Pos.y;
+			next.Pos.y = (next.Velocity.y < 0.0f ? PosI.y : (PosI.y + 1));
 			next.Velocity.y = -next.Velocity.y * WaterConstants.Instance.BounceDamp;
 			next.PosI.y = PosI.y;
 		}

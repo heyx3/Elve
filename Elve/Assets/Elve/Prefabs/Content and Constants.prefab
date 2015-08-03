@@ -103,8 +103,11 @@ MonoBehaviour:
   BounceDamp: .5
   Mass: 10
   Gravity: -9.80000019
-  RadiusShrinkRate: .00300000003
-  MaxRadius: .150000006
+  MaxSpeed: 5
+  CombineDistScale: .870000005
+  SeparationForce: 25
+  RadiusShrinkRate: .00600000005
+  MaxRadius: .0700000003
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

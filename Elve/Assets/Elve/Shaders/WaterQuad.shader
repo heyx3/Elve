@@ -3,11 +3,13 @@
 	Properties
 	{
 		[PerRendererData] _MainTex ("Water Pass Texture", 2D) = "white" {}
+
         _WaterColor("Water Color", Color) = (0.1, 0.4, 1.0, 0.4)
         _Tint("Tint", Color) = (1.0, 1.0, 1.0, 1.0)
         _Z("Z", Range(0.0, 1.0)) = 0.0
-		[MaterialToggle] DiscardAlpha ("Discard invisible pixels?", Float) = 0
-        _AlphaThreshold("Discard Alpha Threshold", Range(0.0, 1.0)) = 0.5
+
+        _WaterThinness("Water Thinness", Range(0.0, 1.0)) = 0.0
+        _LandscapeAlphaThreshold("Discard Landscape Alpha Threshold", Range(0.0, 1.0)) = 0.01
 	}
 
 	SubShader
@@ -25,14 +27,14 @@
 		Lighting Off
 		ZWrite On
 		Fog { Mode Off }
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend One Zero
 
 		Pass
 		{
 		CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			#pragma multi_compile DUMMY DISCARDALPHA_ON
+			#pragma multi_compile DUMMY DISCARDLANDSCAPEALPHA_ON
 			#include "UnityCG.cginc"
 			
 			struct appdata_t
@@ -62,16 +64,15 @@
 				return OUT;
 			}
 
-			sampler2D _MainTex;
+			sampler2D _MainTex, _Landscape;
             fixed4 _Tint, _WaterColor;
-            float _AlphaThreshold;
+            float _LandscapeAlphaThreshold, _WaterThinness;
 
 			fixed4 frag(v2f IN) : COLOR
 			{
-                fixed4 col = tex2D(_MainTex, IN.texcoord);
-#ifdef DISCARDALPHA_ON
-                clip(col.a - _AlphaThreshold);
-#endif
+                fixed4 waterCol = tex2D(_MainTex, IN.texcoord);
+                clip(waterCol.a - _WaterThinness);
+
 				return _WaterColor * _Tint;
 			}
 		ENDCG

@@ -78,28 +78,35 @@ public class WaterBehavior : MonoBehaviour
 
 			//Check for collisions.
 			bool collided = false;
-			if (from[i].Radius < WaterConstants.Instance.MaxRadius)
+			for (int j = i + 1; j < from.Count; ++j)
 			{
-				for (int j = i + 1; j < from.Count; ++j)
+				float targetDist = from[i].Radius + from[j].Radius,
+					  combineDist = targetDist * WaterConstants.Instance.CombineDistScale;
+				Vector2 toJ = from[j].Pos - from[i].Pos;
+				float distSqr = toJ.sqrMagnitude;
+				//If the drops are touching, combine them.
+				if (distSqr <= combineDist * combineDist &&
+					from[i].Radius < WaterConstants.Instance.MaxRadius &&
+					from[j].Radius < WaterConstants.Instance.MaxRadius)
 				{
-					if (from[j].Radius < WaterConstants.Instance.MaxRadius)
-					{
-						float targetDist = from[i].Radius + from[j].Radius;
-						if ((from[i].Pos - from[j].Pos).sqrMagnitude <= targetDist * targetDist)
-						{
-							//Combine the two drops together.
-							to[i] = from[i].Combine(from[j]);
-							from.RemoveAt(j);
-							to.RemoveAt(to.Count - 1);
-							collided = true;
+					//Combine the two drops together.
+					to[i] = from[i].Combine(from[j]);
+					from.RemoveAt(j);
+					to.RemoveAt(to.Count - 1);
+					collided = true;
 
-							//Run the rest of the update logic for the new drop.
-							force.y += WaterConstants.Instance.Gravity;
-							to[i].AddNormalForces(ref force);
-							to[i] = to[i].Update(force);
-							break;
-						}
-					}
+					//Run the rest of the update logic for the new drop.
+					force.y += WaterConstants.Instance.Gravity;
+					to[i].AddNormalForces(ref force);
+					to[i] = to[i].Update(force);
+					break;
+				}
+				//Otherwise, push away.
+				else if (distSqr <= targetDist * targetDist)
+				{
+					Vector2 forceJ = forces[j];
+					from[i].Separate(from[j], toJ, distSqr, ref force, ref forceJ);
+					forces[j] = forceJ;
 				}
 			}
 

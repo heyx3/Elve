@@ -130,7 +130,7 @@ Material:
       data:
         first:
           name: _Z
-        second: .523999989
+        second: .560000002
       data:
         first:
           name: DiscardAlpha
@@ -147,4 +147,4 @@ Material:
       data:
         first:
           name: _Tint
-        second: {r: 0, g: 0, b: 0, a: .0719999969}
+        second: {r: 0, g: 0, b: 0, a: .0219999999}

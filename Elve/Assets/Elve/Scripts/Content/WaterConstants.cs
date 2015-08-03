@@ -55,6 +55,21 @@ public class WaterConstants : MonoBehaviour
 	public float Gravity = -9.8f;
 
 	/// <summary>
+	/// Any drops moving faster than this will be slowed down.
+	/// </summary>
+	public float MaxSpeed = 5.0f;
+
+	/// <summary>
+	/// When two drops are this fraction of their radius away from each other, they can combine.
+	/// </summary>
+	public float CombineDistScale = 0.5f;
+
+	/// <summary>
+	/// The force pushing large drops apart.
+	/// </summary>
+	public float SeparationForce = 10.0f;
+
+	/// <summary>
 	/// The rate at which a water drop's radius will shrink.
 	/// </summary>
 	public float RadiusShrinkRate = 0.001f;
