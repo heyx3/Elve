@@ -1,15 +1,15 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &187262
+--- !u!1 &122740
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 465302}
-  - 114: {fileID: 11435692}
-  - 114: {fileID: 11425524}
+  - 4: {fileID: 428642}
+  - 114: {fileID: 11441192}
+  - 114: {fileID: 11491918}
   m_Layer: 0
   m_Name: Water Test
   m_TagString: Untagged
@@ -17,46 +17,48 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &465302
+--- !u!4 &428642
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 187262}
+  m_GameObject: {fileID: 122740}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11425524
+--- !u!114 &11441192
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 187262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f05c8e18f647e4881bebc8b0c99947, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11435692
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 187262}
+  m_GameObject: {fileID: 122740}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfcdbafa105c3e3409a923e2d96645d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Water: {fileID: 0}
-  NDrops: 4
-  DropRadiusMin: .0399999991
-  DropRadiusMax: .0500000007
-  ContinuousDrop: 0
+  NDrops: 6
+  DropRadiusMin: .00999999978
+  DropRadiusMax: .0199999996
+  MinVelocity: {x: -3, y: 0}
+  MaxVelocity: {x: 3, y: -5}
+  ContinuousDrop: 1
   ClearAllWater: 0
+--- !u!114 &11491918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 122740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f05c8e18f647e4881bebc8b0c99947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -66,5 +68,5 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 187262}
+  m_RootGameObject: {fileID: 122740}
   m_IsPrefabParent: 1

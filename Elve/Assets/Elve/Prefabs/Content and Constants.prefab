@@ -80,6 +80,10 @@ MonoBehaviour:
     SubTexturePixelMin: {x: 35, y: 1}
   - Type: 2
     SubTexturePixelMin: {x: 69, y: 1}
+  - Type: 3
+    SubTexturePixelMin: {x: 103, y: 1}
+  - Type: 4
+    SubTexturePixelMin: {x: 137, y: 1}
 --- !u!114 &11475848
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -98,6 +102,10 @@ MonoBehaviour:
     Friction: .100000001
   - Type: 2
     Friction: .100000001
+  - Type: 3
+    Friction: .100000001
+  - Type: 4
+    Friction: .00100000005
   NormalForceGrowth: 2
   NormalForce: 325
   BounceDamp: .5
@@ -116,6 +124,14 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: Data.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: Friction.Array.data[0].Friction
       value: .100000001
       objectReference: {fileID: 0}
@@ -130,6 +146,34 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: RadiusShrinkRate
       value: .00300000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[3].Type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Data.Array.data[3].Type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Data.Array.data[3].SubTexturePixelMin.x
+      value: 103
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[4].Type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[4].Friction
+      value: .00100000005
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Data.Array.data[4].Type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Data.Array.data[4].SubTexturePixelMin.x
+      value: 137
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

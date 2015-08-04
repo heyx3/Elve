@@ -9,6 +9,9 @@ public class WorldGenSettings
 			   Height = 256;
 
 
+	public int Seed = 12345;
+
+
 	/// <summary>
 	/// The start positions of the different "biomes" based on height:
 	///   * Rock: mix between hard and soft rock.
@@ -54,4 +57,19 @@ public class WorldGenSettings
 	/// used to decide between soft rock and dirt.
 	/// </summary>
 	public float DirtScale = 0.1f;
+
+	/// <summary>
+	/// The chance of any random voxel on the surface having a tree planted on it.
+	/// </summary>
+	public float TreeChance = 0.1f;
+	/// <summary>
+	/// The min/max number of growth iterations for each pre-generated tree.
+	/// </summary>
+	public int TreeMinGrowth = 2,
+			   TreeMaxGrowth = 10;
+	/// <summary>
+	/// Values between 0 and 1 bias trees towards having more growth iterations.
+	/// Values over 1 bias trees towards having fewer growth iterations.
+	/// </summary>
+	public float TreeGrowthExponent = 3.0f;
 }

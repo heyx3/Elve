@@ -37,20 +37,33 @@ public class WorldVoxels : MonoBehaviour
 	}
 
 
+	/// <summary>
+	/// Gets whether the given type of block is a solid surface.
+	/// </summary>
 	public static bool IsSolid(VoxelTypes type)
 	{
-		switch (type)
-		{
-			case VoxelTypes.Dirt:
-			case VoxelTypes.SoftRock:
-			case VoxelTypes.HardRock:
-				return true;
+		return type != VoxelTypes.Empty;
+	}
+	/// <summary>
+	/// Gets whether a tree can destroy/grow over the given type of block.
+	/// </summary>
+	public static bool IsTreeFodder(VoxelTypes type)
+	{
+		return type == VoxelTypes.Empty;
+	}
 
-			case VoxelTypes.Empty:
-				return false;
+	/// <summary>
+	/// Gets the type of leaf for the given type of tree.
+	/// </summary>
+	public static VoxelTypes GetLeafType(VoxelTypes treeType)
+	{
+		switch (treeType)
+		{
+			case VoxelTypes.Tree_Wood:
+				return VoxelTypes.Tree_Wood_Leaf;
 
 			default:
-				throw new InvalidOperationException("Unknown voxel type " + type);
+				throw new NotImplementedException("Unknown tree type " + treeType);
 		}
 	}
 

@@ -32,8 +32,10 @@ public class VoxelContent : MonoBehaviour
 	public VoxelData[] Data = new VoxelData[(int)VoxelTypes.Empty]
 	{
 		new VoxelData(VoxelTypes.SoftRock, new Vector2(0.0f, 0.0f)),
-		new VoxelData(VoxelTypes.HardRock, new Vector2(33.0f, 0.0f)),
-		new VoxelData(VoxelTypes.Dirt, new Vector2(66.0f, 0.0f))
+		new VoxelData(VoxelTypes.HardRock, new Vector2(35.0f, 0.0f)),
+		new VoxelData(VoxelTypes.Dirt, new Vector2(69.0f, 0.0f)),
+		new VoxelData(VoxelTypes.Tree_Wood, new Vector2(103.0f, 1.0f)),
+		new VoxelData(VoxelTypes.Tree_Wood_Leaf, new Vector2(137.0f, 1.0f)),
 	};
 
 

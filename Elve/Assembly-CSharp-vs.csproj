@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Elve\Scripts\Camera\FollowObject.cs" />
+     <Compile Include="Assets\Elve\Scripts\Camera\KeyboardMouseCameraController.cs" />
      <Compile Include="Assets\Elve\Scripts\Camera\MatchParentCamera.cs" />
      <Compile Include="Assets\Elve\Scripts\Camera\RenderTargetQuad.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\ElveConstants.cs" />
@@ -72,6 +73,11 @@
      <Compile Include="Assets\Elve\Scripts\Tests\PathingTest.cs" />
      <Compile Include="Assets\Elve\Scripts\Tests\VoxelAddRemoveTest.cs" />
      <Compile Include="Assets\Elve\Scripts\Tests\WaterTest.cs" />
+     <Compile Include="Assets\Elve\Scripts\Trees\Growth\GrowData.cs" />
+     <Compile Include="Assets\Elve\Scripts\Trees\Growth\GrowPattern.cs" />
+     <Compile Include="Assets\Elve\Scripts\Trees\Growth\Oak.cs" />
+     <Compile Include="Assets\Elve\Scripts\Trees\Tree.cs" />
+     <Compile Include="Assets\Elve\Scripts\Trees\WorldTrees.cs" />
      <Compile Include="Assets\Elve\Scripts\Vector2i.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\Chunk.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\VoxelTypes.cs" />

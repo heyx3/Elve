@@ -98,6 +98,7 @@ GameObject:
   - 4: {fileID: 485250}
   - 20: {fileID: 2041180}
   - 114: {fileID: 11440948}
+  - 114: {fileID: 11472076}
   m_Layer: 0
   m_Name: Game Cam
   m_TagString: MainCamera
@@ -446,6 +447,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cam: {fileID: 2074104}
+--- !u!114 &11472076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3c4672962f5df64cb1eb98a7c5d32f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DragSpeed: .00999999978
+  KeyMoveSpeed: .200000003
+  UpKeys: 7700000011010000
+  DownKeys: 7300000012010000
+  LeftKeys: 6100000014010000
+  RightKeys: 6400000013010000
 --- !u!114 &11489486
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -632,7 +650,19 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: DragSpeed
+      value: .00999999978
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: KeyMoveSpeed
+      value: .200000003
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 174220}

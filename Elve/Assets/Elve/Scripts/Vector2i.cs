@@ -49,6 +49,10 @@ public struct Vector2i
 	{
 		return (x * 73856093) ^ (y * 19349663);
 	}
+	public int GetHashCode(int z)
+	{
+		return (this * z).GetHashCode();
+	}
 	public override bool Equals(object obj)
 	{
 		return (obj is Vector2i) && ((Vector2i)obj) == this;
