@@ -9,6 +9,12 @@ using UnityEngine;
 public interface IGrowPattern
 {
 	/// <summary>
+	/// Gets a description of this  tree type for the UI.
+	/// </summary>
+	string TreeType { get; }
+
+
+	/// <summary>
 	/// Creates a new tree from a seed at the given position by modifying the given voxel grid.
 	/// Returns some information about the tree's growth.
 	/// Outputs into "changedPoses" all voxels that were changed.

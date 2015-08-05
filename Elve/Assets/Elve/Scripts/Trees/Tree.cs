@@ -8,6 +8,11 @@ public class Tree
 	public IGrowPattern GrowPattern;
 	public GrowData GrowDat;
 
+	/// <summary>
+	/// The amount of water this tree has absorbed in it.
+	/// </summary>
+	public float Water = 0.0f;
+
 
 	public Tree(IGrowPattern pattern, GrowData dat)
 	{

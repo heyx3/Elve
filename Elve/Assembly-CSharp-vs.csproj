@@ -78,6 +78,9 @@
      <Compile Include="Assets\Elve\Scripts\Trees\Growth\Oak.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\Tree.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\WorldTrees.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\DeactivateAfterTime.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\TreeWindow.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\UIController.cs" />
      <Compile Include="Assets\Elve\Scripts\Vector2i.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\Chunk.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\VoxelTypes.cs" />

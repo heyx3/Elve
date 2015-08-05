@@ -14,6 +14,7 @@ public class KeyboardMouseCameraController : MonoBehaviour
 
 
 	public Camera GameCam;
+	public UIController UIControl;
 
 	public float DragSpeed = 0.005f,
 				 KeyMoveSpeed = 0.2f;
@@ -43,6 +44,8 @@ public class KeyboardMouseCameraController : MonoBehaviour
 	}
 	void Update()
 	{
+		Vector2 oldCamPos = tr.position;
+
 		//Update dragging input.
 		if (Input.GetMouseButton(1))
 		{
@@ -68,8 +71,10 @@ public class KeyboardMouseCameraController : MonoBehaviour
 		}
 
 		//Update mouse wheel input.
+		float currentSize = GameCam.orthographicSize;
 		GameCam.orthographicSize *= Mathf.Pow(ZoomScale, -Input.GetAxis("Mouse ScrollWheel"));
-		GameCam.orthographicSize = Mathf.Clamp(GameCam.orthographicSize, MinZoom, MaxZoom);	
+		GameCam.orthographicSize = Mathf.Clamp(GameCam.orthographicSize, MinZoom, MaxZoom);
+		UIControl.OnZoom(currentSize / GameCam.orthographicSize);
 
 		//Update keyboard input.
 		foreach (KeyCode upKey in UpKeys)
@@ -84,5 +89,8 @@ public class KeyboardMouseCameraController : MonoBehaviour
 		foreach (KeyCode rightKey in RightKeys)
 			if (Input.GetKey(rightKey))
 				tr.position += new Vector3(KeyMoveSpeed, 0.0f, 0.0f);
+
+
+		UIControl.OnPan((Vector2)tr.position - oldCamPos);
 	}
 }
