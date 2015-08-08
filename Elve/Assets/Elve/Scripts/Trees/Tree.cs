@@ -13,6 +13,11 @@ public class Tree
 	/// </summary>
 	public float Water = 0.0f;
 
+	/// <summary>
+	/// Whether this tree is allowed to grow organically when it has enough water.
+	/// </summary>
+	public bool AllowGrowth = true;
+
 
 	public Tree(IGrowPattern pattern, GrowData dat)
 	{

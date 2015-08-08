@@ -7,7 +7,8 @@ using Assert = UnityEngine.Assertions.Assert;
 
 public class TreeWindow : MonoBehaviour
 {
-	public Text WindowTitle;
+	public Text WindowTitle, WaterAmount;
+	public Toggle AllowGrowthToggle;
 
 	private Tree tree;
 
@@ -17,6 +18,24 @@ public class TreeWindow : MonoBehaviour
 	/// </summary>
 	public void SetUpForTree(Tree tree)
 	{
-		WindowTitle.text = tree.GrowPattern.TreeType + " Tree";
+		this.tree = tree;
+
+		WindowTitle.text = UIController.TreeTypeToString(tree.GrowDat.TreeType) + " " +
+						   tree.GrowPattern.TreeType + " Tree";
+		AllowGrowthToggle.isOn = tree.AllowGrowth;
+	}
+
+	/// <summary>
+	/// A callback for the "Allow Organic Growth?" checkbox.
+	/// </summary>
+	public void OnAllowGrowthChanged()
+	{
+		tree.AllowGrowth = AllowGrowthToggle.isOn;
+	}
+
+
+	void Update()
+	{
+		WaterAmount.text = "Water: " + System.Math.Round(tree.Water, 3);
 	}
 }

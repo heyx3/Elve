@@ -13,6 +13,12 @@ public class WorldTrees : MonoBehaviour
 	public List<Tree> Trees = new List<Tree>();
 
 
+	public List<VoxelTypes> AvailableSeeds = new List<VoxelTypes>()
+	{
+		VoxelTypes.Tree_Wood,
+	};
+
+
 	void Awake()
 	{
 		Assert.AreEqual(null, Instance, "More than one instance of 'WorldTrees' component!");

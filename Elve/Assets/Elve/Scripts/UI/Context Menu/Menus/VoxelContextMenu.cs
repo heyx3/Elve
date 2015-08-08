@@ -1,0 +1,1 @@
+﻿public class VoxelContextMenu : ContextMenu<Vector2i> { }

@@ -45,11 +45,77 @@ public class WorldVoxels : MonoBehaviour
 		return type != VoxelTypes.Empty;
 	}
 	/// <summary>
+	/// Gets whether the given type of block is a tree block (not including leaves).
+	/// </summary>
+	public static bool IsTree(VoxelTypes type)
+	{
+		return type == VoxelTypes.Tree_Wood;
+	}
+	/// <summary>
+	/// Gets whether the given type of block is a tree leaf block.
+	/// </summary>
+	public static bool IsLeaf(VoxelTypes type)
+	{
+		return type == VoxelTypes.Tree_Wood_Leaf;
+	}
+	/// <summary>
 	/// Gets whether a tree can destroy/grow over the given type of block.
 	/// </summary>
 	public static bool IsTreeFodder(VoxelTypes type)
 	{
 		return type == VoxelTypes.Empty;
+	}
+	/// <summary>
+	/// Gets whether a seed can be planted on the surface of the given type of block.
+	/// </summary>
+	public static bool CanPlantOn(VoxelTypes treeType, VoxelTypes surfaceType)
+	{
+		switch (surfaceType)
+		{
+			case VoxelTypes.Dirt:
+				return true;
+
+			case VoxelTypes.SoftRock:
+				//Only have wood trees right now.
+				return false;
+
+			case VoxelTypes.HardRock:
+				//Only have wood trees right now.
+				return false;
+
+			case VoxelTypes.Tree_Wood:
+				return true;
+
+			case VoxelTypes.Empty:
+			case VoxelTypes.Tree_Wood_Leaf:
+				return false;
+
+			default:
+				UnityEngine.Assertions.Assert.IsTrue(false, "Unknown voxel type " + surfaceType);
+				return false;
+		}
+	}
+	/// <summary>
+	/// Gets whether any kind of seed can be planted on the surface of the given type of block.
+	/// </summary>
+	public static bool CanPlantOn(VoxelTypes surfaceType)
+	{
+		switch (surfaceType)
+		{
+			case VoxelTypes.Dirt:
+			case VoxelTypes.SoftRock:
+			case VoxelTypes.HardRock:
+			case VoxelTypes.Tree_Wood:
+				return true;
+
+			case VoxelTypes.Empty:
+			case VoxelTypes.Tree_Wood_Leaf:
+				return false;
+
+			default:
+				UnityEngine.Assertions.Assert.IsTrue(false, "Unknown voxel type " + surfaceType);
+				return false;
+		}
 	}
 
 	/// <summary>

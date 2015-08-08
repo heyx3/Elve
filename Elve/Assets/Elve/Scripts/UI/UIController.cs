@@ -7,13 +7,17 @@ using Assert = UnityEngine.Assertions.Assert;
 
 /// <summary>
 /// The main interpreter of UI input on the game world.
+/// Is a singleton for easy access.
 /// </summary>
 public class UIController : MonoBehaviour
 {
+	public static UIController Instance { get; private set; }
+
+
 	/// <summary>
-	/// Gets a nice, short name for the given type of voxel.
+	/// Gets a nice, short name for the given type of block.
 	/// </summary>
-	public static string ToString(VoxelTypes t)
+	public static string BlockToString(VoxelTypes t)
 	{
 		switch (t)
 		{
@@ -35,18 +39,77 @@ public class UIController : MonoBehaviour
 				return "UNKNOWN type " + t.ToString();
 		}
 	}
+	/// <summary>
+	/// Gets a nice, short name for the given type of tree.
+	/// </summary>
+	public static string TreeTypeToString(VoxelTypes tree)
+	{
+		switch (tree)
+		{
+			case VoxelTypes.Tree_Wood:
+				return "Wood";
+
+			default:
+				Assert.IsTrue(false, "Unknown tree type " + tree);
+				return "UNKNOWN type " + tree.ToString();
+		}
+	}
 
 
 	public Camera GameCam;
+	public Transform MouseOverlay;
 
 	public TreeWindow TreeInfoWindow;
+	public VoxelContextMenu VoxelContextPopup;
+
+
+	public Transform CurrentContextMenu { get; private set; }
 
 	
 	void Awake()
 	{
+		CurrentContextMenu = null;
+
 		Assert.IsNotNull(GameCam);
+		Assert.IsNotNull(MouseOverlay);
+		Assert.IsNotNull(VoxelContextPopup);
 	}
 
+	void Update()
+	{
+		Vector3 worldPos = GameCam.ScreenToWorldPoint(Input.mousePosition);
+		MouseOverlay.position = new Vector3((int)worldPos.x + 0.5f,
+											(int)worldPos.y + 0.5f,
+											worldPos.z);
+
+		if (CurrentContextMenu != null && !CurrentContextMenu.gameObject.activeSelf)
+		{
+			CurrentContextMenu = null;
+		}
+	}
+
+	/// <summary>
+	/// Clears any popups currently visible.
+	/// Returns whether any popups were actually visible.
+	/// </summary>
+	public bool ClearPopups()
+	{
+		MouseOverlay.gameObject.SetActive(true);
+
+		if (CurrentContextMenu != null)
+		{
+			CurrentContextMenu.gameObject.SetActive(false);
+			CurrentContextMenu = null;
+			return true;
+		}
+		else if (TreeInfoWindow.gameObject.activeSelf)
+		{
+			TreeInfoWindow.gameObject.SetActive(false);
+			return true;
+		}
+
+		return false;
+	}
 
 	public void OnClick()
 	{
@@ -60,46 +123,50 @@ public class UIController : MonoBehaviour
 			worldPosI.y < WorldVoxels.Instance.Voxels.GetLength(1))
 		{
 			VoxelTypes clickedOn = WorldVoxels.Instance.Voxels[worldPosI.x, worldPosI.y];
-			switch (clickedOn)
+
+			//If something is already open, close it.
+			//Otherwise, open some kind of popup menu based on what was clicked.
+			if (!ClearPopups())
 			{
-				case VoxelTypes.Dirt:
-				case VoxelTypes.SoftRock:
-				case VoxelTypes.HardRock:
-				case VoxelTypes.Empty:
-
-					//Disable any open windows.
-					if (TreeInfoWindow.gameObject.activeSelf)
-					{
-						TreeInfoWindow.gameObject.SetActive(false);
-					}
-
-					break;
-
-				case VoxelTypes.Tree_Wood:
-				case VoxelTypes.Tree_Wood_Leaf:
-
-					Tree t = WorldTrees.Instance.GetTreeAt(worldPosI,
-														   (clickedOn == VoxelTypes.Tree_Wood_Leaf));
+				//Was a tree clicked?
+				if (WorldVoxels.IsTree(clickedOn))
+				{
+					Tree t = WorldTrees.Instance.GetTreeAt(worldPosI, false);
 					Assert.IsNotNull(t, "Can't find tree that was clicked on!");
 
 					TreeInfoWindow.gameObject.SetActive(true);
 					TreeInfoWindow.SetUpForTree(t);
-
-					break;
-
-
-				default:
-					Assert.IsTrue(false, "Unknown voxel type " + clickedOn);
-					break;
+					
+					MouseOverlay.gameObject.SetActive(false);
+				}
+				//No special items were clicked, so a voxel was clicked.
+				else
+				{
+					CurrentContextMenu = VoxelContextPopup.MyTransform;
+					if (VoxelContextPopup.SetUp(worldPosI, new Vector2(mousePos.x, mousePos.y)))
+					{
+						MouseOverlay.gameObject.SetActive(false);
+					}
+				}
 			}
 		}
 	}
 	public void OnPan(Vector2 amount)
 	{
+		if (amount == Vector2.zero)
+		{
+			return;
+		}
 
+		ClearPopups();
 	}
 	public void OnZoom(float amount)
 	{
+		if (amount == 1.0f)
+		{
+			return;
+		}
 
+		ClearPopups();
 	}
 }
