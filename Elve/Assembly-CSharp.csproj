@@ -54,6 +54,7 @@
      <Compile Include="Assets\Elve\Scripts\Content\PathingConstants.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\VoxelContent.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\WaterConstants.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\ElveAnim.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimController.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimFinishEvent.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimStates.cs" />
@@ -99,6 +100,7 @@
      <Compile Include="Assets\Elve\Scripts\World Generation\NoiseAlgos.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenSettings.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenerator.cs" />
+     <Compile Include="Assets\Elve\Scripts\WorldTime.cs" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />

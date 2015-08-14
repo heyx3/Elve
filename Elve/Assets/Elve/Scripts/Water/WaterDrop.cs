@@ -143,12 +143,12 @@ public struct WaterDrop
 	/// Applies this drop's force to its velocity, then its velocity to its position.
 	/// Returns the new drop instead of changing this one.
 	/// </summary>
-	public WaterDrop Update(Vector2 force)
+	public WaterDrop Update(Vector2 force, float deltaTime)
 	{
 		WaterDrop next = new WaterDrop(this);
 
 		//Apply the force.
-		next.Velocity += force * Time.deltaTime / Mass;
+		next.Velocity += force * deltaTime / Mass;
 		float sizeSqr = next.Velocity.sqrMagnitude;
 		if (sizeSqr > WaterConstants.Instance.MaxSpeed)
 		{
@@ -159,7 +159,7 @@ public struct WaterDrop
 
 		//Try applying the velocity and back up if a wall is hit.
 
-		next.Pos += next.Velocity * Time.deltaTime;
+		next.Pos += next.Velocity * deltaTime;
 		next.PosI = new Vector2i((int)next.Pos.x, (int)next.Pos.y);
 
 		VoxelTypes[,] vxs = WorldVoxels.Instance.Voxels;
@@ -178,7 +178,7 @@ public struct WaterDrop
 			next.PosI.y = PosI.y;
 		}
 
-		next.Radius -= WaterConstants.Instance.RadiusShrinkRate * Time.deltaTime;
+		next.Radius -= WaterConstants.Instance.RadiusShrinkRate * deltaTime;
 
 		return next;
 	}

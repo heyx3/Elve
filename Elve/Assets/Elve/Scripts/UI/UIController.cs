@@ -31,7 +31,7 @@ public class UIController : MonoBehaviour
 				return "Empty Space";
 			case VoxelTypes.Tree_Wood:
 				return "Wood";
-			case VoxelTypes.Tree_Wood_Leaf:
+			case VoxelTypes.Leaf:
 				return "Leaves";
 
 			default:
@@ -62,8 +62,28 @@ public class UIController : MonoBehaviour
 	public TreeWindow TreeInfoWindow;
 	public VoxelContextMenu VoxelContextPopup;
 
-
+	public Image PauseTimeHighlight, QuarterTimeHighlight, HalfTimeHighlight,
+				 NormalTimeHighlight, DoubleTimeHighlight, TripleTimeHighlight,
+				 QuadrupleTimeHighlight;
+	private void EnableHighlight(Image highlight)
+	{
+		PauseTimeHighlight.enabled = PauseTimeHighlight == highlight;
+		QuarterTimeHighlight.enabled = QuarterTimeHighlight == highlight;
+		HalfTimeHighlight.enabled = HalfTimeHighlight == highlight;
+		NormalTimeHighlight.enabled = NormalTimeHighlight == highlight;
+		DoubleTimeHighlight.enabled = DoubleTimeHighlight == highlight;
+		TripleTimeHighlight.enabled = TripleTimeHighlight == highlight;
+		QuadrupleTimeHighlight.enabled = QuadrupleTimeHighlight == highlight;
+	}
+	
+	
 	public Transform CurrentContextMenu { get; private set; }
+
+
+	/// <summary>
+	/// Used when un-pausing the world time.
+	/// </summary>
+	private float desiredTimeScale = 1.0f;
 
 	
 	void Awake()
@@ -74,18 +94,67 @@ public class UIController : MonoBehaviour
 		Assert.IsNotNull(MouseOverlay);
 		Assert.IsNotNull(VoxelContextPopup);
 	}
+	void Start()
+	{
+		NormalTime();
+	}
 
 	void Update()
 	{
 		Vector3 worldPos = GameCam.ScreenToWorldPoint(Input.mousePosition);
-		MouseOverlay.position = new Vector3((int)worldPos.x + 0.5f,
-											(int)worldPos.y + 0.5f,
-											worldPos.z);
+
+		MouseOverlay.gameObject.SetActive(!Input.GetMouseButton(1));
+		if (CurrentContextMenu == null && !TreeInfoWindow.gameObject.activeSelf)
+		{
+			MouseOverlay.position = new Vector3((int)worldPos.x + 0.5f,
+												(int)worldPos.y + 0.5f,
+												worldPos.z);
+		}
 
 		if (CurrentContextMenu != null && !CurrentContextMenu.gameObject.activeSelf)
 		{
 			CurrentContextMenu = null;
 		}
+
+		//Handle time scale input.
+		if (Input.GetButtonDown("Pause Time"))
+		{
+			//If time is already paused, unpause it.
+			if (WorldTime.TimeScale == 0.0f)
+			{
+				if (desiredTimeScale == 0.25f)
+					QuarterTime();
+				else if (desiredTimeScale == 0.5f)
+					HalfTime();
+				else if (desiredTimeScale == 1.0f)
+					NormalTime();
+				else if (desiredTimeScale == 2.0f)
+					DoubleTime();
+				else if (desiredTimeScale == 3.0f)
+					TripleTime();
+				else
+				{
+					Assert.AreEqual(desiredTimeScale, 4.0f);
+					QuadrupleTime();
+				}
+			}
+			else
+			{
+				PauseTime();
+			}
+		}
+		else if (Input.GetButtonDown("Quarter Time"))
+			QuarterTime();
+		else if (Input.GetButtonDown("Half Time"))
+			HalfTime();
+		else if (Input.GetButtonDown("Normal Time"))
+			NormalTime();
+		else if (Input.GetButtonDown("Double Time"))
+			DoubleTime();
+		else if (Input.GetButtonDown("Triple Time"))
+			TripleTime();
+		else if (Input.GetButtonDown("Quadruple Time"))
+			QuadrupleTime();
 	}
 
 	/// <summary>
@@ -94,8 +163,6 @@ public class UIController : MonoBehaviour
 	/// </summary>
 	public bool ClearPopups()
 	{
-		MouseOverlay.gameObject.SetActive(true);
-
 		if (CurrentContextMenu != null)
 		{
 			CurrentContextMenu.gameObject.SetActive(false);
@@ -136,8 +203,6 @@ public class UIController : MonoBehaviour
 
 					TreeInfoWindow.gameObject.SetActive(true);
 					TreeInfoWindow.SetUpForTree(t);
-					
-					MouseOverlay.gameObject.SetActive(false);
 				}
 				//No special items were clicked, so a voxel was clicked.
 				else
@@ -145,7 +210,7 @@ public class UIController : MonoBehaviour
 					CurrentContextMenu = VoxelContextPopup.MyTransform;
 					if (VoxelContextPopup.SetUp(worldPosI, new Vector2(mousePos.x, mousePos.y)))
 					{
-						MouseOverlay.gameObject.SetActive(false);
+						//Nothing needs to be done at this point if the pop-up fails.
 					}
 				}
 			}
@@ -168,5 +233,48 @@ public class UIController : MonoBehaviour
 		}
 
 		ClearPopups();
+	}
+
+
+	public void PauseTime()
+	{
+		WorldTime.TimeScale = 0.0f;
+		EnableHighlight(PauseTimeHighlight);
+	}
+	public void QuarterTime()
+	{
+		WorldTime.TimeScale = 0.25f;
+		desiredTimeScale = WorldTime.TimeScale;
+		EnableHighlight(QuarterTimeHighlight);
+	}
+	public void HalfTime()
+	{
+		WorldTime.TimeScale = 0.5f;
+		desiredTimeScale = WorldTime.TimeScale;
+		EnableHighlight(HalfTimeHighlight);
+	}
+	public void NormalTime()
+	{
+		WorldTime.TimeScale = 1.0f;
+		desiredTimeScale = WorldTime.TimeScale;
+		EnableHighlight(NormalTimeHighlight);
+	}
+	public void DoubleTime()
+	{
+		WorldTime.TimeScale = 2.0f;
+		desiredTimeScale = WorldTime.TimeScale;
+		EnableHighlight(DoubleTimeHighlight);
+	}
+	public void TripleTime()
+	{
+		WorldTime.TimeScale = 3.0f;
+		desiredTimeScale = WorldTime.TimeScale;
+		EnableHighlight(TripleTimeHighlight);
+	}
+	public void QuadrupleTime()
+	{
+		WorldTime.TimeScale = 4.0f;
+		desiredTimeScale = WorldTime.TimeScale;
+		EnableHighlight(QuadrupleTimeHighlight);
 	}
 }

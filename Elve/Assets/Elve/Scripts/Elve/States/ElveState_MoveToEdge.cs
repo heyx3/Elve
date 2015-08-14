@@ -81,7 +81,7 @@ public class ElveState_MoveToEdge : ElveState
 				Owner.MyTransform.localScale = new Vector3(Dir, 1.0f, Owner.MyTransform.localScale.z);
 
 				//Move.
-				moveAmount = Time.deltaTime * ElveConstants.Instance.WalkSpeed;
+				moveAmount = WorldTime.DeltaTime * ElveConstants.Instance.WalkSpeed;
 				distToTarget = Mathf.Abs(myPos.x - targetPos);
 				//If close to the goal, jump there and end the state.
 				if (moveAmount > distToTarget)
@@ -118,7 +118,7 @@ public class ElveState_MoveToEdge : ElveState
 														   Dir, Owner.MyTransform.localScale.z);
 
 				//Move.
-				moveAmount = Time.deltaTime * ElveConstants.Instance.ClimbSpeed;
+				moveAmount = WorldTime.DeltaTime * ElveConstants.Instance.ClimbSpeed;
 				distToTarget = Mathf.Abs(myPos.y - targetPos);
 				if (moveAmount > distToTarget)
 				{

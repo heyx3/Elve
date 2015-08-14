@@ -58,7 +58,7 @@ public class ContextMenu<ContextData> : MonoBehaviour
 	private Vector2 itemSize;
 
 
-	void Start()
+	void Awake()
 	{
 		MyTransform = transform;
 		targetScale = MyTransform.transform.localScale;
@@ -145,9 +145,10 @@ public class ContextMenu<ContextData> : MonoBehaviour
 	/// </summary>
 	public bool SetUp(ContextData context, Vector2 screenPos)
 	{
+		gameObject.SetActive(true);
+
 		MyTransform.position = new Vector3(screenPos.x, screenPos.y, MyTransform.position.z);
 
-		gameObject.SetActive(true);
 		Context = context;
 
 		//Enable/position the applicable items.
@@ -181,7 +182,7 @@ public class ContextMenu<ContextData> : MonoBehaviour
 		else
 		{
 			float finalY = nextPos.y - (dir * itemSize.y) + (0.5f * itemSize.y * dir) + (dir * Border.y);
-			Rect r = new Rect(screenPos.x - Border.x,
+			Rect r = new Rect(screenPos.x,
 							  Mathf.Min(screenPos.y, finalY),
 							  itemSize.x + Border.x + Border.x,
 							  Mathf.Abs(finalY - screenPos.y));

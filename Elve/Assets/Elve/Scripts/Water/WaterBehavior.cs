@@ -46,10 +46,19 @@ public class WaterBehavior : MonoBehaviour
 	}
 	void FixedUpdate()
 	{
+		//Don't bother doing anything if the game is paused.
+		if (WorldTime.TimeScale == 0.0f)
+		{
+			return;
+		}
+
+
 		NFixedUpdates += 1;
 
 		List<WaterDrop> from = dropsBuffers[fromIndex],
 						to = dropsBuffers[(fromIndex + 1) % 2];
+
+		float timeDelta = Time.fixedDeltaTime * WorldTime.TimeScale;
 
 		//Make sure both lists have the same number of drops.
 		ResizeList(to, from.Count);
@@ -98,7 +107,7 @@ public class WaterBehavior : MonoBehaviour
 					//Run the rest of the update logic for the new drop.
 					force.y += WaterConstants.Instance.Gravity;
 					to[i].AddNormalForces(ref force);
-					to[i] = to[i].Update(force);
+					to[i] = to[i].Update(force, timeDelta);
 					break;
 				}
 				//Otherwise, push away.
@@ -116,7 +125,7 @@ public class WaterBehavior : MonoBehaviour
 				force.y += WaterConstants.Instance.Gravity;
 				from[i].AddNormalForces(ref force);
 
-				to[i] = from[i].Update(force);
+				to[i] = from[i].Update(force, timeDelta);
 			}
 		}
 

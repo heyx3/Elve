@@ -14,9 +14,17 @@ public class Tree
 	public float Water = 0.0f;
 
 	/// <summary>
-	/// Whether this tree is allowed to grow organically when it has enough water.
+	/// Whether this tree is allowed to grow organically once it has enough water.
 	/// </summary>
 	public bool AllowGrowth = true;
+	/// <summary>
+	/// If true, Elves will pull material out of this tree as needed.
+	/// </summary>
+	public bool UseAsResource = false;
+	/// <summary>
+	/// If true, Elves will pull water out of this tree as needed.
+	/// </summary>
+	public bool UseAsWaterSource = false;
 
 
 	public Tree(IGrowPattern pattern, GrowData dat)

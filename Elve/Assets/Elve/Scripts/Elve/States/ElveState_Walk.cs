@@ -131,7 +131,7 @@ public class ElveState_Walk : ElveState
 
 		//Walk forwards.
 		Vector3 pos = Owner.MyTransform.position;
-		pos.x += Dir * Time.deltaTime * ElveConstants.Instance.WalkSpeed;
+		pos.x += Dir * WorldTime.DeltaTime * ElveConstants.Instance.WalkSpeed;
 		if (Owner.CurrentSurface == ElveBehavior.Surfaces.Floor)
 		{
 			pos.y = Mathf.Floor(pos.y) + 0.00001f;
