@@ -28,7 +28,7 @@ public class WaterConstants : MonoBehaviour
 		new TypeAndFriction(VoxelTypes.HardRock, 0.1f),
 		new TypeAndFriction(VoxelTypes.Dirt, 0.1f),
 		new TypeAndFriction(VoxelTypes.Tree_Wood, 0.1f),
-		new TypeAndFriction(VoxelTypes.Tree_Wood_Leaf, 0.001f),
+		new TypeAndFriction(VoxelTypes.Leaf, 0.001f),
 	};
 
 	/// <summary>

@@ -124,31 +124,29 @@ public class GrowPattern_Oak : IGrowPattern
 	/// </summary>
 	private static void AddLeaves(GrowData_Oak dat, VoxelTypes[,] worldGrid)
 	{
-		VoxelTypes leafType = WorldVoxels.GetLeafType(dat.TreeType);
-
 		Vector2i topPos = new Vector2i(dat.SproutPos.x, dat.TopY);
 		if (topPos.x > 0)
 		{
-			AddLeaves_Iterate(topPos.LessX, dat.LeavesRadius, leafType, worldGrid, dat);
+			AddLeaves_Iterate(topPos.LessX, dat.LeavesRadius, worldGrid, dat);
 		}
 		if (topPos.x < worldGrid.GetLength(0) - 1)
 		{
-			AddLeaves_Iterate(topPos.MoreX, dat.LeavesRadius, leafType, worldGrid, dat);
+			AddLeaves_Iterate(topPos.MoreX, dat.LeavesRadius, worldGrid, dat);
 		}
 		if (topPos.y < worldGrid.GetLength(1) - 1)
 		{
-			AddLeaves_Iterate(topPos.MoreY, dat.LeavesRadius, leafType, worldGrid, dat);
+			AddLeaves_Iterate(topPos.MoreY, dat.LeavesRadius, worldGrid, dat);
 		}
 	}
 	/// <summary>
 	/// The recursive loop for adding leaves to the top of a tree.
 	/// </summary>
-	private static void AddLeaves_Iterate(Vector2i pos, int stepsLeft, VoxelTypes leafType,
+	private static void AddLeaves_Iterate(Vector2i pos, int stepsLeft,
 										  VoxelTypes[,] worldGrid, GrowData_Oak dat)
 	{
 		if (WorldVoxels.IsTreeFodder(worldGrid[pos.x, pos.y]))
 		{
-			worldGrid[pos.x, pos.y] = leafType;
+			worldGrid[pos.x, pos.y] = VoxelTypes.Leaf;
 			dat.Leaves.Add(pos);
 			
 			dat.MinBoundBox.x = UnityEngine.Mathf.Min(dat.MinBoundBox.x, pos.x);
@@ -161,19 +159,19 @@ public class GrowPattern_Oak : IGrowPattern
 				stepsLeft -= 1;
 				if (pos.x > 0)
 				{
-					AddLeaves_Iterate(pos.LessX, stepsLeft, leafType, worldGrid, dat);
+					AddLeaves_Iterate(pos.LessX, stepsLeft, worldGrid, dat);
 				}
 				if (pos.x < worldGrid.GetLength(0) - 1)
 				{
-					AddLeaves_Iterate(pos.MoreX, stepsLeft, leafType, worldGrid, dat);
+					AddLeaves_Iterate(pos.MoreX, stepsLeft, worldGrid, dat);
 				}
 				if (pos.y > 0)
 				{
-					AddLeaves_Iterate(pos.LessY, stepsLeft, leafType, worldGrid, dat);
+					AddLeaves_Iterate(pos.LessY, stepsLeft, worldGrid, dat);
 				}
 				if (pos.y < worldGrid.GetLength(1) - 1)
 				{
-					AddLeaves_Iterate(pos.MoreY, stepsLeft, leafType, worldGrid, dat);
+					AddLeaves_Iterate(pos.MoreY, stepsLeft, worldGrid, dat);
 				}
 			}
 		}

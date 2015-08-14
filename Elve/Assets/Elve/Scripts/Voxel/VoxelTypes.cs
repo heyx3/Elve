@@ -5,7 +5,7 @@
 	Dirt,
 
 	Tree_Wood,
-	Tree_Wood_Leaf,
+	Leaf,
 
 	/// <summary>
 	/// When casted to an int, gives the number of enum values other than "Empty".

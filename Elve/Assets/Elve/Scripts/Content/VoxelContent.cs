@@ -35,7 +35,7 @@ public class VoxelContent : MonoBehaviour
 		new VoxelData(VoxelTypes.HardRock, new Vector2(35.0f, 0.0f)),
 		new VoxelData(VoxelTypes.Dirt, new Vector2(69.0f, 0.0f)),
 		new VoxelData(VoxelTypes.Tree_Wood, new Vector2(103.0f, 1.0f)),
-		new VoxelData(VoxelTypes.Tree_Wood_Leaf, new Vector2(137.0f, 1.0f)),
+		new VoxelData(VoxelTypes.Leaf, new Vector2(137.0f, 1.0f)),
 	};
 
 

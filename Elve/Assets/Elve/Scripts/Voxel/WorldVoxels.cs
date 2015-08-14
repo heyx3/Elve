@@ -52,13 +52,6 @@ public class WorldVoxels : MonoBehaviour
 		return type == VoxelTypes.Tree_Wood;
 	}
 	/// <summary>
-	/// Gets whether the given type of block is a tree leaf block.
-	/// </summary>
-	public static bool IsLeaf(VoxelTypes type)
-	{
-		return type == VoxelTypes.Tree_Wood_Leaf;
-	}
-	/// <summary>
 	/// Gets whether a tree can destroy/grow over the given type of block.
 	/// </summary>
 	public static bool IsTreeFodder(VoxelTypes type)
@@ -87,7 +80,7 @@ public class WorldVoxels : MonoBehaviour
 				return true;
 
 			case VoxelTypes.Empty:
-			case VoxelTypes.Tree_Wood_Leaf:
+			case VoxelTypes.Leaf:
 				return false;
 
 			default:
@@ -109,27 +102,12 @@ public class WorldVoxels : MonoBehaviour
 				return true;
 
 			case VoxelTypes.Empty:
-			case VoxelTypes.Tree_Wood_Leaf:
+			case VoxelTypes.Leaf:
 				return false;
 
 			default:
 				UnityEngine.Assertions.Assert.IsTrue(false, "Unknown voxel type " + surfaceType);
 				return false;
-		}
-	}
-
-	/// <summary>
-	/// Gets the type of leaf for the given type of tree.
-	/// </summary>
-	public static VoxelTypes GetLeafType(VoxelTypes treeType)
-	{
-		switch (treeType)
-		{
-			case VoxelTypes.Tree_Wood:
-				return VoxelTypes.Tree_Wood_Leaf;
-
-			default:
-				throw new NotImplementedException("Unknown tree type " + treeType);
 		}
 	}
 
