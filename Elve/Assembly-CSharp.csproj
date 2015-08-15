@@ -60,11 +60,13 @@
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimStates.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveBehavior.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveMovementController.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\Jobs\Labors.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_ChangeSurface.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_Climb.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_CrossLedge.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_MoveToEdge.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_UseMagic.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_Walk.cs" />
      <Compile Include="Assets\Elve\Scripts\Pathing\BaseGraphDeclarations.cs" />
      <Compile Include="Assets\Elve\Scripts\Pathing\Game Pathing\VoxelGraphDeclarations.cs" />
@@ -88,6 +90,7 @@
      <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Menus\VoxelContextMenu.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\ContextMenu.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\DeactivateAfterTime.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\SizeFitsCanvas.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\TreeWindow.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\UIController.cs" />
      <Compile Include="Assets\Elve\Scripts\Vector2i.cs" />

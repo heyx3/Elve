@@ -74,6 +74,16 @@ public class ElveAnimController : MonoBehaviour
 		new StateAndObject(ElveAnimStates.WallToCeiling),
 		new StateAndObject(ElveAnimStates.CeilingToFloor),
 		new StateAndObject(ElveAnimStates.CeilingToWall),
+		
+		new StateAndObject(ElveAnimStates.UseMagicFloorToFloor),
+		new StateAndObject(ElveAnimStates.UseMagicFloorToWall),
+		new StateAndObject(ElveAnimStates.UseMagicFloorToCeiling),
+		new StateAndObject(ElveAnimStates.UseMagicWallToSelf),
+		new StateAndObject(ElveAnimStates.UseMagicWallToWall),
+		new StateAndObject(ElveAnimStates.UseMagicWallToCeiling),
+		new StateAndObject(ElveAnimStates.UseMagicCeilingToFloor),
+		new StateAndObject(ElveAnimStates.UseMagicCeilingToWall),
+		new StateAndObject(ElveAnimStates.UseMagicCeilingToCeiling),
 	};
 
 

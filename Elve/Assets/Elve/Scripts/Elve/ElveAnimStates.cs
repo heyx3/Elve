@@ -22,4 +22,15 @@
 	WallToCeiling,
 	CeilingToFloor,
 	CeilingToWall,
+
+	//Animations to use magic on a nearby surface.
+	UseMagicFloorToFloor,
+	UseMagicFloorToWall,
+	UseMagicFloorToCeiling,
+	UseMagicWallToSelf,
+	UseMagicWallToWall,
+	UseMagicWallToCeiling, //Also used for wall to floor.
+	UseMagicCeilingToFloor,
+	UseMagicCeilingToWall,
+	UseMagicCeilingToCeiling,
 }

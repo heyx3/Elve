@@ -114,8 +114,7 @@ public class ElveState_ChangeSurface : ElveState
 				}
 				break;
 		}
-		Owner.MyTransform.localScale = new Vector3(xScale, yScale,
-												   Owner.MyTransform.localScale.z);
+		Owner.MyTransform.localScale = new Vector3(xScale, yScale, Owner.MyTransform.localScale.z);
 		
 		//When the animation is finished, switch states.
 		Owner.MyAnimator.ActiveAnim.GetComponent<ElveAnimFinishEvent>().OnAnimFinished += OnAnimFinished;

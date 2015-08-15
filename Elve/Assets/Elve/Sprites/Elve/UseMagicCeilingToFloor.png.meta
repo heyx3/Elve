@@ -1,0 +1,88 @@
+fileFormatVersion: 2
+guid: 4134b43aa876c5c48b733b22982e9447
+timeCreated: 1439612613
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: UseMagicCeilingToFloor_0
+    21300002: UseMagicCeilingToFloor_1
+    21300004: UseMagicCeilingToFloor_3
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 256
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: UseMagicCeilingToFloor_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9
+        width: 116
+        height: 119
+      alignment: 9
+      pivot: {x: .470974177, y: .993522167}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: UseMagicCeilingToFloor_1
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 7
+        width: 116
+        height: 121
+      alignment: 9
+      pivot: {x: .480172515, y: .995867789}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: UseMagicCeilingToFloor_3
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 17
+        width: 116
+        height: 111
+      alignment: 9
+      pivot: {x: .481896758, y: .995495498}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
