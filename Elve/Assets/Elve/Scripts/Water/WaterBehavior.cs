@@ -126,6 +126,7 @@ public class WaterBehavior : MonoBehaviour
 				from[i].AddNormalForces(ref force);
 
 				to[i] = from[i].Update(force, timeDelta);
+				to[i] = to[i].ShrinkRadius(timeDelta);
 			}
 		}
 

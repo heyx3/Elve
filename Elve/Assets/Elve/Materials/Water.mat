@@ -130,7 +130,11 @@ Material:
       data:
         first:
           name: _RadiusScale
-        second: 4.05999994
+        second: 5.5
+      data:
+        first:
+          name: _StrengthDropoff
+        second: .589999974
     m_Colors:
       data:
         first:

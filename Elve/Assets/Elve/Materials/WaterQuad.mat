@@ -149,7 +149,7 @@ Material:
       data:
         first:
           name: _WaterThinness
-        second: .660000026
+        second: .400000006
       data:
         first:
           name: _LandscapeAlphaThreshold

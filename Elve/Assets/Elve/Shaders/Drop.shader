@@ -3,6 +3,7 @@
 	Properties
 	{
         _RadiusScale("Radius Scale", Float) = 1.5
+        _StrengthDropoff("Strength Dropoff", Float) = 1.0
 	}
 
 	SubShader
@@ -35,6 +36,7 @@
 				#include "UnityCG.cginc"
 
 				float _RadiusScale;
+                float _StrengthDropoff;
 
 				struct VS_INPUT
 				{
@@ -109,6 +111,7 @@
                     //Output [0, 1] if dist is between radius and scaled radius.
                     //Output 0 if dist is greater than scaled radius.
                     float alpha = 1.0 - saturate((dist - radius) / radiusDiff);
+                    alpha = pow(alpha, _StrengthDropoff);
 
                     return fixed4(alpha, alpha, alpha, alpha);
 				}

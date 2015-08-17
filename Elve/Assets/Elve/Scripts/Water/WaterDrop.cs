@@ -166,20 +166,44 @@ public struct WaterDrop
 		if (next.PosI.x < 0 || next.PosI.x >= vxs.GetLength(0) ||
 			WorldVoxels.IsSolid(vxs[next.PosI.x, PosI.y]))
 		{
-			next.Pos.x = (next.Velocity.x < 0.0f ? PosI.x : (PosI.x + 1));
-			next.Velocity.x = -next.Velocity.x * WaterConstants.Instance.BounceDamp;
-			next.PosI.x = PosI.x;
+			if (next.Velocity.x < 0.0f)
+			{
+				next.Pos.x = PosI.x + 0.000001f;
+				next.PosI.x = PosI.x;
+			}
+			else
+			{
+				next.Pos.x = PosI.x + 0.999999f;
+				next.PosI.x = PosI.x;// +1;
+			}
+			next.Velocity.x *= -WaterConstants.Instance.BounceDamp;
 		}
 		if (next.PosI.y < 0 || next.PosI.y >= vxs.GetLength(1) ||
-			WorldVoxels.IsSolid(vxs[PosI.x, next.PosI.y]))
+			WorldVoxels.IsSolid(vxs[next.PosI.x, next.PosI.y]))
 		{
-			next.Pos.y = (next.Velocity.y < 0.0f ? PosI.y : (PosI.y + 1));
-			next.Velocity.y = -next.Velocity.y * WaterConstants.Instance.BounceDamp;
-			next.PosI.y = PosI.y;
+			if (next.Velocity.y < 0.0f)
+			{
+				next.Pos.y = PosI.y + 0.000001f;
+				next.PosI.y = PosI.y;
+			}
+			else
+			{
+				next.Pos.y = PosI.y + 0.999999f;
+				next.PosI.y = PosI.y;// +1;
+			}
+			next.Velocity.y *= -WaterConstants.Instance.BounceDamp;
 		}
 
-		next.Radius -= WaterConstants.Instance.RadiusShrinkRate * deltaTime;
-
 		return next;
+	}
+
+	/// <summary>
+	/// Shrinks this drop's radius given the update time step length.
+	/// </summary>
+	public WaterDrop ShrinkRadius(float deltaTime)
+	{
+		WaterDrop drop = new WaterDrop(this);
+		drop.Radius -= WaterConstants.Instance.RadiusShrinkRate * deltaTime;
+		return drop;
 	}
 }

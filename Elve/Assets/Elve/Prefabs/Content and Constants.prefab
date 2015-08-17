@@ -1,18 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &160690
+--- !u!1 &126776
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 486196}
-  - 114: {fileID: 11470980}
-  - 114: {fileID: 11443932}
-  - 114: {fileID: 11420212}
-  - 114: {fileID: 11475848}
-  - 114: {fileID: 11416338}
+  - 4: {fileID: 445136}
+  - 114: {fileID: 11481544}
+  - 114: {fileID: 11443322}
+  - 114: {fileID: 11471526}
+  - 114: {fileID: 11474446}
+  - 114: {fileID: 11449090}
   m_Layer: 0
   m_Name: Content and Constants
   m_TagString: Untagged
@@ -20,35 +20,48 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &486196
+--- !u!4 &445136
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 160690}
+  m_GameObject: {fileID: 126776}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11416338
+--- !u!114 &11443322
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 160690}
+  m_GameObject: {fileID: 126776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3720bfb48bf545143bb1d3c8ba4af03b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WalkSpeed: 1
+  ClimbSpeed: 1
+--- !u!114 &11449090
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126776}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d6fbc283316a7e42a0128d7f5fcb87a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11420212
+--- !u!114 &11471526
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 160690}
+  m_GameObject: {fileID: 126776}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 355f7db445fbc3a4985b795dbfc03079, type: 3}
@@ -61,47 +74,12 @@ MonoBehaviour:
     Cost: 1
   - Type: 2
     Cost: 1.10000002
---- !u!114 &11443932
+--- !u!114 &11474446
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 160690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3720bfb48bf545143bb1d3c8ba4af03b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WalkSpeed: 1
-  ClimbSpeed: 1
---- !u!114 &11470980
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 160690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09fbc68b862b8c947a4d57df002cabda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Data:
-  - Type: 0
-    SubTexturePixelMin: {x: 1, y: 1}
-  - Type: 1
-    SubTexturePixelMin: {x: 35, y: 1}
-  - Type: 2
-    SubTexturePixelMin: {x: 69, y: 1}
-  - Type: 3
-    SubTexturePixelMin: {x: 103, y: 1}
-  - Type: 4
-    SubTexturePixelMin: {x: 137, y: 1}
---- !u!114 &11475848
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 160690}
+  m_GameObject: {fileID: 126776}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d91a4ff1181bfb4188da1803660891e, type: 3}
@@ -119,75 +97,45 @@ MonoBehaviour:
   - Type: 4
     Friction: .00100000005
   NormalForceGrowth: 2
-  NormalForce: 325
-  BounceDamp: .5
-  Mass: 10
-  Gravity: -9.80000019
-  MaxSpeed: 5
+  NormalForce: 360
+  BounceDamp: .0900000036
+  Mass: 108.07
+  Gravity: -.409999996
+  MaxSpeed: 10
   CombineDistScale: .870000005
-  SeparationForce: 25
-  RadiusShrinkRate: .00600000005
-  MaxRadius: .0700000003
+  SeparationForce: 1
+  RadiusShrinkRate: .00100000005
+  MaxRadius: .0250000004
+--- !u!114 &11481544
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09fbc68b862b8c947a4d57df002cabda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+  - Type: 0
+    SubTexturePixelMin: {x: 1, y: 1}
+  - Type: 1
+    SubTexturePixelMin: {x: 35, y: 1}
+  - Type: 2
+    SubTexturePixelMin: {x: 69, y: 1}
+  - Type: 3
+    SubTexturePixelMin: {x: 103, y: 1}
+  - Type: 4
+    SubTexturePixelMin: {x: 137, y: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: Data.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Friction.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Friction.Array.data[0].Friction
-      value: .100000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Friction.Array.data[1].Friction
-      value: .100000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Friction.Array.data[2].Friction
-      value: .100000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: RadiusShrinkRate
-      value: .00300000003
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Friction.Array.data[3].Type
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Data.Array.data[3].Type
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Data.Array.data[3].SubTexturePixelMin.x
-      value: 103
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Friction.Array.data[4].Type
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Friction.Array.data[4].Friction
-      value: .00100000005
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Data.Array.data[4].Type
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: Data.Array.data[4].SubTexturePixelMin.x
-      value: 137
-      objectReference: {fileID: 0}
+    m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 160690}
+  m_RootGameObject: {fileID: 126776}
   m_IsPrefabParent: 1

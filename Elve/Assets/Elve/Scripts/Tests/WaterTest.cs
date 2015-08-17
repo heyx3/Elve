@@ -16,6 +16,9 @@ public class WaterTest : MonoBehaviour
 	public bool ClearAllWater = false;
 
 
+	public int TotalDrops = 0;
+
+
 	void Update()
 	{
 		if ((ContinuousDrop && Input.GetMouseButton(1)) ||
@@ -32,7 +35,8 @@ public class WaterTest : MonoBehaviour
 																	 UnityEngine.Random.value),
 														  Mathf.Lerp(MinVelocity.y, MaxVelocity.y,
 																	 UnityEngine.Random.value)),
-											  Mathf.Lerp(DropRadiusMin, DropRadiusMax, UnityEngine.Random.value)));
+											  Mathf.Lerp(DropRadiusMin, DropRadiusMax,
+														 UnityEngine.Random.value)));
 			}
 		}
 
@@ -41,5 +45,7 @@ public class WaterTest : MonoBehaviour
 			ClearAllWater = false;
 			Water.Drops.Clear();
 		}
+
+		TotalDrops = Water.Drops.Count;
 	}
 }
