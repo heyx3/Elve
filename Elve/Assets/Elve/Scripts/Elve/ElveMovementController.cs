@@ -29,6 +29,11 @@ public class ElveMovementController : MonoBehaviour
 	/// </summary>
 	public event PathCompletedCallback OnPathCompleted;
 
+	/// <summary>
+	/// Gets whether there are any nodes left to complete in the path.
+	/// </summary>
+	public bool IsPathCompleted { get { return Path.Count == 0; } }
+
 
 	private Transform tr;
 	private ElveBehavior fsm;
@@ -49,9 +54,18 @@ public class ElveMovementController : MonoBehaviour
 	/// </summary>
 	public void StartPath(Vector2 targetWorldPos)
 	{
+		StartPath(new Vector2i((int)targetWorldPos.x, (int)targetWorldPos.y));
+	}
+	/// <summary>
+	/// Immediately starts pathing towards the given target position.
+	/// Replaces any previous pathing commands.
+	/// Returns "false" if no path could be found, and "true" otherwise.
+	/// </summary>
+	public bool StartPath(Vector2i targetWorldPos)
+	{
 		OnPathCompleted = null;
 
-		targetPos = new Vector2i((int)targetWorldPos.x, (int)targetWorldPos.y);
+		targetPos = targetWorldPos;
 		Assert.IsTrue(targetPos.x >= 0 && targetPos.y >= 0 &&
 					   targetPos.x < WorldVoxels.Instance.Voxels.GetLength(0) &&
 					   targetPos.y < WorldVoxels.Instance.Voxels.GetLength(1),
@@ -63,7 +77,13 @@ public class ElveMovementController : MonoBehaviour
 																 VoxelEdge.MakeEdge);
 		pather.Start = new VoxelNode(currentPos);
 		pather.End = new VoxelNode(targetPos);
-		pather.FindPath();
+		bool foundPath = pather.FindPath();
+		if (!foundPath)
+		{
+			Path.Clear();
+			return false;
+		}
+
 		Path = pather.CurrentPath.ToList();
 		Path.Reverse();
 
@@ -73,6 +93,8 @@ public class ElveMovementController : MonoBehaviour
 						Path[Path.Count - 1].WorldPos);
 		targetPos = currentPos;
 		OnStateFinished(null);
+
+		return true;
 	}
 	private void UpdatePos()
 	{

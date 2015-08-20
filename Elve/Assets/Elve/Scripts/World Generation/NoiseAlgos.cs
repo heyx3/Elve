@@ -1,9 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 using Mathf = UnityEngine.Mathf;
 
 using Utils = NoiseAlgoUtils;
+
+
+/// <summary>
+/// A custom PRNG with a nice balance between randomness and speed.
+/// </summary>
+public struct PRNG
+{
+	public int Seed;
+
+	public PRNG(int seed = 12345) { Seed = seed; }
+
+
+	/// <summary>
+	/// Returns a random non-negative integer value.
+	/// </summary>
+	public int NextInt()
+	{
+		Seed = (Seed ^ 61) ^ (Seed >> 16);
+		Seed += (Seed << 3);
+		Seed ^= (Seed >> 4);
+		Seed *= 0x27d4eb2d;
+		Seed ^= (Seed >> 15);
+		return Seed;
+	}
+	/// <summary>
+	/// Returns a random value between 0 and 1.
+	/// </summary>
+	public float NextFloat()
+	{
+		const int b = 9999999;
+		return (float)(NextInt() % b) / (float)b;
+	}
+}
 
 
 /// <summary>
@@ -11,41 +45,8 @@ using Utils = NoiseAlgoUtils;
 /// Is thread-safe (no global state).
 /// No strange artifacts or seams when dipping down into negative seed values.
 /// </summary>
-public static class NoiseAlgos
+public static class NoiseAlgos2D
 {
-	/// <summary>
-	/// A custom PRNG with a nice balance between randomness and speed.
-	/// </summary>
-	public struct PRNG
-	{
-		public int Seed;
-
-		public PRNG(int seed = 12345) { Seed = seed; }
-
-
-		/// <summary>
-		/// Returns a random non-negative integer value.
-		/// </summary>
-		public int NextInt()
-		{
-			Seed = (Seed ^ 61) ^ (Seed >> 16);
-			Seed += (Seed << 3);
-			Seed ^= (Seed >> 4);
-			Seed *= 0x27d4eb2d;
-			Seed ^= (Seed >> 15);
-			return Seed;
-		}
-		/// <summary>
-		/// Returns a random value between 0 and 1.
-		/// </summary>
-		public float NextFloat()
-		{
-			const int b = 9999999;
-			return (float)(NextInt() % b) / (float)b;
-		}
-	}
-
-
 	/// <summary>
 	/// Returns a pseudo-random value from 0 to 1 using the given seed.
 	/// </summary>
@@ -163,11 +164,110 @@ public static class NoiseAlgos
 }
 
 
+/// <summary>
+/// Provides 3D noise generation algorithms.
+/// Is thread-safe (no global state).
+/// No strange artifacts or seams when dipping down into negative seed values.
+/// </summary>
+public static class NoiseAlgos3D
+{
+	/// <summary>
+	/// Returns a pseudo-random value from 0 to 1 using the given seed.
+	/// </summary>
+	public static float WhiteNoise(Vector3 seed)
+	{
+		return new PRNG(Utils.GetHashCode(seed)).NextFloat();
+	}
+
+
+	/// <summary>
+	/// Returns a pseudo-random value between 0 and 1 based on the given seed's floored value.
+	/// </summary>
+	public static float GridNoise(Vector3 seed)
+	{
+		return WhiteNoise(new Vector3(Mathf.Floor(seed.x),
+									  Mathf.Floor(seed.y),
+									  Mathf.Floor(seed.z)));
+	}
+
+	/// <summary>
+	/// Works like GridNoise(), but allows for interpolation instead of hard jumps between values.
+	/// </summary>
+	public static float InterpolateNoise(Vector3 seed, Func<Vector3, Vector3> tModifier)
+	{
+		//Get the integer values behind and in front of the seed values.
+		float minX = Mathf.Floor(seed.x),
+			  maxX = Mathf.Ceil(seed.x),
+			  minY = Mathf.Floor(seed.y),
+			  maxY = Mathf.Ceil(seed.y),
+			  minZ = Mathf.Floor(seed.z),
+			  maxZ = Mathf.Ceil(seed.z);
+
+		//Get the interpolant (will be linear if nothing is done to modify it).
+		Vector3 lerp = tModifier(seed - new Vector3(minX, minY, minZ));
+
+		return Mathf.Lerp(Mathf.Lerp(Mathf.Lerp(WhiteNoise(new Vector3(minX, minY, minZ)),
+												WhiteNoise(new Vector3(maxX, minY, minZ)),
+												lerp.x),
+									 Mathf.Lerp(WhiteNoise(new Vector3(minX, maxY, minZ)),
+												WhiteNoise(new Vector3(maxX, maxY, minZ)),
+												lerp.x),
+									 lerp.y),
+						  Mathf.Lerp(Mathf.Lerp(WhiteNoise(new Vector3(minX, minY, maxZ)),
+												WhiteNoise(new Vector3(maxX, minY, maxZ)),
+												lerp.x),
+									 Mathf.Lerp(WhiteNoise(new Vector3(minX, maxY, maxZ)),
+												WhiteNoise(new Vector3(maxX, maxY, maxZ)),
+												lerp.x),
+									 lerp.y),
+						  lerp.z);
+	}
+	/// <summary>
+	/// Like GridNoise(), but with a linear interpolation between values instead of a hard jump.
+	/// </summary>
+	public static float LinearNoise(Vector3 seed)
+	{
+		return InterpolateNoise(seed, v => v);
+	}
+	/// <summary>
+	/// Like GridNoise(), but with a smooth interpolation between values instead of a hard jump.
+	/// </summary>
+	public static float SmoothNoise(Vector3 seed)
+	{
+		return InterpolateNoise(seed, v =>
+			new Vector3(v.x * v.x * (3.0f - (2.0f * v.x)),
+						v.y * v.y * (3.0f - (2.0f * v.y)),
+						v.z * v.z * (3.0f - (2.0f * v.z))));
+	}
+	/// <summary>
+	/// Like GridNoise(), but with a very smooth interpolation between values instead of a hard jump.
+	/// </summary>
+	public static float SmootherNoise(Vector3 seed)
+	{
+		return InterpolateNoise(seed, v =>
+			new Vector3(v.x * v.x * v.x * (10.0f + (v.x * (-15.0f + (v.x * 6.0f)))),
+						v.y * v.y * v.y * (10.0f + (v.y * (-15.0f + (v.y * 6.0f)))),
+						v.z * v.z * v.z * (10.0f + (v.z * (-15.0f + (v.z * 6.0f))))));
+	}
+}
+
+
 
 
 
 public static class NoiseAlgoUtils
 {
+	public struct Vector3i
+	{
+		public int x, y, z;
+		public Vector3i(int _x, int _y, int _z) { x = _x; y = _y; z = _z; }
+		public override int GetHashCode()
+		{
+			return (x * 73856093) ^ (y * 19349663) ^ (z * 83492791);
+		}
+	}
+
+
 	/// <summary>
 	/// Allows you to reinterpret_cast from float to int and vice-versa.
 	/// Used for hashing Unity's Vector2 structure.
@@ -195,8 +295,19 @@ public static class NoiseAlgoUtils
 			y = new Reinterpret(v.y).Int;
 		return new Vector2i(x, y).GetHashCode();
 	}
+	/// <summary>
+	/// A good psuedo-random hash function for Unity's Vector3 class.
+	/// </summary>
+	public static int GetHashCode(Vector3 v)
+	{
+		//Reinterpret the floats as ints and get the hash code for them.
+		int x = new Reinterpret(v.x).Int,
+			y = new Reinterpret(v.y).Int,
+			z = new Reinterpret(v.z).Int;
+		return new Vector3i(x, y, z).GetHashCode();
+	}
 	
-
+	
 	/// <summary>
 	/// Gets a random position between {0, 0} and {1, 1} given a seed.
 	/// Used for Worley/Voroni noise.
@@ -204,9 +315,10 @@ public static class NoiseAlgoUtils
 	public static Vector2 GetWorleyPos(Vector2 seed)
 	{
 		Vector2 seed2 = new Vector2(seed.y, -seed.x);
-		return new Vector2(NoiseAlgos.WhiteNoise(seed),
-						   NoiseAlgos.WhiteNoise(seed2));
+		return new Vector2(NoiseAlgos2D.WhiteNoise(seed),
+						   NoiseAlgos2D.WhiteNoise(seed2));
 	}
+
 	/// <summary>
 	/// Updates the closest and second-closest values given a new potential value.
 	/// Used for Worley/Voroni noise.

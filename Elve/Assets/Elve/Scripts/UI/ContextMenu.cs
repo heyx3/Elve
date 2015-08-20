@@ -26,7 +26,7 @@ public class ContextMenu<ContextData> : MonoBehaviour
 	/// </summary>
 	private void AddListener(Button b, IContextMenuItem<ContextData> item)
 	{
-		b.onClick.AddListener(() => { item.OnSelected(Context); });
+		b.onClick.AddListener(() => { item.OnSelected(Context, MyTransform.position); });
 	}
 
 

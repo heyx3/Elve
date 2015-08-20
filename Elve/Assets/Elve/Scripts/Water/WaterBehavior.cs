@@ -7,7 +7,7 @@ using UnityEngine;
 /// <summary>
 /// Handles water simulation system.
 /// </summary>
-public class WaterBehavior : MonoBehaviour
+public class WaterBehavior : Singleton<WaterBehavior>
 {
 	private static void ResizeList<T>(List<T> list, int newSize) where T : struct
 	{

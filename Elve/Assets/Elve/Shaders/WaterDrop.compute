@@ -1,0 +1,155 @@
+﻿#pragma kernel Burst
+#pragma kernel Update
+
+
+#define WORK_SIZE 32
+
+
+struct WaterDrop
+{
+	float2 pos, vel;
+	float radius;
+};
+RWStructuredBuffer<WaterDrop> drops;
+
+
+float deltaTime;
+
+float radiusShrinkRate;
+float gravity;
+float bounceDamp;
+float maxSpeed;
+float separationForce;
+float normalForce, normalForceGrowth;
+
+
+Texture2D<float4> voxelGrid;
+bool isSolid(float4 voxelGridVal)
+{
+	return voxelGridVal.r > 0.5;
+}
+float getFriction(float4 voxelGridVal)
+{
+	return voxelGridVal.g;
+}
+
+
+[numthreads(WORK_SIZE, 1, 1)]
+void Update(uint id : SV_DispatchThreadID, uint groupId : SV_GroupThreadID)
+{
+	WaterDrop d = drops[id];
+
+	int2 posI = int2(int(d.pos.x), int(d.pos.y));
+
+	float2 force = 0.0;
+	force.y += gravity;
+
+	//Get normal/friction forces.
+	//TODO: Use max/min normal force (just max, with min of 0?) instead of this "normalForceGrowth" thing.
+	float xMin = d.pos.x - d.radius,
+		  xMax = d.pos.x + d.radius,
+		  yMin = d.pos.y - d.radius,
+		  yMax = d.pos.y + d.radius;
+	float4 leftBlock = voxelGrid[int2(posI.x - 1, posI.y)],
+		   rightBlock = voxelGrid[int2(posI.x + 1, posI.y)],
+		   bottomBlock = voxelGrid[int2(posI.x, posI.y - 1)],
+		   topBlock = voxelGrid[int2(posI.x, posI.y + 1)];
+	if (int(xMin) < posI.x && isSolid(leftBlock))
+	{
+		float dist = floor(d.pos.x) - xMin;
+		float myNormalForce = pow(dist, normalForceGrowth) * normalForce;
+		force.x -= myNormalForce;
+		force.y += myNormalForce * -d.vel.y * getFriction(leftBlock);
+	}
+	if (int(xMax) > posI.x && isSolid(rightBlock))
+	{
+		float dist = xMax - floor(d.pos.x) + 1.0;
+		float myNormalForce = pow(dist, normalForceGrowth) * normalForce;
+		force.x -= myNormalForce;
+		force.y += myNormalForce * -d.vel.y * getFriction(rightBlock);
+	}
+	if (int(yMin) < posI.y && isSolid(bottomBlock))
+	{
+		float dist = floor(d.pos.y) - yMin;
+		float myNormalForce = pow(dist, normalForceGrowth) * normalForce;
+		force.x += myNormalForce * -d.vel.x * getFriction(bottomBlock);
+		force.y -= myNormalForce;
+	}
+	if (int(yMax) > posI.y && isSolid(topBlock))
+	{
+		float dist = yMax - floor(d.pos.y) + 1.0;
+		float myNormalForce = pow(dist, normalForceGrowth) * normalForce;
+		force.x += myNormalForce * -d.vel.x * getFriction(topBlock);
+		force.y -= myNormalForce;
+	}
+
+	//Push away from other drops in this work group.
+	uint indexOffset = (id / WORK_SIZE) * WORK_SIZE;
+	for (uint i = 0; i < WORK_SIZE; ++i)
+	{
+		if (i != groupId)
+		{
+			WaterDrop otherD = drops[i + indexOffset];
+			float2 toMe = d.pos - otherD.pos;
+			float distToMe = length(toMe);
+			if (distToMe <= (d.radius + otherD.radius))
+			{
+				force += (d.pos - otherD.pos) * separationForce / max(distToMe, 0.000001);
+			}
+		}
+	}
+
+	d.vel += (force * deltaTime);
+
+	//TODO: Try disabling this "max speed" constraint.
+	if (length(d.vel) > maxSpeed)
+	{
+		d.vel = normalize(d.vel) * maxSpeed;
+	}
+
+	//Try applying the velocity and check for block collisions.
+	float2 newPos = d.pos + (d.vel * deltaTime);
+	int2 newPosI = int2(int(newPos.x), int(newPos.y));
+
+	//TODO: Decide which axis to check collision against first based on something (which velocity component is biggest?)
+	if (isSolid(voxelGrid[int2(newPosI.x, posI.y)]))
+	{
+		newPos.x = floor(d.pos.x) + (d.vel.x < 0.0 ? 0.000001 : 0.999999);
+		newPosI.x = posI.x;
+		d.vel.x *= -bounceDamp;
+	}
+	if (isSolid(voxelGrid[int2(newPosI.x, newPosI.y)]))
+	{
+		newPos.y = (d.vel.y < 0.0 ? (floor(d.pos.y) + 0.00001) : (ceil(d.pos.y) - 0.00001));
+		newPosI.y = posI.y;
+		d.vel.y *= -bounceDamp;
+	}
+
+	d.pos = newPos;
+	//d.radius = max(0.0, d.radius - (radiusShrinkRate * deltaTime));
+	drops[id] = d;
+}
+
+
+
+float2 minPos, maxPos, minVel, maxVel;
+float minRadius, maxRadius;
+int indexOffset, burstNumber;
+
+Texture2D<float4> randVals;
+
+[numthreads(WORK_SIZE, 1, 1)]
+void Burst(uint id : SV_GroupThreadID)
+{
+	uint index = indexOffset + id;
+
+	float4 rand1 = randVals[uint2(index, burstNumber)],
+		   rand2 = randVals[uint2(index, burstNumber + 1)];
+
+	WaterDrop d;
+	d.pos = lerp(minPos, maxPos, rand1.xy);
+	d.vel = lerp(minVel, maxVel, rand2.xy);
+	d.radius = lerp(minRadius, maxRadius, rand1.z);
+
+	drops[index] = d;
+}

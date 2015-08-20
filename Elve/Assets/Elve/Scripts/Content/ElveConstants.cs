@@ -15,6 +15,11 @@ public class ElveConstants : MonoBehaviour
 	public float WalkSpeed = 1.0f,
 				 ClimbSpeed = 1.0f;
 
+	/// <summary>
+	/// The max distance the mouse can be from an Elve and still click on it.
+	/// </summary>
+	public float ClickDistance = 0.25f;
+
 	
 	void Awake()
 	{

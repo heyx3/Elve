@@ -58,7 +58,7 @@ public class WorldGenerator : MonoBehaviour
 		GenerateTrees();
 
 		//Finalize.
-		WorldVoxels.Instance.GenerateChunksAndConnections();
+		WorldVoxels.Instance.GenerateSecondaryData();
 	}
 	/// <summary>
 	/// Gets the type of voxel for the given block
@@ -72,8 +72,8 @@ public class WorldGenerator : MonoBehaviour
 	{
 		//Get which biome we're in based on height.
 		float heightLerp = worldPos.y / worldSize.y;
-		float variance = NoiseAlgos.LinearNoise(new Vector2(worldPos.x * Settings.BiomeVarianceScale,
-														    0.0f));
+		float variance = NoiseAlgos2D.LinearNoise(new Vector2(worldPos.x * Settings.BiomeVarianceScale,
+															  0.0f));
 		heightLerp += Mathf.Lerp(-Settings.BiomeVariance, Settings.BiomeVariance, variance);
 
 		//Bedrock.
@@ -84,7 +84,7 @@ public class WorldGenerator : MonoBehaviour
 		//Rock.
 		else if (heightLerp < Settings.Biome_Dirt)
 		{
-			float noise = NoiseAlgos.LinearNoise(worldPos * Settings.RockScale);
+			float noise = NoiseAlgos2D.LinearNoise(worldPos * Settings.RockScale);
 			float threshold = Mathf.Lerp(Settings.HardRockChanceMin,
 										 Settings.HardRockChanceMax,
 										 Mathf.InverseLerp(Settings.Biome_Rock,
@@ -102,7 +102,7 @@ public class WorldGenerator : MonoBehaviour
 		//Dirt.
 		else if (heightLerp < Settings.Biome_Surface)
 		{
-			float noise = NoiseAlgos.LinearNoise(worldPos * Settings.DirtScale);
+			float noise = NoiseAlgos2D.LinearNoise(worldPos * Settings.DirtScale);
 			float threshold = Mathf.Lerp(Settings.HardRockChanceMin,
 										 Settings.HardRockChanceMax,
 										 Mathf.InverseLerp(Settings.Biome_Dirt,

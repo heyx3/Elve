@@ -71,19 +71,19 @@
 					float2 tileSize = (1.0 / _MainTexSize.xy) * _TileSize;
 
 					output.Pos = mul(UNITY_MATRIX_MVP, input[0].Pos);
-					output.UV = input[0].UVMin;
-					outStream.Append(output);
-
-					output.Pos = mul(UNITY_MATRIX_MVP, input[0].Pos + float4(0.0, 1.0, 0.0, 0.0));
 					output.UV = input[0].UVMin + float2(0.0, -tileSize.y);
 					outStream.Append(output);
 
+					output.Pos = mul(UNITY_MATRIX_MVP, input[0].Pos + float4(0.0, 1.0, 0.0, 0.0));
+					output.UV = input[0].UVMin;
+					outStream.Append(output);
+
 					output.Pos = mul(UNITY_MATRIX_MVP, input[0].Pos + float4(1.0, 0.0, 0.0, 0.0));
-					output.UV = input[0].UVMin + float2(tileSize.x, 0.0);
+					output.UV = input[0].UVMin + float2(tileSize.x, -tileSize.y);
 					outStream.Append(output);
 
 					output.Pos = mul(UNITY_MATRIX_MVP, input[0].Pos + float4(1.0, 1.0, 0.0, 0.0));
-					output.UV = input[0].UVMin + float2(tileSize.x, -tileSize.y);
+					output.UV = input[0].UVMin + float2(tileSize.x, 0.0);
 					outStream.Append(output);
 				}
 				fixed4 frag(F_INPUT input) : COLOR0

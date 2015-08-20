@@ -47,7 +47,7 @@ public class NoiseAlgoTests : MonoBehaviour
 					Vector2 seed = new Vector2((float)(x - 512),
 											   (float)(y - 512)) * 0.01f;
 
-					float noiseVal = NoiseAlgos.LinearNoise(seed);
+					float noiseVal = NoiseAlgos2D.LinearNoise(seed);
 
 					cols[i] = new Color(noiseVal, noiseVal, noiseVal);
 				}

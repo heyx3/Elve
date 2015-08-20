@@ -108,6 +108,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\BlurEffectConeTaps.shader" />
      <None Include="Assets\Elve\Shaders\Drop.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\CameraMotionBlur.shader" />
+     <None Include="Assets\Elve\Shaders\WaterDrop.compute" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_Antialiasing\DLAA.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\NoiseAndGrainDX11.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
@@ -132,6 +133,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\PrepareSunShaftsBlur.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\Blend.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\BlendModesOverlay.shader" />
+     <None Include="Assets\Elve\Shaders\WaterDropNew.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\SimpleClear.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAdd.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_Antialiasing\FXAA3Console.shader" />

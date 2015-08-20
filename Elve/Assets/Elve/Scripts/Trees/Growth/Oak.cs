@@ -47,9 +47,6 @@ public class GrowPattern_Oak : IGrowPattern
 	public GrowData Sprout(VoxelTypes[,] worldGrid, VoxelTypes treeType, Vector2i seedPos,
 						   List<Vector2i> changedPoses)
 	{
-		Assert.AreEqual(VoxelTypes.Empty, worldGrid[seedPos.x, seedPos.y],
-						"Seed at " + seedPos + " is not in empty space");
-
 		GrowData_Oak dat = new GrowData_Oak(seedPos, treeType);
 		
 		worldGrid[seedPos.x, seedPos.y] = treeType;

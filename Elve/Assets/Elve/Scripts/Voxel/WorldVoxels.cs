@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -8,8 +9,83 @@ using UnityEngine;
 /// </summary>
 public class WorldVoxels : MonoBehaviour
 {
+	#region Voxel property lookup tables
+
+	private readonly static bool[] isSolid = new bool[(int)VoxelTypes.Empty + 1]
+	{
+		true, true, true, //soft rock, hard rock, dirt
+		true, true, false, //wooden tree, leaf, tree background
+		false, //seed
+		false, //empty
+	};
+	private readonly static bool[] isTree = new bool[(int)VoxelTypes.Empty + 1]
+	{
+		false, false, false, //soft rock, hard rock, dirt
+		true, false, false, //wooden tree, leaf, tree background
+		false, //seed
+		false, //empty
+	};
+	private readonly static bool[] isItem = new bool[(int)VoxelTypes.Empty + 1]
+	{
+		false, false, false, //soft rock, hard rock, dirt
+		false, false, false, //wooden tree, leaf, tree background
+		true, //seed
+		false, //empty
+	};
+	private readonly static bool[] isTreeFodder = new bool[(int)VoxelTypes.Empty + 1]
+	{
+		false, false, false, //soft rock, hard rock, dirt
+		false, false, false, //wooden tree, leaf, tree background
+		false, //seed
+		true, //empty
+	};
+	private readonly static bool[] canPlantIn = new bool[(int)VoxelTypes.Empty + 1]
+	{
+		false, false, false, //soft rock, hard rock, dirt
+		false, false, false, //wooden tree, leaf, tree background
+		false, //seed
+		true, //empty
+	};
+	private readonly static bool[] canPlantOn = new bool[(int)VoxelTypes.Empty + 1]
+	{
+		true, true, true, //soft rock, hard rock, dirt
+		false, false, false, //wooden tree, leaf, tree background
+		false, //seed
+		false, //empty
+	};
+
+	#endregion
+
 	/// <summary>
-	/// Defines what types of movement can be done from a certain voxel to its adjacent ones.
+	/// Whether the given voxel is a solid surface.
+	/// </summary>
+	public static bool IsSolid(VoxelTypes type) { return isSolid[(int)type]; }
+	/// <summary>
+	/// Whether the given voxel is a tree block (not including leaves).
+	/// </summary>
+	public static bool IsTree(VoxelTypes type) { return isTree[(int)type]; }
+	/// <summary>
+	/// Whether the given voxel is an item, like a planted seed.
+	/// </summary>
+	public static bool IsItem(VoxelTypes type) { return isItem[(int)type]; }
+	/// <summary>
+	/// Whether a tree can destroy/grow over the given type of block.
+	/// </summary>
+	public static bool IsTreeFodder(VoxelTypes type) { return isTreeFodder[(int)type]; }
+	/// <summary>
+	/// Whether the given voxel can have seeds planted inside it.
+	/// </summary>
+	public static bool CanPlantIn(VoxelTypes type) { return canPlantIn[(int)type]; }
+	/// <summary>
+	/// Whether the given voxel can have seeds planted on its outside surface.
+	/// </summary>
+	public static bool CanPlantOn(VoxelTypes type) { return canPlantOn[(int)type]; }
+
+	public static VoxelTypes GetVoxelAt(Vector2i pos) { return Instance.Voxels[pos.x, pos.y]; }
+
+	
+	/// <summary>
+	/// Defines what types of movement can be performed from a certain voxel to its adjacent ones.
 	/// </summary>
 	public struct VoxelConnections
 	{
@@ -38,77 +114,14 @@ public class WorldVoxels : MonoBehaviour
 
 
 	/// <summary>
-	/// Gets whether the given type of block is a solid surface.
+	/// Gets the color for the given block in the voxel texture.
 	/// </summary>
-	public static bool IsSolid(VoxelTypes type)
+	public static Color GetVoxelTexValue(VoxelTypes block)
 	{
-		return type != VoxelTypes.Empty;
-	}
-	/// <summary>
-	/// Gets whether the given type of block is a tree block (not including leaves).
-	/// </summary>
-	public static bool IsTree(VoxelTypes type)
-	{
-		return type == VoxelTypes.Tree_Wood;
-	}
-	/// <summary>
-	/// Gets whether a tree can destroy/grow over the given type of block.
-	/// </summary>
-	public static bool IsTreeFodder(VoxelTypes type)
-	{
-		return type == VoxelTypes.Empty;
-	}
-	/// <summary>
-	/// Gets whether a seed can be planted on the surface of the given type of block.
-	/// </summary>
-	public static bool CanPlantOn(VoxelTypes treeType, VoxelTypes surfaceType)
-	{
-		switch (surfaceType)
-		{
-			case VoxelTypes.Dirt:
-				return true;
-
-			case VoxelTypes.SoftRock:
-				//Only have wood trees right now.
-				return false;
-
-			case VoxelTypes.HardRock:
-				//Only have wood trees right now.
-				return false;
-
-			case VoxelTypes.Tree_Wood:
-				return true;
-
-			case VoxelTypes.Empty:
-			case VoxelTypes.Leaf:
-				return false;
-
-			default:
-				UnityEngine.Assertions.Assert.IsTrue(false, "Unknown voxel type " + surfaceType);
-				return false;
-		}
-	}
-	/// <summary>
-	/// Gets whether any kind of seed can be planted on the surface of the given type of block.
-	/// </summary>
-	public static bool CanPlantOn(VoxelTypes surfaceType)
-	{
-		switch (surfaceType)
-		{
-			case VoxelTypes.Dirt:
-			case VoxelTypes.SoftRock:
-			case VoxelTypes.HardRock:
-			case VoxelTypes.Tree_Wood:
-				return true;
-
-			case VoxelTypes.Empty:
-			case VoxelTypes.Leaf:
-				return false;
-
-			default:
-				UnityEngine.Assertions.Assert.IsTrue(false, "Unknown voxel type " + surfaceType);
-				return false;
-		}
+		bool solid = IsSolid(block);
+		return new Color(solid ? 1.0f : 0.0f,
+						 solid ? WaterConstants.Instance.Friction[(int)block].Friction : 0.0f,
+						 0.0f, 0.0f);
 	}
 
 
@@ -116,6 +129,13 @@ public class WorldVoxels : MonoBehaviour
 
 	
 	public Material VoxelBlockMat;
+
+	/// <summary>
+	/// Every voxel block's information, stored on a 2D texture. Used for water simulation.
+	/// The Red value is 0.0 if not solid, and 1.0 if solid.
+	/// The Green value is the coefficient of friction for the solid blocks.
+	/// </summary>
+	public Texture2D VoxelTex;
 
 	/// <summary>
 	/// The voxel grid.
@@ -203,10 +223,10 @@ public class WorldVoxels : MonoBehaviour
 
 
 	/// <summary>
-	/// Should be called once the "Voxels" array is filled with its initial values.
-	/// Generates the "Chunk" and "Connections" arrays.
+	/// Should be called once the "Voxels" grid is filled with its initial values.
+	/// Generates all the extra voxel data used for pathing, rendering, etc.
 	/// </summary>
-	public void GenerateChunksAndConnections()
+	public void GenerateSecondaryData()
 	{
 		UnityEngine.Assertions.Assert.IsTrue(Voxels.GetLength(0) % Chunk.Size == 0 &&
 											  Voxels.GetLength(1) % Chunk.Size == 0,
@@ -227,6 +247,20 @@ public class WorldVoxels : MonoBehaviour
 		for (int y = 0; y < Voxels.GetLength(1); ++y)
 			for (int x = 0; x < Voxels.GetLength(0); ++x)
 				GetConnections(new Vector2i(x, y));
+
+		//Set up the texture.
+		VoxelTex = new Texture2D(Voxels.GetLength(0), Voxels.GetLength(1), TextureFormat.RGHalf,
+								 false, true);
+		VoxelTex.name = "Voxel Data Texture";
+		VoxelTex.anisoLevel = 0;
+		VoxelTex.filterMode = FilterMode.Point;
+		VoxelTex.wrapMode = TextureWrapMode.Clamp;
+		Color[] cols = new Color[VoxelTex.width * VoxelTex.height];
+		for (int y = 0; y < VoxelTex.height; ++y)
+			for (int x = 0; x < VoxelTex.width; ++x)
+				cols[(y * VoxelTex.width) + x] = GetVoxelTexValue(Voxels[x, y]);
+		VoxelTex.SetPixels(cols);
+		VoxelTex.Apply();
 	}
 
 	/// <summary>
@@ -356,24 +390,28 @@ public class WorldVoxels : MonoBehaviour
 	/// <summary>
 	/// Sets the given world position to contain the given block.
 	/// Assumes the given position is inside the world's voxel grid.
-	/// Automatically regenerates the chunk's mesh and updates pathing connections.
+	/// Automatically updates secondary data like meshes, jobs, and pathing.
 	/// </summary>
-	public void SetVoxelAt(Vector2 worldPos, VoxelTypes newType)
+	public void SetVoxelAt(Vector2i worldPos, VoxelTypes newValue)
 	{
-		Vector2i worldPosI = new Vector2i((int)worldPos.x, (int)worldPos.y),
-				 chunkPosI = new Vector2i(worldPosI.x / Chunk.Size,
-										  worldPosI.y / Chunk.Size);
+		Vector2i chunkPos = new Vector2i(worldPos.x / Chunk.Size,
+										 worldPos.y / Chunk.Size);
 		
-		Voxels[worldPosI.x, worldPosI.y] = newType;
-		Chunks[chunkPosI.x, chunkPosI.y].RegenMesh();
+		Voxels[worldPos.x, worldPos.y] = newValue;
+		Chunks[chunkPos.x, chunkPos.y].RegenMesh();
+
+		VoxelTex.SetPixel(worldPos.x, worldPos.y, GetVoxelTexValue(newValue));
+		VoxelTex.Apply();
 
 		//Re-calculate connections for adjacent voxels as well as this one.
 		for (int y = -1; y <= 1; ++y)
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				GetConnections(new Vector2i(worldPosI.x + x, worldPosI.y + y));
+				GetConnections(new Vector2i(worldPos.x + x, worldPos.y + y));
 			}
 		}
+
+		JobManager.Instance.OnBlockChanged(worldPos, newValue);
 	}
 }

@@ -78,7 +78,7 @@ public class PathFinder<N> where N : Node
 
 
     /// <summary>
-    /// Builds a search tree moving outward from Start.
+    /// Builds a search tree moving outward from Start. Returns whether a valid end node was actually found.
     /// </summary>
     /// <param name="maxSearchCost">The maximum Edge search cost this pathfinder can search from start.
     /// This can be used to limit the graph search space.
@@ -88,7 +88,7 @@ public class PathFinder<N> where N : Node
     /// Otherwise, it will search the entire graph space within the max search cost.</param>
     /// <param name="setEnd">If true, sets this PathFinder's "End" field to the last node traversed by this algorithm.
 	/// This can be used to see what the pather stopped at in case it never reached its goal.</param>
-    public void CalculatePathTree(float maxSearchCost, bool onlySearchToDestination, bool setEnd = false)
+    public bool CalculatePathTree(float maxSearchCost, bool onlySearchToDestination, bool setEnd = false)
     {
         CurrentPath.Clear();
         PathTree.Clear();
@@ -121,6 +121,8 @@ public class PathFinder<N> where N : Node
         getToNodeSearchCost.Add(Start, 0.0f);
         considered.Add(Start);
 
+		bool foundEnd = false;
+
 
         //While the search frontier is not empty, keep grabbing the nearest Node to search.
         while (!NodesToSearch.IsEmpty)
@@ -139,19 +141,28 @@ public class PathFinder<N> where N : Node
                 PathTree.Add(closestN, closest.Value.Start);
 
             //If the target has been found, exit.
-            if (onlySearchToDestination)
-            {
-                if (HasSpecificEnd && closestN.IsEqualTo(End))
-                {
-                    break;
-                }
-                if (HasSeveralEnds && IsEndNodeFunc(closestN))
-                {
-                    finalDestination = closestN;
-                    if (setEnd) End = closestN;
-                    break;
-                }
-            }
+			if (HasSpecificEnd && closestN.IsEqualTo(End))
+			{
+				foundEnd = true;
+				if (onlySearchToDestination)
+				{
+					break;
+				}
+			}
+			if (HasSeveralEnds && IsEndNodeFunc(closestN))
+			{
+				finalDestination = closestN;
+				if (setEnd)
+				{
+					End = closestN;
+				}
+
+				foundEnd = true;
+				if (onlySearchToDestination)
+				{
+					break;
+				}
+			}
             if (getToNodeSearchCost[closestN] >= maxSearchCost)
             {
                 continue;
@@ -198,6 +209,8 @@ public class PathFinder<N> where N : Node
                 }
             }
         }
+
+		return foundEnd;
     }
 
     /// <summary>
@@ -268,12 +281,15 @@ public class PathFinder<N> where N : Node
     /// <summary>
     /// Recalculates the path from this PathFinder's start to its end.
     /// Assumes this pather has both a start and an end.
+	/// Returns whether an end node was successfully found.
     /// </summary>
     /// <param name="maxSearchCost">Any nodes with a higher cost than this value will not be part of the search space.</param>
-    public void FindPath(float maxSearchCost = Single.PositiveInfinity)
+    public bool FindPath(float maxSearchCost = Single.PositiveInfinity)
     {
-        CalculatePathTree(maxSearchCost, true, End == null);
+        bool foundEnd = CalculatePathTree(maxSearchCost, true, End == null);
 
         CalculatePath();
+
+		return foundEnd;
     }
 }

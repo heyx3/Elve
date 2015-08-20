@@ -25,5 +25,5 @@ public interface IContextMenuItem<Context>
 	/// <summary>
 	/// Reacts to this item being selected in a context menu.
 	/// </summary>
-	void OnSelected(Context context);
+	void OnSelected(Context context, Vector2 menuScreenPos);
 }

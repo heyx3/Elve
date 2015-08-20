@@ -51,7 +51,9 @@
      <Compile Include="Assets\Elve\Scripts\Camera\MatchParentCamera.cs" />
      <Compile Include="Assets\Elve\Scripts\Camera\RenderTargetQuad.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\ElveConstants.cs" />
+     <Compile Include="Assets\Elve\Scripts\Content\JobConstants.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\PathingConstants.cs" />
+     <Compile Include="Assets\Elve\Scripts\Content\UIPrefabs.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\VoxelContent.cs" />
      <Compile Include="Assets\Elve\Scripts\Content\WaterConstants.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnim.cs" />
@@ -59,7 +61,11 @@
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimFinishEvent.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveAnimStates.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveBehavior.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\ElveLabors.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\ElveMovementController.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\Jobs\Job.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\Jobs\JobManager.cs" />
+     <Compile Include="Assets\Elve\Scripts\Elve\Jobs\Job_PlantSeed.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\Jobs\Labors.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState.cs" />
      <Compile Include="Assets\Elve\Scripts\Elve\States\ElveState_ChangeSurface.cs" />
@@ -80,13 +86,16 @@
      <Compile Include="Assets\Elve\Scripts\Trees\Growth\GrowData.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\Growth\GrowPattern.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\Growth\Oak.cs" />
+     <Compile Include="Assets\Elve\Scripts\Trees\SeedManager.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\Tree.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\WorldTrees.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\Context Menu\IContextMenuItem.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Initializers\ContextMenuInitializer.cs" />
-     <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Initializers\ContextMenuInitializer_SeedChoices.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Initializers\ContextMenuInitializer_SeedMaterialChoices.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Initializers\ContextMenuInitializer_TreePatternChoices.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Initializers\ContextMenuInitializer_Voxel.cs" />
-     <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Items\IContextMenuItem.cs" />
-     <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Items\VoxelContextMenuItems.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Menus\ChooseSeedMaterialContextMenu.cs" />
+     <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Menus\ChooseTreePatternContextMenu.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\Context Menu\Menus\VoxelContextMenu.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\ContextMenu.cs" />
      <Compile Include="Assets\Elve\Scripts\UI\DeactivateAfterTime.cs" />
@@ -98,7 +107,9 @@
      <Compile Include="Assets\Elve\Scripts\Voxel\VoxelTypes.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\WorldVoxels.cs" />
      <Compile Include="Assets\Elve\Scripts\Water\WaterBehavior.cs" />
+     <Compile Include="Assets\Elve\Scripts\Water\WaterBehaviorNew.cs" />
      <Compile Include="Assets\Elve\Scripts\Water\WaterDrop.cs" />
+     <Compile Include="Assets\Elve\Scripts\Water\WaterEmitter.cs" />
      <Compile Include="Assets\Elve\Scripts\Water\WaterRender.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\NoiseAlgos.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenSettings.cs" />
@@ -152,6 +163,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\BlurEffectConeTaps.shader" />
      <None Include="Assets\Elve\Shaders\Drop.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\CameraMotionBlur.shader" />
+     <None Include="Assets\Elve\Shaders\WaterDrop.compute" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_Antialiasing\DLAA.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\NoiseAndGrainDX11.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
@@ -176,6 +188,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\PrepareSunShaftsBlur.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\Blend.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\BlendModesOverlay.shader" />
+     <None Include="Assets\Elve\Shaders\WaterDropNew.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\SimpleClear.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAdd.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_Antialiasing\FXAA3Console.shader" />

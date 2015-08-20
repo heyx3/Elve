@@ -13,6 +13,8 @@ GameObject:
   - 114: {fileID: 11471526}
   - 114: {fileID: 11474446}
   - 114: {fileID: 11449090}
+  - 114: {fileID: 11437656}
+  - 114: {fileID: 11431560}
   m_Layer: 0
   m_Name: Content and Constants
   m_TagString: Untagged
@@ -32,6 +34,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11431560
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c859d7cbd84b8374b8c282f86a13a711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  JobPlantWoodSeed: {fileID: 159238, guid: d499756742ee6374f90fdf8645bec48a, type: 2}
+--- !u!114 &11437656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb7f5f1b0aa88044d969acb791f7a429, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimeToPlantSeed: 5
 --- !u!114 &11443322
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -45,6 +71,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WalkSpeed: 1
   ClimbSpeed: 1
+  ClickDistance: .25
 --- !u!114 &11449090
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -96,6 +123,10 @@ MonoBehaviour:
     Friction: .100000001
   - Type: 4
     Friction: .00100000005
+  - Type: 5
+    Friction: 0
+  - Type: 6
+    Friction: 0
   NormalForceGrowth: 2
   NormalForce: 360
   BounceDamp: .0900000036
@@ -128,13 +159,61 @@ MonoBehaviour:
     SubTexturePixelMin: {x: 103, y: 1}
   - Type: 4
     SubTexturePixelMin: {x: 137, y: 1}
+  - Type: 5
+    SubTexturePixelMin: {x: 205, y: 1}
+  - Type: 6
+    SubTexturePixelMin: {x: 171, y: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: Data.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[5].Type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[6].Type
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[5].Friction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Friction.Array.data[6].Friction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Data.Array.data[5].Type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Data.Array.data[6].Type
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Data.Array.data[5].SubTexturePixelMin.x
+      value: 205
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Data.Array.data[6].SubTexturePixelMin.x
+      value: 171
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: JobPlantWoodSeed
+      value: 
+      objectReference: {fileID: 159238, guid: d499756742ee6374f90fdf8645bec48a, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 126776}

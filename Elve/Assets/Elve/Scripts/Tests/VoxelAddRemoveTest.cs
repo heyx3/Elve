@@ -20,12 +20,12 @@ public class VoxelAddRemoveTest : MonoBehaviour
 			}
 
 			VoxelTypes newType = CycleVoxel(WorldVoxels.Instance.GetVoxelAt(new Vector2(worldPos.x, worldPos.y)));
-			WorldVoxels.Instance.SetVoxelAt(worldPos, newType);
+			WorldVoxels.Instance.SetVoxelAt(new Vector2i((int)worldPos.x, (int)worldPos.y), newType);
 		}
 	}
 
 	private VoxelTypes CycleVoxel(VoxelTypes inV)
 	{
-		return (WorldVoxels.IsSolid(inV) ? VoxelTypes.Empty : VoxelTypes.HardRock);
+		return (WorldVoxels.IsSolid(inV) ? VoxelTypes.Empty : VoxelTypes.Dirt);
 	}
 }

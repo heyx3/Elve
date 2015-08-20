@@ -51,7 +51,8 @@ public class Tree
 		for (int i = 0; i < changed.Count; ++i)
 			WorldVoxels.Instance.GetConnections(changed[i]);
 
-		//Regenerate meshes.
+		//Regenerate meshes and update voxel texture data.
+		VoxelTypes[,] vxs = WorldVoxels.Instance.Voxels;
 		List<Chunk> alreadyDone = new List<Chunk>();
 		for (int i = 0; i < changed.Count; ++i)
 		{
@@ -62,11 +63,16 @@ public class Tree
 				chnk.RegenMesh();
 				alreadyDone.Add(chnk);
 			}
+
+			WorldVoxels.Instance.VoxelTex.SetPixel(changed[i].x, changed[i].y,
+												   WorldVoxels.GetVoxelTexValue(vxs[changed[i].x,
+																					changed[i].y]));
 		}
+		WorldVoxels.Instance.VoxelTex.Apply();
 	}
 	/// <summary>
-	/// Grows the tree but does NOT recalculate pathing or regenerate meshes for affected voxels.
-	/// Should generally only be used when first generating the world.
+	/// Grows the tree but does NOT recalculate secondary data such as pathing.
+	/// Only used when first generating the world.
 	/// </summary>
 	public void GrowBareBones()
 	{

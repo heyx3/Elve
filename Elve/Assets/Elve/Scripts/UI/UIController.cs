@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Assert = UnityEngine.Assertions.Assert;
@@ -9,11 +10,8 @@ using Assert = UnityEngine.Assertions.Assert;
 /// The main interpreter of UI input on the game world.
 /// Is a singleton for easy access.
 /// </summary>
-public class UIController : MonoBehaviour
+public class UIController : Singleton<UIController>
 {
-	public static UIController Instance { get; private set; }
-
-
 	/// <summary>
 	/// Gets a nice, short name for the given type of block.
 	/// </summary>
@@ -27,16 +25,23 @@ public class UIController : MonoBehaviour
 				return "Soft Rock";
 			case VoxelTypes.HardRock:
 				return "Hard Rock";
-			case VoxelTypes.Empty:
-				return "Empty Space";
+
 			case VoxelTypes.Tree_Wood:
 				return "Wood";
 			case VoxelTypes.Leaf:
 				return "Leaves";
+			case VoxelTypes.TreeBackground:
+				return "Empty Tree Space";
+
+			case VoxelTypes.Item_WoodSeed:
+				return "Tree Seed";
+
+			case VoxelTypes.Empty:
+				return "Empty Space";
 
 			default:
 				Assert.IsTrue(false, "Unknown voxel type " + t);
-				return "UNKNOWN type " + t.ToString();
+				return "UNKNOWN: " + t.ToString();
 		}
 	}
 	/// <summary>
@@ -51,7 +56,22 @@ public class UIController : MonoBehaviour
 
 			default:
 				Assert.IsTrue(false, "Unknown tree type " + tree);
-				return "UNKNOWN type " + tree.ToString();
+				return "UNKNOWN: " + tree.ToString();
+		}
+	}
+	/// <summary>
+	/// Gets a nice, short name for the given type of seed.
+	/// </summary>
+	public static string SeedTypeToString(VoxelTypes seed)
+	{
+		switch (seed)
+		{
+			case VoxelTypes.Item_WoodSeed:
+				return "Wood";
+
+			default:
+				Assert.IsTrue(false, "Unknown seed type " + seed);
+				return "UNKNOWN: " + seed.ToString();
 		}
 	}
 
@@ -60,7 +80,10 @@ public class UIController : MonoBehaviour
 	public Transform MouseOverlay;
 
 	public TreeWindow TreeInfoWindow;
+
 	public VoxelContextMenu VoxelContextPopup;
+	public ChooseSeedMaterialContextMenu SeedMaterialContextPopup;
+	public ChooseTreePatternContextMenu TreePatternContextPopup;
 
 	public Image PauseTimeHighlight, QuarterTimeHighlight, HalfTimeHighlight,
 				 NormalTimeHighlight, DoubleTimeHighlight, TripleTimeHighlight,
@@ -86,13 +109,20 @@ public class UIController : MonoBehaviour
 	private float desiredTimeScale = 1.0f;
 
 	
-	void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		CurrentContextMenu = null;
 
 		Assert.IsNotNull(GameCam);
 		Assert.IsNotNull(MouseOverlay);
+		
+		Assert.IsNotNull(TreeInfoWindow);
+
 		Assert.IsNotNull(VoxelContextPopup);
+		Assert.IsNotNull(SeedMaterialContextPopup);
+		Assert.IsNotNull(TreePatternContextPopup);
 	}
 	void Start()
 	{
@@ -177,12 +207,30 @@ public class UIController : MonoBehaviour
 
 		return false;
 	}
+	/// <summary>
+	/// Shows the given context menu popup.
+	/// Returns whether it successfully opened (it will fail if there are no available options).
+	/// </summary>
+	public bool ShowContextMenu<T>(ContextMenu<T> menu, T context, Vector2 screenPos)
+	{
+		if (CurrentContextMenu != null)
+		{
+			CurrentContextMenu.gameObject.SetActive(false);
+		}
+
+		//Show the menu, then store the menu's transform.
+		//Must be done in this order for some reason.
+		bool b = menu.SetUp(context, screenPos);
+		CurrentContextMenu = menu.MyTransform;
+		return b;
+	}
 
 	public void OnClick()
 	{
 		//Get the world position that was clicked on.
 		Vector3 mousePos = Input.mousePosition;
 		Vector3 worldPos = GameCam.ScreenToWorldPoint(mousePos);
+		Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
 		Vector2i worldPosI = new Vector2i((int)worldPos.x, (int)worldPos.y);
 
 		if (worldPosI.x >= 0 && worldPosI.y >= 0 &&
@@ -195,6 +243,18 @@ public class UIController : MonoBehaviour
 			//Otherwise, open some kind of popup menu based on what was clicked.
 			if (!ClearPopups())
 			{
+				//Was an elve clicked?
+				float maxDistSqr = ElveConstants.Instance.ClickDistance *
+								   ElveConstants.Instance.ClickDistance;
+				ElveLabors clickedElve = JobManager.Instance.Elfs.FirstOrDefault(kvp =>
+					{
+						Vector2 elvePos = kvp.Key.transform.position;
+						return (elvePos - worldPos2D).sqrMagnitude <= maxDistSqr;
+					}).Key;
+				if (clickedElve != null)
+				{
+					//TODO: Bring up an info screen for the Elve that was clicked on.
+				}
 				//Was a tree clicked?
 				if (WorldVoxels.IsTree(clickedOn))
 				{
