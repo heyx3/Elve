@@ -1,4 +1,4 @@
-﻿Shader "Water/Drop New"
+﻿Shader "Water/Water Drops"
 {
 	Properties
 	{

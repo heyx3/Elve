@@ -34,6 +34,12 @@ public class WaterConstants : MonoBehaviour
 		new TypeAndFriction(VoxelTypes.Item_WoodSeed, 0.0f),
 	};
 
+
+	/// <summary>
+	/// The maximum number of possible drops in the game.
+	/// </summary>
+	public int MaxDrops = 1024;
+
 	/// <summary>
 	/// An exponent indicating how the normal force grows in strength
 	/// as the drop gets closer to the surface.

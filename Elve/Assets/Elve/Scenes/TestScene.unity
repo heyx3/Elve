@@ -161,12 +161,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
---- !u!114 &138134716 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11405628, guid: d194db29713d74c4a9da41cbf17038fb,
-    type: 2}
-  m_PrefabInternal: {fileID: 743410139}
-  m_Script: {fileID: 11500000, guid: 9019ecb10270156418c5eafde508434b, type: 3}
 --- !u!1001 &180267816
 Prefab:
   m_ObjectHideFlags: 0
@@ -231,7 +225,7 @@ GameObject:
   - 4: {fileID: 387229624}
   - 114: {fileID: 387229623}
   m_Layer: 0
-  m_Name: Test Water Emitter
+  m_Name: Water Emitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,7 +247,8 @@ MonoBehaviour:
   MaxVelocity: {x: 3.5, y: 3.5}
   MinRadius: .00999999978
   MaxRadius: .0199999996
-  SpawnNow: 0
+  SpawnInterval: .0500000007
+  SpawnAmount: 1
 --- !u!4 &387229624
 Transform:
   m_ObjectHideFlags: 0
@@ -265,7 +260,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
 --- !u!1001 &396561433
 Prefab:
   m_ObjectHideFlags: 0
@@ -353,9 +348,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 182714, guid: d194db29713d74c4a9da41cbf17038fb, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11413442, guid: d194db29713d74c4a9da41cbf17038fb, type: 2}
+    - {fileID: 11405628, guid: d194db29713d74c4a9da41cbf17038fb, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d194db29713d74c4a9da41cbf17038fb, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &760877665 stripped
@@ -431,23 +428,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 93ea41d7f06123d48a24cabe5207e3b2, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1110788955 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 122740, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-  m_PrefabInternal: {fileID: 1534852962}
---- !u!114 &1110788956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1110788955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14c3fa6503a4193428026a3237e095f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WaterUpdateShader: {fileID: 7200000, guid: 70fe1a1b97234754392f4554622f2a78, type: 3}
-  WaterDropsRenderMat: {fileID: 2100000, guid: ebef5ce359e0aea4188b3375ec611b1f, type: 2}
 --- !u!1001 &1247419447
 Prefab:
   m_ObjectHideFlags: 0
@@ -539,7 +519,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 489292, guid: e4fd87a8b16815c499517b0793138da7, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11414684, guid: e4fd87a8b16815c499517b0793138da7, type: 2}
       propertyPath: UIControl
@@ -571,64 +551,6 @@ Prefab:
       objectReference: {fileID: 8400000, guid: 0c3a1acbd81775f43acff8077d740417, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e4fd87a8b16815c499517b0793138da7, type: 2}
-  m_IsPrefabParent: 0
---- !u!1001 &1534852962
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 428642, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 428642, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 428642, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 428642, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 428642, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 428642, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 428642, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 428642, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_RootOrder
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 11441192, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: Water
-      value: 
-      objectReference: {fileID: 138134716}
-    - target: {fileID: 11441192, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: NDrops
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 11441192, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 122740, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
-      propertyPath: m_Layer
-      value: 4
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 760c0704d957e0d46b896906b70194e8, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1919959702
 GameObject:
@@ -721,7 +643,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22457044, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 22457044, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
       propertyPath: m_AnchoredPosition.x
@@ -777,8 +699,26 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22459214, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 705
+      value: 583
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2132353271 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 182714, guid: d194db29713d74c4a9da41cbf17038fb, type: 2}
+  m_PrefabInternal: {fileID: 743410139}
+--- !u!114 &2132353272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2132353271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c3fa6503a4193428026a3237e095f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WaterBurstShader: {fileID: 7200000, guid: f4a7cd3642ac6cc4d8b50e7ef9951fdf, type: 3}
+  WaterUpdateShader: {fileID: 7200000, guid: 70fe1a1b97234754392f4554622f2a78, type: 3}
+  WaterDropsRenderMat: {fileID: 2100000, guid: ebef5ce359e0aea4188b3375ec611b1f, type: 2}

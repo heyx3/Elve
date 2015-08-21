@@ -3,7 +3,10 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 
-public class WaterBehaviorNew : Singleton<WaterBehaviorNew>
+/// <summary>
+/// Handles bursting, updating, and rendering GPU water drops.
+/// </summary>
+public class WaterController : Singleton<WaterController>
 {
 	private struct WaterDropNew
 	{
@@ -14,16 +17,17 @@ public class WaterBehaviorNew : Singleton<WaterBehaviorNew>
 		{
 			pos = _pos;
 			vel = _vel;
-			radius = _radius;
+			radius = _radius; 
 		}
 	}
 
 
-	public const int MaxDrops = 1024;
-	public const int WorkSize = 32;
-	public const int NWorkGroups = MaxDrops / WorkSize;
+	public const int WorkSize = 64;
+	public int MaxDrops { get { return WaterConstants.Instance.MaxDrops; } }
 
-	public ComputeShader WaterUpdateShader;
+	public int NDrops { get; private set; }
+
+	public ComputeShader WaterBurstShader, WaterUpdateShader;
 	public Material WaterDropsRenderMat;
 
 	public int NBursts { get; private set; }
@@ -33,11 +37,9 @@ public class WaterBehaviorNew : Singleton<WaterBehaviorNew>
 	private Texture2D randTex;
 
 
-	protected override void Awake()
+	protected void Start()
 	{
-		base.Awake();
-
-		burstKernel = WaterUpdateShader.FindKernel("Burst");
+		burstKernel = WaterBurstShader.FindKernel("Burst");
 		updateKernel = WaterUpdateShader.FindKernel("Update");
 
 		WaterDropNew[] data = new WaterDropNew[MaxDrops];
@@ -46,10 +48,11 @@ public class WaterBehaviorNew : Singleton<WaterBehaviorNew>
 			data[i] = new WaterDropNew(Vector2.zero, Vector2.zero, 0.0f);
 		}
 
-		DropsBuffer = new ComputeBuffer(data.Length, sizeof(float) * 5);
+		DropsBuffer = new ComputeBuffer(data.Length, sizeof(float) * 5, ComputeBufferType.Append);
 		DropsBuffer.SetData(data);
 
 		NBursts = 0;
+		NDrops = 0;
 
 
 		//Set up the rand texture.
@@ -79,8 +82,8 @@ public class WaterBehaviorNew : Singleton<WaterBehaviorNew>
 		
 
 		//Set buffer/texture data for compute shader.
-		WaterUpdateShader.SetTexture(burstKernel, "randVals", randTex);
-		WaterUpdateShader.SetBuffer(burstKernel, "drops", DropsBuffer);
+		WaterBurstShader.SetTexture(burstKernel, "randVals", randTex);
+		WaterBurstShader.SetBuffer(burstKernel, "drops", DropsBuffer);
 		WaterUpdateShader.SetBuffer(updateKernel, "drops", DropsBuffer);
 	}
 	void FixedUpdate()
@@ -101,19 +104,20 @@ public class WaterBehaviorNew : Singleton<WaterBehaviorNew>
 		WaterUpdateShader.SetFloat("normalForceGrowth", WaterConstants.Instance.NormalForceGrowth);
 		
 		WaterUpdateShader.SetTexture(updateKernel, "voxelGrid", WorldVoxels.Instance.VoxelTex);
+		WaterUpdateShader.SetBuffer(updateKernel, "drops", DropsBuffer);
 		WaterUpdateShader.Dispatch(updateKernel, NBursts, 1, 1);
 	}
 	void OnRenderObject()
 	{
 		//Don't render if the camera doesn't see this object's layer.
-		if ((Camera.current.cullingMask & (1 << gameObject.layer)) == 0)
+		if (NDrops == 0 || (Camera.current.cullingMask & (1 << gameObject.layer)) == 0)
 		{
 			return;
 		}
 
 		WaterDropsRenderMat.SetPass(0);
 		WaterDropsRenderMat.SetBuffer("dropsBuffer", DropsBuffer);
-		Graphics.DrawProcedural(MeshTopology.Points, WorkSize * NBursts);
+		Graphics.DrawProcedural(MeshTopology.Points, NDrops);
 	}
 	void OnDestroy()
 	{
@@ -122,6 +126,7 @@ public class WaterBehaviorNew : Singleton<WaterBehaviorNew>
 			DropsBuffer.Dispose();
 			DropsBuffer = null;
 		}
+		randTex = null;
 	}
 
 
@@ -130,20 +135,31 @@ public class WaterBehaviorNew : Singleton<WaterBehaviorNew>
 	/// </summary>
 	public void BurstDrops(Vector2 minPos, Vector2 maxPos,
 						   Vector2 minVel, Vector2 maxVel,
-						   float minRadius, float maxRadius)
+						   float minRadius, float maxRadius,
+						   int nDrops)
 	{
-		WaterUpdateShader.SetFloats("minPos", minPos.x, minPos.y);
-		WaterUpdateShader.SetFloats("maxPos", maxPos.x, maxPos.y);
-		WaterUpdateShader.SetFloats("minVel", minVel.x, minVel.y);
-		WaterUpdateShader.SetFloats("maxVel", maxVel.x, maxVel.y);
-		WaterUpdateShader.SetFloat("minRadius", minRadius);
-		WaterUpdateShader.SetFloat("maxRadius", maxRadius);
+		//Limit the drops to not exceed the maximum.
+		nDrops = Mathf.Min(MaxDrops - NDrops, nDrops);
+		if (nDrops <= 0)
+		{
+			return;
+		}
 
-		WaterUpdateShader.SetInt("burstNumber", NBursts);
+		WaterBurstShader.SetFloats("minPos", minPos.x, minPos.y);
+		WaterBurstShader.SetFloats("maxPos", maxPos.x, maxPos.y);
+		WaterBurstShader.SetFloats("minVel", minVel.x, minVel.y);
+		WaterBurstShader.SetFloats("maxVel", maxVel.x, maxVel.y);
+		WaterBurstShader.SetFloat("minRadius", minRadius);
+		WaterBurstShader.SetFloat("maxRadius", maxRadius);
 
-		WaterUpdateShader.SetInt("indexOffset", (NBursts % NWorkGroups) * WorkSize);
+		WaterBurstShader.SetInt("amountToBurst", nDrops);
+		WaterBurstShader.SetInt("randTexY", NBursts % randTex.height);
+		WaterBurstShader.SetInt("randTexWidth", randTex.width);
+
+		WaterBurstShader.SetBuffer(burstKernel, "drops", DropsBuffer);
+
+		WaterBurstShader.Dispatch(burstKernel, (nDrops / WorkSize) + 1, 1, 1);
 		NBursts += 1;
-
-		WaterUpdateShader.Dispatch(burstKernel, 1, 1, 1);
+		NDrops += nDrops;
 	}
 }

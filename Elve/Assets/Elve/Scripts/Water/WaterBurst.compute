@@ -1,0 +1,38 @@
+﻿#pragma kernel Burst
+
+
+#define WORK_SIZE 64
+
+
+struct WaterDrop
+{
+	float2 pos, vel;
+	float radius;
+};
+AppendStructuredBuffer<WaterDrop> drops;
+
+
+float2 minPos, maxPos, minVel, maxVel;
+float minRadius, maxRadius;
+uint amountToBurst;
+uint randTexY, randTexWidth;
+
+Texture2D<float4> randVals;
+
+[numthreads(WORK_SIZE, 1, 1)]
+void Burst(uint fullID : SV_DispatchThreadID)
+{
+	if (fullID < amountToBurst)
+	{
+		uint texX = fullID % randTexWidth;
+		float4 rand1 = randVals[uint2(texX, randTexY)],
+			   rand2 = randVals[uint2((texX + 1) % randTexWidth, randTexY)];
+
+		WaterDrop d;
+		d.pos = lerp(minPos, maxPos, rand1.xy);
+		d.vel = lerp(minVel, maxVel, rand2.xy);
+		d.radius = lerp(minRadius, maxRadius, rand1.z);
+
+		drops.Append(d);
+	}
+} 

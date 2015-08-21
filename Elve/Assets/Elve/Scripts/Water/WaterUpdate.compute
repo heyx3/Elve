@@ -1,8 +1,7 @@
-﻿#pragma kernel Burst
-#pragma kernel Update
+﻿#pragma kernel Update
 
 
-#define WORK_SIZE 32
+#define WORK_SIZE 64
 
 
 struct WaterDrop
@@ -111,7 +110,6 @@ void Update(uint id : SV_DispatchThreadID, uint groupId : SV_GroupThreadID)
 	float2 newPos = d.pos + (d.vel * deltaTime);
 	int2 newPosI = int2(int(newPos.x), int(newPos.y));
 
-	//TODO: Decide which axis to check collision against first based on something (which velocity component is biggest?)
 	if (isSolid(voxelGrid[int2(newPosI.x, posI.y)]))
 	{
 		newPos.x = floor(d.pos.x) + (d.vel.x < 0.0 ? 0.000001 : 0.999999);
@@ -128,28 +126,4 @@ void Update(uint id : SV_DispatchThreadID, uint groupId : SV_GroupThreadID)
 	d.pos = newPos;
 	//d.radius = max(0.0, d.radius - (radiusShrinkRate * deltaTime));
 	drops[id] = d;
-}
-
-
-
-float2 minPos, maxPos, minVel, maxVel;
-float minRadius, maxRadius;
-int indexOffset, burstNumber;
-
-Texture2D<float4> randVals;
-
-[numthreads(WORK_SIZE, 1, 1)]
-void Burst(uint id : SV_GroupThreadID)
-{
-	uint index = indexOffset + id;
-
-	float4 rand1 = randVals[uint2(index, burstNumber)],
-		   rand2 = randVals[uint2(index, burstNumber + 1)];
-
-	WaterDrop d;
-	d.pos = lerp(minPos, maxPos, rand1.xy);
-	d.vel = lerp(minVel, maxVel, rand2.xy);
-	d.radius = lerp(minRadius, maxRadius, rand1.z);
-
-	drops[index] = d;
 }

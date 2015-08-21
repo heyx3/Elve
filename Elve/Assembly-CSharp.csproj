@@ -82,7 +82,6 @@
      <Compile Include="Assets\Elve\Scripts\Tests\NoiseAlgoTests.cs" />
      <Compile Include="Assets\Elve\Scripts\Tests\PathingTest.cs" />
      <Compile Include="Assets\Elve\Scripts\Tests\VoxelAddRemoveTest.cs" />
-     <Compile Include="Assets\Elve\Scripts\Tests\WaterTest.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\Growth\GrowData.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\Growth\GrowPattern.cs" />
      <Compile Include="Assets\Elve\Scripts\Trees\Growth\Oak.cs" />
@@ -106,11 +105,8 @@
      <Compile Include="Assets\Elve\Scripts\Voxel\Chunk.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\VoxelTypes.cs" />
      <Compile Include="Assets\Elve\Scripts\Voxel\WorldVoxels.cs" />
-     <Compile Include="Assets\Elve\Scripts\Water\WaterBehavior.cs" />
-     <Compile Include="Assets\Elve\Scripts\Water\WaterBehaviorNew.cs" />
-     <Compile Include="Assets\Elve\Scripts\Water\WaterDrop.cs" />
+     <Compile Include="Assets\Elve\Scripts\Water\WaterController.cs" />
      <Compile Include="Assets\Elve\Scripts\Water\WaterEmitter.cs" />
-     <Compile Include="Assets\Elve\Scripts\Water\WaterRender.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\NoiseAlgos.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenSettings.cs" />
      <Compile Include="Assets\Elve\Scripts\World Generation\WorldGenerator.cs" />
@@ -139,6 +135,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\Contrast Stretch\Apply.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\frag_ao.cginc" />
      <None Include="Assets\Elve\Shaders\Sprites-CustomZ.shader" />
+     <None Include="Assets\Elve\Scripts\Water\WaterBurst.compute" />
      <None Include="Assets\Elve\Shaders\WaterQuad.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAlpha.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_DepthOfField\DepthOfField34.shader" />
@@ -161,9 +158,8 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\SeparableBlurPlus.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\MultiPassHollywoodFlares.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\BlurEffectConeTaps.shader" />
-     <None Include="Assets\Elve\Shaders\Drop.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\CameraMotionBlur.shader" />
-     <None Include="Assets\Elve\Shaders\WaterDrop.compute" />
+     <None Include="Assets\Elve\Scripts\Water\WaterUpdate.compute" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_Antialiasing\DLAA.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\NoiseAndGrainDX11.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
@@ -188,7 +184,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\PrepareSunShaftsBlur.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_BloomAndFlares\Blend.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\BlendModesOverlay.shader" />
-     <None Include="Assets\Elve\Shaders\WaterDropNew.shader" />
+     <None Include="Assets\Elve\Shaders\WaterDrops.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\SimpleClear.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAdd.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_Antialiasing\FXAA3Console.shader" />

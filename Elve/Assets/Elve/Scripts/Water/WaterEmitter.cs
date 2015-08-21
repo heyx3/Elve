@@ -10,11 +10,11 @@ public class WaterEmitter : MonoBehaviour
 	public float MinRadius = 0.01f,
 				 MaxRadius = 0.02f;
 
-	//public float SpawnInterval = 1.0f;
-	public bool SpawnNow = false;
+	public float SpawnInterval = 0.05f;
+	public int SpawnAmount = 1;
 
 
-	//private float elapsed = 0.0f;
+	private float elapsed = 0.0f;
 	private Transform tr;
 
 
@@ -24,22 +24,21 @@ public class WaterEmitter : MonoBehaviour
 	}
 	void Update()
 	{
-		//elapsed += WorldTime.DeltaTime;
+		elapsed += WorldTime.DeltaTime;
 		
-		//if (elapsed >= SpawnInterval)
-		if (SpawnNow)
+		if (elapsed >= SpawnInterval)
 		{
-			//elapsed -= SpawnInterval;
-			SpawnNow = false;
+			elapsed -= SpawnInterval;
 
 			Vector3 myPos = tr.position;
 			Vector2 myPos2 = new Vector2(myPos.x, myPos.y);
 
 			Vector2 halfSize = SpawnAreaSize * 0.5f;
 
-			WaterBehaviorNew.Instance.BurstDrops(myPos2 - halfSize, myPos2 + halfSize,
-												 MinVelocity, MaxVelocity,
-												 MinRadius, MaxRadius);
+			WaterController.Instance.BurstDrops(myPos2 - halfSize, myPos2 + halfSize,
+												MinVelocity, MaxVelocity,
+												MinRadius, MaxRadius,
+												SpawnAmount);
 		}
 	}
 	void OnDrawGizmosSelected()
