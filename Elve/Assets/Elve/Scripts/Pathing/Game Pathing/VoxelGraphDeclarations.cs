@@ -29,6 +29,10 @@ public class VoxelNode : Node
 	{
 		WorldPos = worldPos;
 	}
+	public VoxelNode(UnityEngine.Vector2 worldPosF)
+	{
+		WorldPos = new Vector2i((int)worldPosF.x, (int)worldPosF.y);
+	}
 
 
 	public override bool IsEqualTo(Node other)

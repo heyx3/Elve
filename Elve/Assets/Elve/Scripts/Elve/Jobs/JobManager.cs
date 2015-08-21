@@ -42,7 +42,8 @@ public class JobManager : Singleton<JobManager>
 			{
 				for (int j = 0; j < Jobs.Count; ++j)
 				{
-					if (Elfs[i].Key.HasLabor(Jobs[j].LaborType))
+					if (Elfs[i].Key.HasLabor(Jobs[j].LaborType) &&
+						Jobs[j].CanElveDoJob(Elfs[i].Key.BehaviorFSM))
 					{
 						Elfs[i] = new KeyValuePair<ElveLabors, Job>(Elfs[i].Key, Jobs[j]);
 

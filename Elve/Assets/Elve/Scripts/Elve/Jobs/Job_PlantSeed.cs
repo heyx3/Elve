@@ -17,7 +17,7 @@ public class Job_PlantSeed : Job
 	/// <summary>
 	/// The UI item that appears in the world.
 	/// </summary>
-	private Transform uiWidget = null;
+	private GameObject uiWidget = null;
 
 
 	public Job_PlantSeed(Vector2i plantPos, VoxelTypes seedType, IGrowPattern growPattern)
@@ -35,7 +35,7 @@ public class Job_PlantSeed : Job
 		switch (SeedType)
 		{
 			case VoxelTypes.Item_WoodSeed:
-				uiWidget = UIPrefabs.Create_JobPlantWoodSeed(PlantPos);
+				uiWidget = UIPrefabs.Create_JobPlantWoodSeed(PlantPos).gameObject;
 				break;
 
 			default:
@@ -45,9 +45,18 @@ public class Job_PlantSeed : Job
 	}
 	public override void OnLeavingQueue()
 	{
-		//Destroy the UI widget.
-		Assert.IsNotNull(uiWidget);
-		GameObject.Destroy(uiWidget.gameObject);
+		//Don't do anything.
+	}
+
+	public override bool CanElveDoJob(ElveBehavior elve)
+	{
+		PathFinder<VoxelNode> pather =
+			new PathFinder<VoxelNode>(VoxelGraph.Instance,
+									  (n1, n2) =>
+										  new VoxelEdge(n1, n2, PathingConstants.MovementTypes.Walk));
+		pather.Start = new VoxelNode((Vector2)elve.MyTransform.position);
+		pather.End = new VoxelNode(PlantPos);
+		return pather.FindPath();
 	}
 
 	public override IEnumerator RunJobCoroutine(ElveBehavior elve)
@@ -117,6 +126,10 @@ public class Job_PlantSeed : Job
 	public override void StopJob(bool moveJobToQueue, string reason = null)
 	{
 		base.StopJob(moveJobToQueue, reason);
+		
+		//Destroy the UI widget.
+		Assert.IsNotNull(uiWidget);
+		GameObject.Destroy(uiWidget);
 
 		Assert.IsNotNull(elveMovement);
 
@@ -128,9 +141,17 @@ public class Job_PlantSeed : Job
 		}
 		else
 		{
-			elveMovement.Path.Clear();
+			elveMovement.CancelPath();
 		}
 
 		elveMovement = null;
+	}
+	public override void Cancel(string reason)
+	{
+		base.Cancel(reason);
+		
+		//Destroy the UI widget.
+		Assert.IsNotNull(uiWidget);
+		GameObject.Destroy(uiWidget.gameObject);
 	}
 }

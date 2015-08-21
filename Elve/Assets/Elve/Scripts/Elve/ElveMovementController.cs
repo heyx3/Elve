@@ -59,7 +59,7 @@ public class ElveMovementController : MonoBehaviour
 	/// <summary>
 	/// Immediately starts pathing towards the given target position.
 	/// Replaces any previous pathing commands.
-	/// Returns "false" if no path could be found, and "true" otherwise.
+	/// Returns "false" if no path could be found, or "true" otherwise.
 	/// </summary>
 	public bool StartPath(Vector2i targetWorldPos)
 	{
@@ -150,4 +150,13 @@ public class ElveMovementController : MonoBehaviour
 		}
 	}
 	private static void DummyFunc(ElveMovementController e) { }
+
+	/// <summary>
+	/// Cancels the path currently being walked.
+	/// </summary>
+	public void CancelPath()
+	{
+		Path.Clear();
+		fsm.CurrentState = null;
+	}
 }

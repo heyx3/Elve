@@ -37,6 +37,10 @@ public abstract class Job
 	/// </summary>
 	public abstract void OnLeavingQueue();
 
+	/// <summary>
+	/// Calculates whether the given Elve can do this job, ignoring labor requirements.
+	/// </summary>
+	public abstract bool CanElveDoJob(ElveBehavior elve);
 
 	/// <summary>
 	/// A coroutine that makes the given Elve do this job.
