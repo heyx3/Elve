@@ -20,9 +20,9 @@ public class JobManager : Singleton<JobManager>
 	/// </summary>
 	public List<Job> Jobs = new List<Job>();
 	/// <summary>
-	/// The jobs that *have* been taken by an Elve.
+	/// The jobs that are currently being worked on by an Elve.
 	/// </summary>
-	public List<Job> JobsInProgress = new List<Job>();
+	public List<KeyValuePair<Job, Coroutine>> JobsInProgress = new List<KeyValuePair<Job, Coroutine>>();
 
 
 	/// <summary>
@@ -33,6 +33,8 @@ public class JobManager : Singleton<JobManager>
 
 	void Update()
 	{
+		//TODO: Prioritize based on each Elve's proximity to the job?
+
 		//Try to give each idle Elve a job.
 		for (int i = 0; i < Elfs.Count; ++i)
 		{
@@ -42,14 +44,13 @@ public class JobManager : Singleton<JobManager>
 				{
 					if (Elfs[i].Key.HasLabor(Jobs[j].LaborType))
 					{
-						Elfs[i] = new KeyValuePair<ElveLabors, Job>(Elfs[i].Key, Jobs[i]);
+						Elfs[i] = new KeyValuePair<ElveLabors, Job>(Elfs[i].Key, Jobs[j]);
 
-						JobsInProgress.Add(Jobs[j]);
+						Jobs[j].OnLeavingQueue();
+
+						Coroutine co = StartCoroutine(Elfs[i].Value.RunJobCoroutine(Elfs[i].Key.BehaviorFSM));
+						JobsInProgress.Add(new KeyValuePair<Job,Coroutine>(Jobs[j], co));
 						Jobs.RemoveAt(j);
-
-						Elfs[i].Value.OnLeavingQueue();
-
-						StartCoroutine(Elfs[i].Value.RunJobCoroutine(Elfs[i].Key.BehaviorFSM));
 
 						break;
 					}
@@ -66,18 +67,6 @@ public class JobManager : Singleton<JobManager>
 		Jobs.Add(job);
 		job.OnEnterQueue();
 	}
-	/// <summary>
-	/// Removes the given job from any queues.
-	/// Assumes the job is currently being worked on by an Elve.
-	/// </summary>
-	public void FinishJob(Job job)
-	{
-		int index = Elfs.FindIndex(kvp => kvp.Value == job);
-		UnityEngine.Assertions.Assert.IsTrue(index >= 0, "Couldn't find active job " + job.GetType());
-		Elfs[index] = new KeyValuePair<ElveLabors, Job>(Elfs[index].Key, null);
-
-		JobsInProgress.Remove(job);
-	}
 
 	/// <summary>
 	/// Lets all jobs know that the given block changed values.
@@ -90,7 +79,7 @@ public class JobManager : Singleton<JobManager>
 		}
 		for (int i = 0; i < JobsInProgress.Count; ++i)
 		{
-			JobsInProgress[i].OnBlockChanged(blockPos, newVal);
+			JobsInProgress[i].Key.OnBlockChanged(blockPos, newVal);
 		}
 	}
 }

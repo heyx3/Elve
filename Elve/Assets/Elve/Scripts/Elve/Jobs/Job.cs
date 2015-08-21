@@ -27,12 +27,12 @@ public abstract class Job
 	/// <summary>
 	/// Called when this job enters the job queue.
 	/// Generally happens when first created or if an Elve abandons it for some reason.
-	/// Allows this job to create stuff like UI elements for visibility.
+	/// Allows this job to create stuff like UI elements to show what kind of job this is.
 	/// </summary>
 	public abstract void OnEnterQueue();
 	/// <summary>
 	/// Called when this job leaves the job queue.
-	/// Generally happens when it's cancelled or when an Elve commits to doing it.
+	/// Generally happens when it's cancelled or when an Elve first commits to doing it.
 	/// Allows this job to destroy whatever UI elements it spawned when entering the queue.
 	/// </summary>
 	public abstract void OnLeavingQueue();
@@ -40,36 +40,68 @@ public abstract class Job
 
 	/// <summary>
 	/// A coroutine that makes the given Elve do this job.
+	/// NOTE: Make sure at least one update cycle has passed before calling "StopJob()".
 	/// </summary>
 	public abstract IEnumerator RunJobCoroutine(ElveBehavior elve);
 
 	/// <summary>
-	/// Called when the given block is changed. Lets this job react to that information.
+	/// Called when the given voxel is changed. Lets this job react to that information.
 	/// </summary>
 	public abstract void OnBlockChanged(Vector2i block, VoxelTypes newValue);
-	/// <summary>
-	/// Called when this job gets cancelled somehow.
-	/// </summary>
-	public abstract void OnCancelled();
 
 
 	/// <summary>
-	/// Makes this job fail: pushes it back in the queue and displays the proper UI response.
-	/// Pass "null" to not show a message.
+	/// Stops this job, assuming an Elve was in the middle of doing it.
+	/// Optionally leaves it in the queue to be picked up by another Elve.
 	/// </summary>
-	public virtual void Fail(string reason)
+	/// <param name="reason">
+	/// The message to display in the UI about this job ending, or "null" if nothing should be displayed.
+	/// </param>
+	/// <param name="moveJobToQueue">
+	/// If true, the job is moved back to the queue to be picked up by another Elve.
+	/// If false, the job is cancelled.
+	/// </param>
+	public virtual void StopJob(bool moveJobToQueue, string reason = null)
 	{
 		//Remove the job from the Elve doing it.
 
 		int index = JobManager.Instance.Elfs.FindIndex(kvp => kvp.Value == this);
-		Assert.IsTrue(index >= 0, "Can't find job " + GetType() + " in 'Elfs' list!");
+		Assert.IsTrue(index >= 0, "Can't find any Elve doing job " + GetType());
 
 		JobManager.Instance.Elfs[index] = new ElveJobKVP(JobManager.Instance.Elfs[index].Key, null);
 
 
-		JobManager.Instance.JobsInProgress.Remove(this);
-		JobManager.Instance.AddNewJob(this);
+		//Remove from the "in progress" job list.
 
-		//TODO: Display the failure somewhere.
+		index = JobManager.Instance.JobsInProgress.FindIndex(kvp => kvp.Key == this);
+		Assert.IsTrue(index >= 0, "Can't find job in progress: " + GetType());
+
+		JobManager.Instance.StopCoroutine(JobManager.Instance.JobsInProgress[index].Value);
+		JobManager.Instance.JobsInProgress.RemoveAt(index);
+
+
+		//Possibly move the job back to the queue.
+		if (moveJobToQueue)
+		{
+			JobManager.Instance.AddNewJob(this);
+		}
+
+		//TODO: Display the message somewhere.
+	}
+	/// <summary>
+	/// Cancels this job, assuming it was in the queue and nobody was working on it.
+	/// </summary>
+	/// <param name="reason">
+	/// The message to display in the UI about this cancellation, or "null" if nothing should be displayed.
+	/// </param>
+	public virtual void Cancel(string reason)
+	{
+		Assert.IsFalse(JobManager.Instance.Elfs.Any(kvp => kvp.Value == this));
+		Assert.IsFalse(JobManager.Instance.JobsInProgress.Any(kvp => kvp.Key == this));
+
+		JobManager.Instance.Jobs.Remove(this);
+		OnLeavingQueue();
+
+		//TODO: Display the message somewhere.
 	}
 }

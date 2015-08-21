@@ -31,6 +31,7 @@ public class Job_PlantSeed : Job
 
 	public override void OnEnterQueue()
 	{
+		//Spawn a UI widget to show that the seed needs to be planted.
 		switch (SeedType)
 		{
 			case VoxelTypes.Item_WoodSeed:
@@ -44,20 +45,21 @@ public class Job_PlantSeed : Job
 	}
 	public override void OnLeavingQueue()
 	{
-		if (uiWidget != null)
-		{
-			GameObject.Destroy(uiWidget.gameObject);
-		}
+		//Destroy the UI widget.
+		Assert.IsNotNull(uiWidget);
+		GameObject.Destroy(uiWidget.gameObject);
 	}
 
 	public override IEnumerator RunJobCoroutine(ElveBehavior elve)
 	{
+		yield return null;
+
 		elveMovement = elve.GetComponent<ElveMovementController>();
 
 		//Move to the target.
 		if (!elveMovement.StartPath(PlantPos))
 		{
-			Fail("Path is blocked");
+			StopJob(true, "Path is blocked");
 			yield break;
 		}
 		while (!elveMovement.IsPathCompleted)
@@ -70,34 +72,56 @@ public class Job_PlantSeed : Job
 		while (elve.CurrentState != null)
 			yield return null;
 
+
+		//Stop the job before creating the seed.
+		//Otherwise, the changing of that voxel will cause this job to cancel itself.
+		StopJob(false);
+
 		WorldVoxels.Instance.SetVoxelAt(PlantPos, SeedType);
 		SeedManager.Instance.Seeds.Add(new SeedManager.SeedData(PlantPos, GrowPattern));
-
-		elveMovement = null;
-		JobManager.Instance.FinishJob(this);
 	}
 
 	public override void OnBlockChanged(Vector2i block, VoxelTypes newValue)
 	{
+		//If we can't plant a seed here anymore, the job should be cancelled.
+		if (!WorldVoxels.CanPlantOn(WorldVoxels.GetVoxelAt(PlantPos.LessY)) ||
+			!WorldVoxels.CanPlantIn(WorldVoxels.GetVoxelAt(PlantPos)))
+		{
+			if (elveMovement != null)
+			{
+				StopJob(false, "Can't plant seed anymore");
+			}
+			else
+			{
+				Cancel("Can't plant seed anymore");
+			}
+			return;
+		}
+
+		//If there is an Elve doing this job, and his path was affected, recalculate pathing.
 		System.Func<VoxelNode, bool> isAffected = (n) =>
 		{
 			return Mathf.Abs(block.x - n.WorldPos.x) <= 1 &&
 				   Mathf.Abs(block.y - n.WorldPos.y) <= 1;
 		};
-
 		if (elveMovement != null && elveMovement.Path.Any(isAffected))
 		{
 			if (!elveMovement.StartPath(PlantPos))
 			{
-				Fail("Path is blocked");
+				StopJob(true, "Path became blocked");
+				return;
 			}
 		}
 	}
-	public override void OnCancelled()
-	{
-		ElveBehavior elve = elveMovement.GetComponent<ElveBehavior>();
 
-		//The Elve is either pathing or using magic to make the seed.
+	public override void StopJob(bool moveJobToQueue, string reason = null)
+	{
+		base.StopJob(moveJobToQueue, reason);
+
+		Assert.IsNotNull(elveMovement);
+
+		//The Elve is either planting the seed or moving to the planting location.
+		ElveBehavior elve = elveMovement.GetComponent<ElveBehavior>();
 		if (elve.CurrentState is ElveState_UseMagic)
 		{
 			elve.CurrentState = null;
@@ -106,26 +130,7 @@ public class Job_PlantSeed : Job
 		{
 			elveMovement.Path.Clear();
 		}
-	}
 
-	public override void Fail(string reason)
-	{
-		base.Fail(reason);
-		
-		//Stop whichever Elve is working on this job.
-		if (elveMovement != null)
-		{
-			ElveBehavior elve = elveMovement.GetComponent<ElveBehavior>();
-			if (elve.CurrentState is ElveState_UseMagic)
-			{
-				elve.CurrentState = null;
-			}
-			else
-			{
-				elveMovement.Path.Clear();
-			}
-
-			elveMovement = null;
-		}
+		elveMovement = null;
 	}
 }
