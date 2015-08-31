@@ -83,6 +83,7 @@ void Update(uint id : SV_DispatchThreadID, uint groupId : SV_GroupThreadID)
 	}
 
 	//Push away from other drops in this work group.
+	//TODO: Ignore drops that haven't been burst yet.
 	uint indexOffset = (id / WORK_SIZE) * WORK_SIZE;
 	for (uint i = 0; i < WORK_SIZE; ++i)
 	{
@@ -124,6 +125,6 @@ void Update(uint id : SV_DispatchThreadID, uint groupId : SV_GroupThreadID)
 	}
 
 	d.pos = newPos;
-	//d.radius = max(0.0, d.radius - (radiusShrinkRate * deltaTime));
+	d.radius = d.radius - (radiusShrinkRate * deltaTime);
 	drops[id] = d;
 }

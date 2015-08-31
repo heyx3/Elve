@@ -15,43 +15,51 @@ public class WorldVoxels : MonoBehaviour
 	{
 		true, true, true, //soft rock, hard rock, dirt
 		true, true, false, //wooden tree, leaf, tree background
-		false, //seed
+		false, //wood seed
 		false, //empty
 	};
 	private readonly static bool[] isTree = new bool[(int)VoxelTypes.Empty + 1]
 	{
 		false, false, false, //soft rock, hard rock, dirt
 		true, false, false, //wooden tree, leaf, tree background
-		false, //seed
+		false, //wood seed
 		false, //empty
 	};
 	private readonly static bool[] isItem = new bool[(int)VoxelTypes.Empty + 1]
 	{
 		false, false, false, //soft rock, hard rock, dirt
 		false, false, false, //wooden tree, leaf, tree background
-		true, //seed
+		true, //wood seed
 		false, //empty
 	};
 	private readonly static bool[] isTreeFodder = new bool[(int)VoxelTypes.Empty + 1]
 	{
 		false, false, false, //soft rock, hard rock, dirt
 		false, false, false, //wooden tree, leaf, tree background
-		false, //seed
+		false, //wood seed
 		true, //empty
 	};
 	private readonly static bool[] canPlantIn = new bool[(int)VoxelTypes.Empty + 1]
 	{
 		false, false, false, //soft rock, hard rock, dirt
 		false, false, false, //wooden tree, leaf, tree background
-		false, //seed
+		false, //wood seed
 		true, //empty
 	};
 	private readonly static bool[] canPlantOn = new bool[(int)VoxelTypes.Empty + 1]
 	{
 		true, true, true, //soft rock, hard rock, dirt
 		false, false, false, //wooden tree, leaf, tree background
-		false, //seed
+		false, //wood seed
 		false, //empty
+	};
+	private readonly static VoxelTypes[] seedTreeConverter = new VoxelTypes[(int)VoxelTypes.Empty + 1]
+	{
+		VoxelTypes.Empty, VoxelTypes.Empty, VoxelTypes.Empty, //soft rock, hard rock, dirt
+		VoxelTypes.Item_WoodSeed, //wooden tree
+		VoxelTypes.Empty, VoxelTypes.Empty, //leaf, tree background
+		VoxelTypes.Tree_Wood, //wood seed
+		VoxelTypes.Empty, //empty
 	};
 
 	#endregion
@@ -80,6 +88,14 @@ public class WorldVoxels : MonoBehaviour
 	/// Whether the given voxel can have seeds planted on its outside surface.
 	/// </summary>
 	public static bool CanPlantOn(VoxelTypes type) { return canPlantOn[(int)type]; }
+	/// <summary>
+	/// Converts between seed types and their corresponding tree types.
+	/// Returns "Empty" if the given type isn't a seed or a tree.
+	/// </summary>
+	public static VoxelTypes ConvertSeedTypeTreeType(VoxelTypes type)
+	{
+		return seedTreeConverter[(int)type];
+	}
 
 	public static VoxelTypes GetVoxelAt(Vector2i pos) { return Instance.Voxels[pos.x, pos.y]; }
 
@@ -124,6 +140,16 @@ public class WorldVoxels : MonoBehaviour
 						 0.0f, 0.0f);
 	}
 
+	/// <summary>
+	/// Gets whether the given position is a valid position in the voxel grid.
+	/// </summary>
+	public static bool IsValidPos(Vector2i voxelPos)
+	{
+		return (voxelPos.x >= 0 && voxelPos.y >= 0 &&
+				voxelPos.x < Instance.Voxels.GetLength(0) &&
+				voxelPos.y < Instance.Voxels.GetLength(1));
+	}
+
 
 	public static WorldVoxels Instance;
 
@@ -149,6 +175,10 @@ public class WorldVoxels : MonoBehaviour
 	/// The connections from each voxel to its 8 neighbors.
 	/// </summary>
 	public VoxelConnections[,] Connections = null;
+	/// <summary>
+	/// The wetness of each voxel, from 0 to 1.
+	/// </summary>
+	public float[,] Wetness = null;
 
 	private Vector2 vMin, vMax;
 	private Transform tr;
@@ -261,6 +291,12 @@ public class WorldVoxels : MonoBehaviour
 				cols[(y * VoxelTex.width) + x] = GetVoxelTexValue(Voxels[x, y]);
 		VoxelTex.SetPixels(cols);
 		VoxelTex.Apply();
+
+		//Set up the wetness data.
+		Wetness = new float[Voxels.GetLength(0), Voxels.GetLength(1)];
+		for (int y = 0; y < Wetness.GetLength(1); ++y)
+			for (int x = 0; x < Wetness.GetLength(0); ++x)
+				Wetness[x, y] = 0.0f;
 	}
 
 	/// <summary>
@@ -413,5 +449,70 @@ public class WorldVoxels : MonoBehaviour
 		}
 
 		JobManager.Instance.OnBlockChanged(worldPos, newValue);
+
+		//If the voxel is being empied out, squeeze out all the water.
+		if (!IsSolid(newValue))
+		{
+			BurstWaterFromVoxel(worldPos);
+		}
+	}
+
+	/// <summary>
+	/// Updates secondary data for the given batch of changed voxels.
+	/// </summary>
+	public void UpdateVoxelsAt(List<Vector2i> changedPoses)
+	{
+		List<Chunk> alreadyDone = new List<Chunk>();
+
+		for (int i = 0; i < changedPoses.Count; ++i)
+		{
+			VoxelTypes voxel = GetVoxelAt(changedPoses[i]);
+
+			//Pathing.
+			GetConnections(changedPoses[i]);
+
+			//Mesh.
+			Chunk chnk = Chunks[changedPoses[i].x / Chunk.Size,
+								changedPoses[i].y / Chunk.Size];
+			if (!alreadyDone.Contains(chnk))
+			{
+				chnk.RegenMesh();
+				alreadyDone.Add(chnk);
+			}
+
+			//Water.
+			if (!IsSolid(voxel))
+			{
+				BurstWaterFromVoxel(changedPoses[i]);
+			}
+
+			//GPU data.
+			VoxelTex.SetPixel(changedPoses[i].x, changedPoses[i].y, GetVoxelTexValue(voxel));
+		}
+		VoxelTex.Apply();
+	}
+
+	/// <summary>
+	/// Empties out all water from the given voxel.
+	/// Sets its "wetness" to 0 and bursts some water drops based on how wet it was.
+	/// </summary>
+	public void BurstWaterFromVoxel(Vector2i worldPos)
+	{
+		float wetness = Wetness[worldPos.x, worldPos.y];
+		Wetness[worldPos.x, worldPos.y] = 0.0f;
+
+		float maxDrops = 1.0f / WaterConstants.Instance.DropWetness;
+		int nDrops = (int)Mathf.Ceil(Mathf.Lerp(0.0f, maxDrops, wetness) - 0.00001f);
+
+		Vector2 burstDist = new Vector2(WaterConstants.Instance.VoxelBurstDist,
+										WaterConstants.Instance.VoxelBurstDist);
+		Vector2 minPos = new Vector2(worldPos.x + 0.5f, worldPos.y + 0.5f) - burstDist,
+				maxPos = minPos + (2.0f * burstDist),
+				minSpeed = -Vector2.one.normalized * WaterConstants.Instance.VoxelBurstSpeed,
+				maxSpeed = -minSpeed;
+		WaterController.Instance.BurstDrops(minPos, maxPos, minSpeed, maxSpeed,
+											WaterConstants.Instance.VoxelBurstRadiusMin,
+											WaterConstants.Instance.VoxelBurstRadiusMax,
+											nDrops);
 	}
 }

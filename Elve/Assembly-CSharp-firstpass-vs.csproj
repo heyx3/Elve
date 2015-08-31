@@ -180,6 +180,7 @@
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\GlobalFog.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAddSoft.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\Contrast Stretch\Luminance.shader" />
+     <None Include="Assets\Elve\Scripts\Water\WaterDestroy.compute" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\ColorCorrectionSelective.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\_DepthOfField\Bokeh34.shader" />
      <None Include="Assets\Standard Assets\ImageEffects\Shaders\CameraMotionBlurDX11.shader" />

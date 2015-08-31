@@ -1,0 +1,87 @@
+﻿#define WORK_SIZE 64
+
+struct WaterDrop
+{
+	float2 pos, vel;
+	float radius;
+};
+struct WaterDropCopy
+{
+	float2 pos;
+	float radius;
+};
+struct DeadWaterDrop
+{
+	float2 pos;
+	float radius;
+};
+
+
+uint nTotalDrops;
+ 
+
+  
+
+#pragma kernel InitBuffer
+
+
+ConsumeStructuredBuffer<DeadWaterDrop> toClear;
+
+[numthreads(WORK_SIZE, 1, 1)]
+void InitBuffer(uint id : SV_DispatchThreadID)
+{
+	if (id < nTotalDrops)
+	{
+		toClear.Consume();
+	}
+}
+
+
+//Must copy drop info into a second buffer because we can't consume drops while also reading them from the buffer.
+RWStructuredBuffer<WaterDropCopy> dropsCopy;
+
+
+#pragma kernel FindDeadDrops
+
+StructuredBuffer<WaterDrop> dropsToCheck;
+
+[numthreads(WORK_SIZE, 1, 1)]
+void FindDeadDrops(uint id : SV_DispatchThreadID)
+{
+	if (id < nTotalDrops)
+	{
+		WaterDrop d = dropsToCheck[id];
+	
+		WaterDropCopy copy;
+		copy.pos = d.pos;
+		copy.radius = d.radius;
+
+		dropsCopy[id] = copy;
+	}
+}
+
+
+
+#pragma kernel DestroyDrops
+
+
+ConsumeStructuredBuffer<WaterDrop> drops;
+AppendStructuredBuffer<DeadWaterDrop> deadDrops;
+
+[numthreads(WORK_SIZE, 1, 1)]
+void DestroyDrops(uint id : SV_DispatchThreadID)
+{
+	if (id < nTotalDrops)
+	{
+		WaterDropCopy drop = dropsCopy[id];
+		if (drop.radius <= 0.0)
+		{
+			DeadWaterDrop deadD;
+			deadD.pos = drop.pos;
+			deadD.radius = drop.radius;
+			deadDrops.Append(deadD);
+
+			drops.Consume();
+		}
+	}
+}

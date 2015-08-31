@@ -1,15 +1,14 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &182714
+--- !u!1 &184626
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 487890}
-  - 114: {fileID: 11405628}
-  - 114: {fileID: 11413442}
+  - 4: {fileID: 434818}
+  - 114: {fileID: 11492974}
   m_Layer: 4
   m_Name: Water
   m_TagString: Untagged
@@ -17,41 +16,33 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &487890
+--- !u!4 &434818
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 182714}
+  m_GameObject: {fileID: 184626}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11405628
+--- !u!114 &11492974
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 182714}
+  m_GameObject: {fileID: 184626}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9019ecb10270156418c5eafde508434b, type: 3}
+  m_Script: {fileID: 11500000, guid: 14c3fa6503a4193428026a3237e095f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11413442
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 182714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01fcf7cb7239eed42b53ccb049e4b5b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FinalWaterMat: {fileID: 2100000, guid: a414d84d3b2b4414c96dade8b67de991, type: 2}
+  WaterBurstShader: {fileID: 7200000, guid: f4a7cd3642ac6cc4d8b50e7ef9951fdf, type: 3}
+  WaterUpdateShader: {fileID: 7200000, guid: 70fe1a1b97234754392f4554622f2a78, type: 3}
+  WaterDestroyShader: {fileID: 7200000, guid: 8ecce9d923f288748b3c1d34561c40e8, type: 3}
+  WaterDropsRenderMat: {fileID: 2100000, guid: ebef5ce359e0aea4188b3375ec611b1f, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -61,5 +52,5 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 182714}
+  m_RootGameObject: {fileID: 184626}
   m_IsPrefabParent: 1

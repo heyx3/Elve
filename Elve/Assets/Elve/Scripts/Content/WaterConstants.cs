@@ -36,9 +36,10 @@ public class WaterConstants : MonoBehaviour
 
 
 	/// <summary>
-	/// The maximum number of possible drops in the game.
+	/// The maximum number of drops allowed at once in the game.
 	/// </summary>
 	public int MaxDrops = 1024;
+
 
 	/// <summary>
 	/// An exponent indicating how the normal force grows in strength
@@ -51,41 +52,46 @@ public class WaterConstants : MonoBehaviour
 	public float NormalForce = 2.0f;
 
 	/// <summary>
+	/// The force pushing large drops apart.
+	/// </summary>
+	public float SeparationForce = 10.0f;
+
+	/// <summary>
 	/// When a drop hits a surface, it bounces off with this fraction of its original velocity.
 	/// </summary>
 	public float BounceDamp = 0.5f;
 
 	/// <summary>
-	/// The scale of water drops' mass.
-	/// </summary>
-	public float Mass = 10.0f;
-
-	/// <summary>
 	/// The strength/direction of the force of gravity on the drops.
 	/// </summary>
 	public float Gravity = -9.8f;
-
 	/// <summary>
 	/// Any drops moving faster than this will be slowed down.
 	/// </summary>
 	public float MaxSpeed = 5.0f;
 
 	/// <summary>
-	/// When two drops are this fraction of their radius away from each other, they can combine.
-	/// </summary>
-	public float CombineDistScale = 0.5f;
-
-	/// <summary>
-	/// The force pushing large drops apart.
-	/// </summary>
-	public float SeparationForce = 10.0f;
-
-	/// <summary>
 	/// The rate at which a water drop's radius will shrink.
 	/// </summary>
 	public float RadiusShrinkRate = 0.001f;
-
-	public float MaxRadius = 0.15f;
+	
+	/// <summary>
+	/// The amount of "wetness" a single drop adds to a voxel.
+	/// </summary>
+	public float DropWetness = 0.1f;
+	/// <summary>
+	/// The size of the spawn area when drops burst out of a destroyed block.
+	/// </summary>
+	public float VoxelBurstDist = 0.25f;
+	/// <summary>
+	/// The speed of the drops that burst out of a destroyed block.
+	/// </summary>
+	public float VoxelBurstSpeed = 5.0f;
+	/// <summary>
+	/// The size of the drops that burst out of a destroyed block.
+	/// </summary>
+	public float VoxelBurstRadiusMin = 0.01f,
+				 VoxelBurstRadiusMax = 0.02f;
 
 
 	void Awake()

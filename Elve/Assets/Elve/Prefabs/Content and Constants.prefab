@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11449090}
   - 114: {fileID: 11437656}
   - 114: {fileID: 11431560}
+  - 114: {fileID: 11403370}
   m_Layer: 0
   m_Name: Content and Constants
   m_TagString: Untagged
@@ -34,6 +35,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11403370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9908781561eef2e4990dbe399daf2869, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OakGrowthRate: 3
 --- !u!114 &11431560
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -127,16 +140,19 @@ MonoBehaviour:
     Friction: 0
   - Type: 6
     Friction: 0
+  MaxDrops: 1024
   NormalForceGrowth: 2
   NormalForce: 360
+  SeparationForce: 1
   BounceDamp: .0900000036
-  Mass: 108.07
   Gravity: -.409999996
   MaxSpeed: 10
-  CombineDistScale: .870000005
-  SeparationForce: 1
   RadiusShrinkRate: .00100000005
-  MaxRadius: .0250000004
+  DropWetness: .100000001
+  VoxelBurstDist: .25
+  VoxelBurstSpeed: 5
+  VoxelBurstRadiusMin: .00999999978
+  VoxelBurstRadiusMax: .0199999996
 --- !u!114 &11481544
 MonoBehaviour:
   m_ObjectHideFlags: 1
