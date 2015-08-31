@@ -45,30 +45,7 @@ public class Tree
 	/// </summary>
 	public void Grow()
 	{
-		List<Vector2i> changed = GrowPattern.Grow(WorldVoxels.Instance.Voxels, GrowDat);
-
-		//Recalculate pathing stuff.		
-		for (int i = 0; i < changed.Count; ++i)
-			WorldVoxels.Instance.GetConnections(changed[i]);
-
-		//Regenerate meshes and update voxel texture data.
-		VoxelTypes[,] vxs = WorldVoxels.Instance.Voxels;
-		List<Chunk> alreadyDone = new List<Chunk>();
-		for (int i = 0; i < changed.Count; ++i)
-		{
-			Chunk chnk = WorldVoxels.Instance.Chunks[changed[i].x / Chunk.Size,
-													 changed[i].y / Chunk.Size];
-			if (!alreadyDone.Contains(chnk))
-			{
-				chnk.RegenMesh();
-				alreadyDone.Add(chnk);
-			}
-
-			WorldVoxels.Instance.VoxelTex.SetPixel(changed[i].x, changed[i].y,
-												   WorldVoxels.GetVoxelTexValue(vxs[changed[i].x,
-																					changed[i].y]));
-		}
-		WorldVoxels.Instance.VoxelTex.Apply();
+		WorldVoxels.Instance.UpdateVoxelsAt(GrowPattern.Grow(WorldVoxels.Instance.Voxels, GrowDat));
 	}
 	/// <summary>
 	/// Grows the tree but does NOT recalculate secondary data such as pathing.

@@ -36,13 +36,10 @@ public class GrowData_Oak : GrowData
 
 public class GrowPattern_Oak : IGrowPattern
 {
-	/// <summary>
-	/// The number of blocks to grow upward each time the tree grows bigger.
-	/// </summary>
-	private const int GrowthRate = 3;
-
-
 	public string TreeType { get { return "Oak"; } }
+
+	private int GrowthRate { get { return TreeConstants.Instance.OakGrowthRate; } }
+
 
 	public GrowData Sprout(VoxelTypes[,] worldGrid, VoxelTypes treeType, Vector2i seedPos,
 						   List<Vector2i> changedPoses)
