@@ -234,7 +234,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &387229623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,7 +564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f2a96b9e5ee0f44196e616b8fdedbd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisplayWaitTime: 1
+  DisplayWaitTime: .5
 --- !u!114 &1915613986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,11 +757,11 @@ Prefab:
       objectReference: {fileID: 1919959704}
     - target: {fileID: 22459214, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 1437
+      value: 1354
       objectReference: {fileID: 0}
     - target: {fileID: 22459214, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 621
+      value: 643
       objectReference: {fileID: 0}
     - target: {fileID: 22459214, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
       propertyPath: m_RootOrder

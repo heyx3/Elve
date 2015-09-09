@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 
 /// <summary>
 /// Handles bursting, updating, and rendering GPU water drops.
+/// Everything is done on the GPU with the help of Compute Shaders.
 /// </summary>
 public class WaterController : Singleton<WaterController>
 {
@@ -42,6 +43,7 @@ public class WaterController : Singleton<WaterController>
 	{
 		public Vector2 pos;
 		public float radius;
+		public override string ToString() { return "[" + pos + "; " + radius + "]"; }
 	}
 
 
@@ -172,10 +174,11 @@ public class WaterController : Singleton<WaterController>
 		nDeadDrops = GetBufferSize(deadDropsBuffer);
 		if (nDeadDrops > 0)
 		{
-			deadDropsBuffer.GetData(deadDropsData);
+			DeadWaterDrop[] deadDropsDat = new DeadWaterDrop[nDeadDrops];
+			deadDropsBuffer.GetData(deadDropsDat);
 			for (int i = 0; i < nDeadDrops; ++i)
 			{
-				KillDrop(deadDropsData[i]);
+				KillDrop(deadDropsDat[i]);
 			}
 			NDrops -= nDeadDrops;
 			UnityEngine.Assertions.Assert.IsTrue(NDrops >= 0);
@@ -231,6 +234,7 @@ public class WaterController : Singleton<WaterController>
 
 		if (posI.x < 0 || posI.y < 0 || posI.x >= vxs.GetLength(0) || posI.y >= vxs.GetLength(1))
 		{
+			Debug.Log("Killing drop that is outside world");
 			return;
 		}
 
@@ -241,24 +245,24 @@ public class WaterController : Singleton<WaterController>
 		bool[] isLesserSurface = new bool[2];
 
 		float horzDist = Mathf.Abs(drop.pos.x - (float)posI.x);
-		if (horzDist < drop.radius)
+		if (horzDist < WaterConstants.Instance.DropSurfaceThreshold)
 		{
 			horzAndVert[0] = true;
 			isLesserSurface[0] = true;
 		}
-		else if (horzDist > (1.0f - drop.radius))
+		else if (horzDist > (1.0f - WaterConstants.Instance.DropSurfaceThreshold))
 		{
 			horzAndVert[0] = true;
 			isLesserSurface[0] = false;
 		}
 		
 		float vertDist = Mathf.Abs(drop.pos.y - (float)posI.y);
-		if (vertDist < drop.radius)
+		if (vertDist < WaterConstants.Instance.DropSurfaceThreshold)
 		{
 			horzAndVert[1] = true;
 			isLesserSurface[1] = true;
 		}
-		else if (vertDist > (1.0f - drop.radius))
+		else if (vertDist > (1.0f - WaterConstants.Instance.DropSurfaceThreshold))
 		{
 			horzAndVert[1] = true;
 			isLesserSurface[1] = false;
@@ -301,6 +305,10 @@ public class WaterController : Singleton<WaterController>
 		ComputeBuffer.CopyCount(buffer, countBuffer, 0);
 		int[] valArray = new int[4] { 0, 0, 0, 0 };
 		countBuffer.GetData(valArray);
+		if (valArray[0] > 0)
+		{
+			valArray = valArray;
+		}
 		return valArray[0];
 	}
 

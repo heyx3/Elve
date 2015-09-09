@@ -63,7 +63,12 @@ public class WetnessDisplay : MonoBehaviour
 				}
 				else
 				{
-					wetStr = (wetness * 100.000001f).ToString().Substring(0, 4) + "% wet";
+					string baseStr = (wetness * 100.000001f).ToString();
+					if (baseStr.Contains("."))
+					{
+						baseStr = baseStr.Substring(0, 4);
+					}
+					wetStr = baseStr + "% wet";
 				}
 
 				txt.text = wetStr;

@@ -93,6 +93,11 @@ public class WaterConstants : MonoBehaviour
 	public float VoxelBurstRadiusMin = 0.01f,
 				 VoxelBurstRadiusMax = 0.02f;
 
+	/// <summary>
+	/// The max distance a drop can be from a surface while still depositing water onto it.
+	/// </summary>
+	public float DropSurfaceThreshold = 0.1f;
+
 
 	void Awake()
 	{
