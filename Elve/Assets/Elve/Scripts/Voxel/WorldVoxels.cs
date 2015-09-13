@@ -449,12 +449,6 @@ public class WorldVoxels : MonoBehaviour
 		}
 
 		JobManager.Instance.OnBlockChanged(worldPos, newValue);
-
-		//If the voxel is being empied out, squeeze out all the water.
-		if (!IsSolid(newValue))
-		{
-			BurstWaterFromVoxel(worldPos);
-		}
 	}
 
 	/// <summary>
@@ -480,39 +474,9 @@ public class WorldVoxels : MonoBehaviour
 				alreadyDone.Add(chnk);
 			}
 
-			//Water.
-			if (!IsSolid(voxel))
-			{
-				BurstWaterFromVoxel(changedPoses[i]);
-			}
-
 			//GPU data.
 			VoxelTex.SetPixel(changedPoses[i].x, changedPoses[i].y, GetVoxelTexValue(voxel));
 		}
 		VoxelTex.Apply();
-	}
-
-	/// <summary>
-	/// Empties out all water from the given voxel.
-	/// Sets its "wetness" to 0 and bursts some water drops based on how wet it was.
-	/// </summary>
-	public void BurstWaterFromVoxel(Vector2i worldPos)
-	{
-		float wetness = Wetness[worldPos.x, worldPos.y];
-		Wetness[worldPos.x, worldPos.y] = 0.0f;
-
-		float maxDrops = 1.0f / WaterConstants.Instance.DropWetness;
-		int nDrops = (int)Mathf.Ceil(Mathf.Lerp(0.0f, maxDrops, wetness) - 0.00001f);
-
-		Vector2 burstDist = new Vector2(WaterConstants.Instance.VoxelBurstDist,
-										WaterConstants.Instance.VoxelBurstDist);
-		Vector2 minPos = new Vector2(worldPos.x + 0.5f, worldPos.y + 0.5f) - burstDist,
-				maxPos = minPos + (2.0f * burstDist),
-				minSpeed = -Vector2.one.normalized * WaterConstants.Instance.VoxelBurstSpeed,
-				maxSpeed = -minSpeed;
-		WaterController.Instance.BurstDrops(minPos, maxPos, minSpeed, maxSpeed,
-											WaterConstants.Instance.VoxelBurstRadiusMin,
-											WaterConstants.Instance.VoxelBurstRadiusMax,
-											nDrops);
 	}
 }

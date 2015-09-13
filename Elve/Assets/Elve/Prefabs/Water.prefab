@@ -41,7 +41,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WaterBurstShader: {fileID: 7200000, guid: f4a7cd3642ac6cc4d8b50e7ef9951fdf, type: 3}
   WaterUpdateShader: {fileID: 7200000, guid: 70fe1a1b97234754392f4554622f2a78, type: 3}
-  WaterDestroyShader: {fileID: 7200000, guid: 8ecce9d923f288748b3c1d34561c40e8, type: 3}
+  WaterSwapShader: {fileID: 7200000, guid: c635c3c888f59fd44a57b5bcc7681dab, type: 3}
   WaterDropsRenderMat: {fileID: 2100000, guid: ebef5ce359e0aea4188b3375ec611b1f, type: 2}
 --- !u!1001 &100100000
 Prefab:
@@ -49,7 +49,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: WaterSwapShader
+      value: 
+      objectReference: {fileID: 7200000, guid: c635c3c888f59fd44a57b5bcc7681dab, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 184626}

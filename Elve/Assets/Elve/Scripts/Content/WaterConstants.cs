@@ -71,6 +71,10 @@ public class WaterConstants : MonoBehaviour
 	public float MaxSpeed = 5.0f;
 
 	/// <summary>
+	/// The radius of each drop.
+	/// </summary>
+	public float DropRadius = 0.015f;
+	/// <summary>
 	/// The rate at which a water drop's radius will shrink.
 	/// </summary>
 	public float RadiusShrinkRate = 0.001f;
@@ -79,19 +83,6 @@ public class WaterConstants : MonoBehaviour
 	/// The amount of "wetness" a single drop adds to a voxel.
 	/// </summary>
 	public float DropWetness = 0.1f;
-	/// <summary>
-	/// The size of the spawn area when drops burst out of a destroyed block.
-	/// </summary>
-	public float VoxelBurstDist = 0.25f;
-	/// <summary>
-	/// The speed of the drops that burst out of a destroyed block.
-	/// </summary>
-	public float VoxelBurstSpeed = 5.0f;
-	/// <summary>
-	/// The size of the drops that burst out of a destroyed block.
-	/// </summary>
-	public float VoxelBurstRadiusMin = 0.01f,
-				 VoxelBurstRadiusMax = 0.02f;
 
 	/// <summary>
 	/// The max distance a drop can be from a surface while still depositing water onto it.

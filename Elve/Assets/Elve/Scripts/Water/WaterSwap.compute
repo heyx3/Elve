@@ -1,0 +1,24 @@
+﻿#pragma kernel Swap
+
+
+//IMPORTANT NOTE: if changing this, also change the work size in WaterUpdate, WaterBurst,
+//    and WaterController.cs.
+#define WORK_SIZE 64
+
+
+struct WaterDrop
+{
+	float2 pos, vel;
+	float radius;
+};
+RWStructuredBuffer<WaterDrop> toSwap;
+
+uint firstIndex, secondIndex;
+
+[numthreads(WORK_SIZE, 1, 1)]
+void Swap(uint groupID : SV_GroupThreadID)
+{
+	WaterDrop firstDrop = toSwap[firstIndex + groupID];
+	toSwap[firstIndex + groupID] = toSwap[secondIndex + groupID];
+	toSwap[secondIndex + groupID] = firstDrop;
+} 

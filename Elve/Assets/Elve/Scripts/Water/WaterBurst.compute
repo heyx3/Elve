@@ -1,6 +1,8 @@
 ﻿#pragma kernel Burst
 
 
+//IMPORTANT NOTE: if changing this, also change the work size in WaterUpdate, WaterSwap,
+//    and WaterController.cs.
 #define WORK_SIZE 64
 
 
@@ -9,30 +11,26 @@ struct WaterDrop
 	float2 pos, vel;
 	float radius;
 };
-AppendStructuredBuffer<WaterDrop> drops;
+RWStructuredBuffer<WaterDrop> drops;
 
 
 float2 minPos, maxPos, minVel, maxVel;
-float minRadius, maxRadius;
-uint amountToBurst;
+float dropRadius;
 uint randTexY, randTexWidth;
+uint firstBurstIndex;
 
 Texture2D<float4> randVals;
 
 [numthreads(WORK_SIZE, 1, 1)]
-void Burst(uint fullID : SV_DispatchThreadID)
+void Burst(uint groupID : SV_GroupThreadID, uint fullID : SV_DispatchThreadID)
 {
-	if (fullID < amountToBurst)
-	{
-		uint texX = fullID % randTexWidth;
-		float4 rand1 = randVals[uint2(texX, randTexY)],
-			   rand2 = randVals[uint2((texX + 1) % randTexWidth, randTexY)];
+	uint texX = fullID % randTexWidth;
+	float4 rands = randVals[uint2(texX, randTexY)];
 
-		WaterDrop d;
-		d.pos = lerp(minPos, maxPos, rand1.xy);
-		d.vel = lerp(minVel, maxVel, rand2.xy);
-		d.radius = lerp(minRadius, maxRadius, rand1.z);
+	WaterDrop d;
+	d.pos = lerp(minPos, maxPos, rands.xy);
+	d.vel = lerp(minVel, maxVel, rands.zw);
+	d.radius = dropRadius;
 
-		drops.Append(d);
-	}
+	drops[(firstBurstIndex * WORK_SIZE) + groupID] = d;
 } 

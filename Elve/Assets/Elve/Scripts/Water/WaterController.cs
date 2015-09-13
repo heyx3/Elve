@@ -1,88 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Rendering;
-using System.Runtime.InteropServices;
+using Assert = UnityEngine.Assertions.Assert;
 
 
 /// <summary>
 /// Handles bursting, updating, and rendering GPU water drops.
 /// Everything is done on the GPU with the help of Compute Shaders.
+/// This controller manually keeps track of when each burst of water needs to be destroyed.
 /// </summary>
 public class WaterController : Singleton<WaterController>
 {
-	public const int WorkSizeUpdate = 64,
-					 WorkSizeDestroy = 64;
+	//IMPORTANT NOTE: if changing this, also change the work size in WaterUpdate, WaterSwap, and WaterBurst.
+	public const int WorkSize = 64;
+
 	private const int Stride_Drops = sizeof(float) * 5,
 					  Stride_AreDropsDead = sizeof(float) * 3;
 
 
 	public int MaxDrops { get { return WaterConstants.Instance.MaxDrops; } }
-
-	public int NDrops { get; private set; }
+	public int MaxBursts { get { return MaxDrops / WorkSize; } }
 	public int NBursts { get; private set; }
 
 	public ComputeBuffer DropsBuffer { get; private set; }
 
 
-	public ComputeShader WaterBurstShader, WaterUpdateShader, WaterDestroyShader;
+	public ComputeShader WaterBurstShader, WaterUpdateShader, WaterSwapShader;
 	public Material WaterDropsRenderMat;
 
-	private ComputeBuffer areDropsDeadBuffer,
-						  deadDropsBuffer,
-						  countBuffer;
-	DeadWaterDrop[] deadDropsData;
-
-	private int burstKernel, updateKernel, initDestroyKernel, findDestroyKernel, destroyKernel;
+	private int burstKernel, updateKernel, swapKernel;
 	private Texture2D randTex;
 
-	private int nDeadDrops = 0;
-
+	private struct Burst
+	{
+		public float TimeLeft;
+		public bool Exists;
+		public Burst(float timeLeft, bool exists) { TimeLeft = timeLeft; Exists = exists; }
+	}
+	private List<Burst> bursts;
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	private struct DeadWaterDrop
+	private struct WaterDrop
 	{
-		public Vector2 pos;
-		public float radius;
-		public override string ToString() { return "[" + pos + "; " + radius + "]"; }
+		public Vector2 Pos, Vel;
+		public float Radius;
 	}
+	private WaterDrop[] dropsBufferCPU = new WaterDrop[WorkSize];
 
 
 	protected void Start()
 	{
 		burstKernel = WaterBurstShader.FindKernel("Burst");
 		updateKernel = WaterUpdateShader.FindKernel("Update");
-		initDestroyKernel = WaterDestroyShader.FindKernel("InitBuffer");
-		findDestroyKernel = WaterDestroyShader.FindKernel("FindDeadDrops");
-		destroyKernel = WaterDestroyShader.FindKernel("DestroyDrops");
+		swapKernel = WaterSwapShader.FindKernel("Swap");
 
-		//Main "water drop" buffer.
+		//"Drops" buffer.
 		byte[] dropData = new byte[MaxDrops * Stride_Drops];
-		DropsBuffer = new ComputeBuffer(MaxDrops, Stride_Drops, ComputeBufferType.Append);
+		DropsBuffer = new ComputeBuffer(MaxDrops, Stride_Drops);
 		DropsBuffer.SetData(dropData);
 
-		//List of which drops need to be killed.
-		byte[] testDeathData = new byte[MaxDrops * Stride_AreDropsDead];
-		areDropsDeadBuffer = new ComputeBuffer(MaxDrops, Stride_AreDropsDead);
-		areDropsDeadBuffer.SetData(testDeathData);
-
-		//Buffer of drops that have been killed.
-		deadDropsData = new DeadWaterDrop[MaxDrops];
-		for (int i = 0; i < MaxDrops; ++i)
-		{
-			deadDropsData[i] = new DeadWaterDrop();
-		}
-		deadDropsBuffer = new ComputeBuffer(deadDropsData.Length,
-											Marshal.SizeOf(typeof(DeadWaterDrop)),
-											ComputeBufferType.Append);
-		deadDropsBuffer.SetData(deadDropsData);
-
-		//Buffer that just holds the size of another buffer.
-		countBuffer = new ComputeBuffer(4, sizeof(int), ComputeBufferType.DrawIndirect);
-		int[] countDat = new int[4] { 0, 0, 0, 0 };
-		countBuffer.SetData(countDat);
-
-		NBursts = 0;
-		NDrops = 0;
+		//"Bursts" list.
+		int maxBursts = MaxDrops / WorkSize;
+		bursts = new List<Burst>(maxBursts);
+		for (int i = 0; i < maxBursts; ++i)
+			bursts.Add(new Burst(0.0f, false));
 
 
 		//Set up the rand texture.
@@ -97,7 +80,7 @@ public class WaterController : Singleton<WaterController>
 					seed2 = -2.13551f,
 					seed3 = 0.15612f,
 					seed4 = 235.12412f,
-				    multiple = 23.0f;
+					multiple = 23.0f;
 		Color[] vals = new Color[randTex.width * randTex.height * 4];
 		for (int i = 0; i < vals.Length; ++i)
 		{
@@ -109,18 +92,13 @@ public class WaterController : Singleton<WaterController>
 		}
 		randTex.SetPixels(vals);
 		randTex.Apply();
-		
+
 
 		//Set buffer/texture data for compute shaders.
 		WaterBurstShader.SetTexture(burstKernel, "randVals", randTex);
 		WaterBurstShader.SetBuffer(burstKernel, "drops", DropsBuffer);
 		WaterUpdateShader.SetBuffer(updateKernel, "drops", DropsBuffer);
-		WaterDestroyShader.SetBuffer(initDestroyKernel, "toClear", deadDropsBuffer);
-		WaterDestroyShader.SetBuffer(findDestroyKernel, "dropsCopy", areDropsDeadBuffer);
-		WaterDestroyShader.SetBuffer(findDestroyKernel, "dropsToCheck", DropsBuffer);
-		WaterDestroyShader.SetBuffer(destroyKernel, "dropsCopy", areDropsDeadBuffer);
-		WaterDestroyShader.SetBuffer(destroyKernel, "drops", DropsBuffer);
-		WaterDestroyShader.SetBuffer(destroyKernel, "deadDrops", deadDropsBuffer);
+		WaterSwapShader.SetBuffer(swapKernel, "toSwap", DropsBuffer);
 	}
 	void FixedUpdate()
 	{
@@ -132,9 +110,9 @@ public class WaterController : Singleton<WaterController>
 
 		//Update the drops.
 
-		int nWorkGroupsUpdate = (NDrops / WorkSizeUpdate) + 1;
-		//TODO: Once these constants are set in stone, don't waste time updating them every frame.
 		WaterUpdateShader.SetFloat("deltaTime", WorldTime.FixedDeltaTime);
+
+		//TODO: Once these constants are set in stone, don't waste time updating them every frame.
 		WaterUpdateShader.SetFloat("radiusShrinkRate", WaterConstants.Instance.RadiusShrinkRate);
 		WaterUpdateShader.SetFloat("gravity", WaterConstants.Instance.Gravity);
 		WaterUpdateShader.SetFloat("bounceDamp", WaterConstants.Instance.BounceDamp);
@@ -142,74 +120,59 @@ public class WaterController : Singleton<WaterController>
 		WaterUpdateShader.SetFloat("separationForce", WaterConstants.Instance.SeparationForce);
 		WaterUpdateShader.SetFloat("normalForce", WaterConstants.Instance.NormalForce);
 		WaterUpdateShader.SetFloat("normalForceGrowth", WaterConstants.Instance.NormalForceGrowth);
-		
+
 		WaterUpdateShader.SetTexture(updateKernel, "voxelGrid", WorldVoxels.Instance.VoxelTex);
 		WaterUpdateShader.SetBuffer(updateKernel, "drops", DropsBuffer);
-		WaterUpdateShader.Dispatch(updateKernel, nWorkGroupsUpdate, 1, 1);
 
+		WaterUpdateShader.Dispatch(updateKernel, NBursts, 1, 1);
+		
 
-		//Now find and kill any drops that need to be killed off.
-
-		int nWorkGroupsDestroy;
-		if (nDeadDrops > 0)
+		//Update the CPU-side info.
+		float radiusChange = -WaterConstants.Instance.RadiusShrinkRate * WorldTime.FixedDeltaTime;
+		for (int i = 0; i < NBursts; ++i)
 		{
-			nWorkGroupsDestroy = (nDeadDrops / WorkSizeDestroy) + 1;
-			WaterDestroyShader.SetInt("nTotalDrops", nDeadDrops);
-			WaterDestroyShader.SetBuffer(initDestroyKernel, "toClear", deadDropsBuffer);
-			WaterDestroyShader.Dispatch(initDestroyKernel, nWorkGroupsDestroy, 1, 1);
-		}
+			Assert.IsTrue(bursts[i].Exists);
+			bursts[i] = new Burst(bursts[i].TimeLeft - WorldTime.FixedDeltaTime, true);
 
-		nWorkGroupsDestroy = (NDrops / WorkSizeDestroy) + 1;
-		WaterDestroyShader.SetInt("nTotalDrops", NDrops);
-		WaterDestroyShader.SetBuffer(findDestroyKernel, "dropsCopy", areDropsDeadBuffer);
-		WaterDestroyShader.SetBuffer(findDestroyKernel, "dropsToCheck", DropsBuffer);
-		WaterDestroyShader.Dispatch(findDestroyKernel, nWorkGroupsDestroy, 1, 1);
-		WaterDestroyShader.SetBuffer(destroyKernel, "dropsCopy", areDropsDeadBuffer);
-		WaterDestroyShader.SetBuffer(destroyKernel, "drops", DropsBuffer);
-		WaterDestroyShader.SetBuffer(destroyKernel, "deadDrops", deadDropsBuffer);
-		WaterDestroyShader.Dispatch(destroyKernel, nWorkGroupsDestroy, 1, 1);
-
-
-		//Pull onto the CPU the destroyed drops and calculate their effect on the world.
-		nDeadDrops = GetBufferSize(deadDropsBuffer);
-		if (nDeadDrops > 0)
-		{
-			DeadWaterDrop[] deadDropsDat = new DeadWaterDrop[nDeadDrops];
-			deadDropsBuffer.GetData(deadDropsDat);
-			for (int i = 0; i < nDeadDrops; ++i)
+			if (bursts[i].TimeLeft <= 0.0f)
 			{
-				KillDrop(deadDropsDat[i]);
+				//Get the water drops that need to be killed, and kill them on the GPU and CPU sides.
+				bursts[i] = new Burst(0.0f, false);
+				if (i > 0)
+				{
+					SwapBursts(0, i);
+				}
+				DropsBuffer.GetData(dropsBufferCPU);
+				if (NBursts > 1)
+				{
+					SwapBursts(0, NBursts - 1);
+				}
+
+				NBursts -= 1;
+
+				//Kill them.
+				for (int j = 0; j < WorkSize; ++j)
+					KillDrop(dropsBufferCPU[j].Pos);
 			}
-			NDrops -= nDeadDrops;
-			UnityEngine.Assertions.Assert.IsTrue(NDrops >= 0);
 		}
 	}
 	void OnRenderObject()
 	{
 		//Don't render if the camera doesn't see this object's layer.
-		if (NDrops == 0 || (Camera.current.cullingMask & (1 << gameObject.layer)) == 0)
+		if (NBursts == 0 || (Camera.current.cullingMask & (1 << gameObject.layer)) == 0)
 		{
 			return;
 		}
 
 		WaterDropsRenderMat.SetPass(0);
 		WaterDropsRenderMat.SetBuffer("dropsBuffer", DropsBuffer);
-		Graphics.DrawProcedural(MeshTopology.Points, NDrops);
+		Graphics.DrawProcedural(MeshTopology.Points, NBursts * WorkSize);
 	}
 	void OnDestroy()
 	{
 		DisposeBuffer(DropsBuffer);
 		DropsBuffer = null;
-		
-		DisposeBuffer(areDropsDeadBuffer);
-		areDropsDeadBuffer = null;
-		
-		DisposeBuffer(deadDropsBuffer);
-		deadDropsBuffer = null;
-		
-		DisposeBuffer(countBuffer);
-		countBuffer = null;
-	
+
 		randTex = null;
 	}
 	private void DisposeBuffer(ComputeBuffer buff)
@@ -221,16 +184,27 @@ public class WaterController : Singleton<WaterController>
 		}
 	}
 
+	private void SwapBursts(int first, int second)
+	{
+		WaterSwapShader.SetInt("firstIndex", first * WorkSize);
+		WaterSwapShader.SetInt("secondIndex", second * WorkSize);
+		WaterSwapShader.Dispatch(swapKernel, 1, 1, 1);
+
+		Burst temp = bursts[first];
+		bursts[first] = bursts[second];
+		bursts[second] = temp;
+	}
+
 	/// <summary>
-	/// Processes a drop at the given position that just disappeared.
-	/// Contributes some wetness to whatever surface it was touching.
+	/// Processes a drop at the given position that just evaporated.
+	/// Contributes some wetness to whatever surface(s) it was touching.
 	/// </summary>
-	private void KillDrop(DeadWaterDrop drop)
+	private void KillDrop(Vector2 pos)
 	{
 		VoxelTypes[,] vxs = WorldVoxels.Instance.Voxels;
 		float[,] wets = WorldVoxels.Instance.Wetness;
 
-		Vector2i posI = new Vector2i((int)drop.pos.x, (int)drop.pos.y);
+		Vector2i posI = new Vector2i((int)pos.x, (int)pos.y);
 
 		if (posI.x < 0 || posI.y < 0 || posI.x >= vxs.GetLength(0) || posI.y >= vxs.GetLength(1))
 		{
@@ -240,11 +214,11 @@ public class WaterController : Singleton<WaterController>
 
 
 		//It might be touching up to two surfaces: floor/ceiling and a wall.
-		
+
 		bool[] horzAndVert = new bool[2] { false, false };
 		bool[] isLesserSurface = new bool[2];
 
-		float horzDist = Mathf.Abs(drop.pos.x - (float)posI.x);
+		float horzDist = Mathf.Abs(pos.x - (float)posI.x);
 		if (horzDist < WaterConstants.Instance.DropSurfaceThreshold)
 		{
 			horzAndVert[0] = true;
@@ -255,8 +229,8 @@ public class WaterController : Singleton<WaterController>
 			horzAndVert[0] = true;
 			isLesserSurface[0] = false;
 		}
-		
-		float vertDist = Mathf.Abs(drop.pos.y - (float)posI.y);
+
+		float vertDist = Mathf.Abs(pos.y - (float)posI.y);
 		if (vertDist < WaterConstants.Instance.DropSurfaceThreshold)
 		{
 			horzAndVert[1] = true;
@@ -285,7 +259,7 @@ public class WaterController : Singleton<WaterController>
 			else
 			{
 				wets[horzPos.x, horzPos.y] = Mathf.Min(wets[horzPos.x, horzPos.y] +
-													    WaterConstants.Instance.DropWetness,
+														WaterConstants.Instance.DropWetness,
 													   1.0f);
 			}
 		}
@@ -297,32 +271,14 @@ public class WaterController : Singleton<WaterController>
 												   1.0f);
 		}
 	}
-	/// <summary>
-	/// Gets the size of the given Append Compute Buffer.
-	/// </summary>
-	private int GetBufferSize(ComputeBuffer buffer)
-	{
-		ComputeBuffer.CopyCount(buffer, countBuffer, 0);
-		int[] valArray = new int[4] { 0, 0, 0, 0 };
-		countBuffer.GetData(valArray);
-		if (valArray[0] > 0)
-		{
-			valArray = valArray;
-		}
-		return valArray[0];
-	}
 
 	/// <summary>
 	/// Bursts a set number of water drops with varied parameters within the given ranges.
 	/// </summary>
 	public void BurstDrops(Vector2 minPos, Vector2 maxPos,
-						   Vector2 minVel, Vector2 maxVel,
-						   float minRadius, float maxRadius,
-						   int nDrops)
+						   Vector2 minVel, Vector2 maxVel)
 	{
-		//Limit the drops to not exceed the maximum.
-		nDrops = Mathf.Min(MaxDrops - NDrops, nDrops);
-		if (nDrops <= 0)
+		if ((NBursts * WorkSize) >= MaxDrops)
 		{
 			return;
 		}
@@ -331,17 +287,23 @@ public class WaterController : Singleton<WaterController>
 		WaterBurstShader.SetFloats("maxPos", maxPos.x, maxPos.y);
 		WaterBurstShader.SetFloats("minVel", minVel.x, minVel.y);
 		WaterBurstShader.SetFloats("maxVel", maxVel.x, maxVel.y);
-		WaterBurstShader.SetFloat("minRadius", minRadius);
-		WaterBurstShader.SetFloat("maxRadius", maxRadius);
 
-		WaterBurstShader.SetInt("amountToBurst", nDrops);
+		//TODO: Once this constant is set in stone, don't waste time updating it every frame.
+		WaterBurstShader.SetFloat("dropRadius", WaterConstants.Instance.DropRadius);
+
+		WaterBurstShader.SetInt("firstBurstIndex", NBursts);
+
 		WaterBurstShader.SetInt("randTexY", NBursts % randTex.height);
 		WaterBurstShader.SetInt("randTexWidth", randTex.width);
 
 		WaterBurstShader.SetBuffer(burstKernel, "drops", DropsBuffer);
 
-		WaterBurstShader.Dispatch(burstKernel, (nDrops / WorkSizeUpdate) + 1, 1, 1);
+		WaterBurstShader.Dispatch(burstKernel, 1, 1, 1);
+
+		Assert.IsFalse(bursts[NBursts].Exists);
+		bursts[NBursts] = new Burst(WaterConstants.Instance.DropRadius /
+										WaterConstants.Instance.RadiusShrinkRate,
+									true);
 		NBursts += 1;
-		NDrops += nDrops;
 	}
 }

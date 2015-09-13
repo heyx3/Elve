@@ -1,6 +1,8 @@
 ﻿#pragma kernel Update
 
 
+//IMPORTANT NOTE: if changing this, also change the work size in WaterBurst, WaterSwap,
+//    and WaterController.cs.
 #define WORK_SIZE 64
 
 
@@ -83,7 +85,6 @@ void Update(uint id : SV_DispatchThreadID, uint groupId : SV_GroupThreadID)
 	}
 
 	//Push away from other drops in this work group.
-	//TODO: Ignore drops that haven't been burst yet.
 	uint indexOffset = (id / WORK_SIZE) * WORK_SIZE;
 	for (uint i = 0; i < WORK_SIZE; ++i)
 	{

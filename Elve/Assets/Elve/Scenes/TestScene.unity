@@ -37,9 +37,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
---- !u!127 &3
-LevelGameManager:
-  m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -68,6 +65,7 @@ LightmapSettings:
     m_TextureCompression: 1
     m_FinalGather: 0
     m_FinalGatherRayCount: 1024
+    m_ReflectionCompression: 2
   m_LightmapSnapshot: {fileID: 0}
   m_RuntimeCPUUsage: 25
 --- !u!196 &5
@@ -116,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 1997211142, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AllowActivationOnStandalone: 0
+  m_ForceModuleActive: 0
 --- !u!114 &87874576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +132,7 @@ MonoBehaviour:
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
   m_RepeatDelay: .5
-  m_AllowActivationOnMobileDevice: 0
+  m_ForceModuleActive: 0
 --- !u!114 &87874577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,10 +247,7 @@ MonoBehaviour:
   SpawnAreaSize: {x: 1, y: 1}
   MinVelocity: {x: -3.5, y: -3.5}
   MaxVelocity: {x: 3.5, y: 3.5}
-  MinRadius: .00999999978
-  MaxRadius: .0199999996
-  SpawnInterval: .0500000007
-  SpawnAmount: 3
+  SpawnInterval: 1
 --- !u!4 &387229624
 Transform:
   m_ObjectHideFlags: 0
@@ -578,6 +573,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 14
@@ -757,7 +758,7 @@ Prefab:
       objectReference: {fileID: 1919959704}
     - target: {fileID: 22459214, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 1354
+      value: 1257
       objectReference: {fileID: 0}
     - target: {fileID: 22459214, guid: de392d111b5aeca419a7c6923d873a66, type: 2}
       propertyPath: m_SizeDelta.y
